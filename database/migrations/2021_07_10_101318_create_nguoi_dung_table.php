@@ -24,6 +24,7 @@ class CreateNguoiDungTable extends Migration
             $table->string('MatKhau', 80);
             $table->tinyInteger('LoaiTK');
             $table->primary('ID');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
