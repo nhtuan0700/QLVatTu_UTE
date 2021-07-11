@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
-class NguoiDung extends Model
+class NguoiDung extends Model implements AuthenticatableContract
 {
     use Notifiable;
-
+    use Authenticatable;
     public const ADMIN = 1;
     public const CSVC = 2;
     public const QLVT = 3;
@@ -32,5 +33,10 @@ class NguoiDung extends Model
     public function khoaPB()
     {
         return $this->belongsTo(KhoaPhongBan::class, 'ID_KhoaPB', 'ID');
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->MatKhau;
     }
 }
