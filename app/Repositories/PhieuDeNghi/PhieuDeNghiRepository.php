@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Repositories\PhieuBanGiao;
+namespace App\Repositories\PhieuDeNghi;
 
 use Carbon\Carbon;
 use App\Models\PhieuDeNghi;
 use App\Repositories\BaseRepository;
 
-class PhieuBanGiaoRepository extends BaseRepository implements PhieuBanGiaoInterface
+class PhieuDeNghiRepository extends BaseRepository implements PhieuDeNghiInterface
 {
     public function getModel()
     {
         return PhieuDeNghi::class;
     }
 
-    public function getIDPhieuBG()
+    public function getIDPhieuMua()
     {
         $now = Carbon::now();
-        $code = 'BG';
+        $code = 'PM';
         $month = $now->format('m');
         $year = $now->format('y');
         $prefix = $code . $month . $year;

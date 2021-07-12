@@ -13,6 +13,7 @@ class PhieuBanGiao extends Model
     protected $table = 'ChiTietSua';
 
     protected $primaryKey = 'ID';
+    public $incrementing = false;
 
     const UPDATED_AT = 'NgayBanGiao';
 

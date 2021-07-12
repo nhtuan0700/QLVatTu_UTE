@@ -17,7 +17,12 @@ class PhieuBanGiaoController extends Controller
 
     public function index()
     {
+        return view('phieubangiao.index');
+    }
 
+    public function showCreateform()
+    {
+        return view('phieubangiao.create');
     }
 
     public function create(CreatePhieuBanGiao $request)
@@ -27,6 +32,6 @@ class PhieuBanGiaoController extends Controller
 
     public function detail($id)
     {
-
+        return view('phieubangiao.detail');
     }
 }

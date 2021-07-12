@@ -3,22 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PhieuMua\CreatePhieuMua;
-use Illuminate\Http\Request;
-use App\Repositories\PhieuMua\PhieuMuaInterface;
+use App\Repositories\PhieuDeNghi\PhieuDeNghiInterface;
+use Illuminate\Support\Facades\Auth;
 
 class PhieuMuaController extends Controller
 {
     protected $phieuMuaRepo;
 
-    public function __construct(PhieuMuaInterface $phieuMuaInterface)
+    public function __construct(PhieuDeNghiInterface $phieuDeNghiInterface)
     {
-        $this->phieuMuaRepo = $phieuMuaInterface;
+        $this->phieuMuaRepo = $phieuDeNghiInterface;
     }
     
     public function index()
     {
-        // dd($this->phieuMuaRepo);
-        dd($this->phieuMuaRepo->getID());
+        return view('phieudenghi.mua.index');
+    }
+
+    public function showFormCreate()
+    {
+        return view('phieudenghi.mua.create');
     }
     
     public function create(CreatePhieuMua $request)
@@ -28,7 +32,7 @@ class PhieuMuaController extends Controller
 
     public function detail($id)
     {
-
+        return view('phieudenghi.mua.detail');
     }
 
     public function update($id)

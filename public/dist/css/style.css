@@ -8040,3 +8040,11 @@ html.ie11 .dropdown-menu ul.menu li a {
 html.ie11 .bs-searchbox .form-control {
   width: 90%; }
 
+.dropdown-menu.inner{
+  margin-left: 30px !important;
+  width: 100% !important;
+}
+.inner.open{
+  overflow: hidden !important;
+  max-height: auto !important;
+}

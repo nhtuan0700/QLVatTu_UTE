@@ -52,6 +52,4 @@ interface RepositoryInterface
     public function findOrFail($id);
 
     public function findByColumn($column, $value);
-
-    public function getID();
 }

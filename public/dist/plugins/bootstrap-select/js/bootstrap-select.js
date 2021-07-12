@@ -524,6 +524,7 @@
        */
       var generateLI = function (content, index, classes, optgroup) {
         return '<li' +
+        
             ((typeof classes !== 'undefined' & '' !== classes) ? ' class="' + classes + '"' : '') +
             ((typeof index !== 'undefined' & null !== index) ? ' data-original-index="' + index + '"' : '') +
             ((typeof optgroup !== 'undefined' & null !== optgroup) ? 'data-optgroup="' + optgroup + '"' : '') +

@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use App\Repositories\PhieuBanGiao\PhieuBanGiaoInterface;
 use App\Repositories\PhieuBanGiao\PhieuBanGiaoRepository;
-use App\Repositories\PhieuMua\PhieuMuaInterface;
-use App\Repositories\PhieuMua\PhieuMuaRepository;
+use App\Repositories\PhieuDeNghi\PhieuDeNghiInterface;
+use App\Repositories\PhieuDeNghi\PhieuDeNghiRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -17,7 +17,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(PhieuMuaInterface::class, PhieuMuaRepository::class);
+        $this->app->bind(PhieuDeNghiInterface::class, PhieuDeNghiRepository::class);
         $this->app->bind(PhieuBanGiaoInterface::class, PhieuBanGiaoRepository::class);
     }
 

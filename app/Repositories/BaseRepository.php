@@ -93,6 +93,4 @@ abstract class BaseRepository implements RepositoryInterface
     {
         return $this->model->where($column, $value)->firstOrFail();
     }
-
-    public abstract function getID();
 }

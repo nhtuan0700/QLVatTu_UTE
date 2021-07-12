@@ -21,7 +21,12 @@ class NguoiDung extends Model implements AuthenticatableContract
         'HoTen', 'NgaySinh', 'CMND', 'SDT', 'Email', 'TaiKhoan', 'MatKhau', 'LoaiTaiKhoan'
     ];
 
+    protected $hidden = [
+        'MatKhau', 'remember_token',
+    ];
+
     protected $table = 'NguoiDung';
+    public $incrementing = false;
 
     protected $primaryKey = 'ID';
 

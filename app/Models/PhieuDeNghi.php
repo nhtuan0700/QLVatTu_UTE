@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class PhieuDeNghi extends Model
 {
+    public const PHIEUMUA = 1;
+    public const PHIEUSUA = 2;
+
     protected $fillable = [
         'ID_NguoiDeNghi', 'ID_NVCSVC', 'LoaiPhieu',
         'NgayLapPhieu', 'NgayDuKien', 'NgayHoanThanh',
@@ -15,6 +18,7 @@ class PhieuDeNghi extends Model
     protected $table = 'PhieuDenghi';
 
     protected $primaryKey = 'ID';
+    public $incrementing = false;
 
     const CREATED_AT = 'NgayLapPhieu';
 
