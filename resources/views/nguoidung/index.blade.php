@@ -38,12 +38,13 @@ Tài khoản người dùng
 						</tr>
 					</thead>
 					<tbody>
+						@foreach ($data as $item)
 						<tr>
-							<th scope="row" style="vertical-align: middle;">1</th>
-							<td style="vertical-align: middle;">Trần Bửu Dung</td>
-							<td style="vertical-align: middle;">@buudung</td>
-							<td style="vertical-align: middle;">Khoa Điện - Điện Tử</td>
-							<td style="vertical-align: middle;">Giảng viên/Cán bộ</td>
+							<th scope="row" style="vertical-align: middle;">{{ $item->ID }}</th>
+							<td style="vertical-align: middle;">{{ $item->HoTen }}</td>
+							<td style="vertical-align: middle;">{{ $item->Email }}</td>
+							<td style="vertical-align: middle;">{{ $item->khoaPB->Ten }}</td>
+							<td style="vertical-align: middle;">{{ $item->vaiTro() }}</td>
 							<td style="vertical-align: middle;">
 								<button type="button" class="btn btn-default waves-effect">
 									<i class="material-icons">edit</i>
@@ -53,26 +54,11 @@ Tài khoản người dùng
 								</button>
 							</td>
 						</tr>
+						@endforeach
 					</tbody>
 				</table>
 				<nav style="text-align: right;">
-					<ul class="pagination">
-						<li class="disabled">
-							<a href="javascript:void(0);">
-								<i class="material-icons">chevron_left</i>
-							</a>
-						</li>
-						<li class="active"><a href="javascript:void(0);">1</a></li>
-						<li><a href="javascript:void(0);" class="waves-effect">2</a></li>
-						<li><a href="javascript:void(0);" class="waves-effect">3</a></li>
-						<li><a href="javascript:void(0);" class="waves-effect">4</a></li>
-						<li><a href="javascript:void(0);" class="waves-effect">5</a></li>
-						<li>
-							<a href="javascript:void(0);" class="waves-effect">
-								<i class="material-icons">chevron_right</i>
-							</a>
-						</li>
-					</ul>
+          {{ $data->links('vendor.pagination.custom') }}
 				</nav>
 			</div>
 		</div>

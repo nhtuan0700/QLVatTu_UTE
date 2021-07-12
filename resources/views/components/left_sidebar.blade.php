@@ -29,7 +29,7 @@
       @can('nguoidung-list')
       <li class="{{ request()->routeIs('nguoidung.*') ? 'active' : '' }}">
         <a href="{{ route('nguoidung.index') }}">
-          <i class="material-icons">local_mall</i>
+          <i class="material-icons">group</i>
           <span>Quản lý tài khoản người dùng</span>
         </a>
       </li>

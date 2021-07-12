@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
+use App\Helpers\Facade\FormatDate;
 
 class HomeController extends Controller
 {

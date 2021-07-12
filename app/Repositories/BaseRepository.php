@@ -10,10 +10,13 @@ abstract class BaseRepository implements RepositoryInterface
     //model muốn tương tác
     protected $model;
 
+    protected $limit;
+
     //khởi tạo
     public function __construct()
     {
         $this->setModel();
+        $this->limit = Config::get('constants.limit_page');
     }
 
     //lấy model tương ứng
@@ -92,5 +95,10 @@ abstract class BaseRepository implements RepositoryInterface
     public function findByColumn($column, $value)
     {
         return $this->model->where($column, $value)->firstOrFail();
+    }
+
+    public function select($columns = '*')
+    {
+        return $this->model->select($columns);
     }
 }

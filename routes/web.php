@@ -25,20 +25,22 @@ Route::middleware('auth')->group(function () {
             Route::get('danhsach', 'PhieuMuaController@index')->name('index');
         });
         Route::middleware('acl:phieumua-create')->group(function () {
-            Route::get('them', 'PhieuMuaController@showFormCreate')->name('create');
+            Route::get('them', 'PhieuMuaController@showCreate')->name('create');
             Route::post('them', 'PhieuMuaController@create');
         });
         Route::middleware('acl:phieumua-delete')->group(function () {
-            Route::delete('xoa/{id?}', 'PhieuMuaController@delete')->name('delete');
+            Route::delete('xoa/{ID?}', 'PhieuMuaController@delete')->name('delete');
         });
-        Route::get('chitiet/{id?}', 'PhieuMuaController@detail')->name('detail');
+        Route::get('sua/{ID?}', 'PhieuMuaController@showEdit')->name('edit');
+        Route::put('sua/{ID?}', 'PhieuMuaController@update');
+        Route::get('chitiet/{ID?}', 'PhieuMuaController@detail')->name('detail');
     });
 
     Route::group(['prefix' => 'xetduyet', 'as' => 'xetduyet.'], function () {
         Route::middleware('acl:phieudenghi-xetduyet')->group(function () {
             Route::get('danhsach', 'XetDuyetController@index')->name('index');
         });
-        Route::get('chitiet/{id?}', 'XetDuyetController@detail')->name('detail');
+        Route::get('chitiet/{ID?}', 'XetDuyetController@detail')->name('detail');
     });
 
     Route::group(['prefix' => 'phieubangiao', 'as' => 'phieubangiao.'], function () {
@@ -49,7 +51,7 @@ Route::middleware('auth')->group(function () {
             Route::get('them', 'PhieuBanGiaoController@showCreateForm')->name('create');
             Route::post('bangiao', 'PhieuBanGiaoController@create');
         });
-        Route::get('chitiet/{id?}', 'PhieuBanGiaoController@detail')->name('detail');
+        Route::get('chitiet/{ID?}', 'PhieuBanGiaoController@detail')->name('detail');
     });
 
     Route::group(['prefix' => 'vattu', 'as' => 'vattu.'], function () {

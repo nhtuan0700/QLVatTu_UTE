@@ -14,7 +14,7 @@ class CreateHanMucTable extends Migration
     public function up()
     {
         Schema::create('HanMuc', function (Blueprint $table) {
-            $table->unsignedInteger('ID_KhoaPB');
+            $table->char('ID_KhoaPB', 10);
             $table->unsignedBigInteger('ID_VPP');
             $table->integer('HanMucDaSuDung')->default(0);
             $table->integer('HanMucToiDa');

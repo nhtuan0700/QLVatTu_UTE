@@ -2,6 +2,9 @@
 @section('title')
 Thông tin cá nhân
 @endsection
+@section('breadcrumb')
+{{ Breadcrumbs::render('profile') }}
+@endsection
 @section('content')
 <!-- Thông tin tài khoản -->
 <div class="row clearfix" id="TTTK">
@@ -20,7 +23,7 @@ Thông tin cá nhân
                   <i class="material-icons">label</i>
                 </span>
                 <div class="form-line">
-                  <input type="text" class="form-control" name="HoTen" value="{{ Auth::user()->name }}" placeholder="Họ tên"
+                  <input type="text" class="form-control" name="HoTen" value="{{ Auth::user()->HoTen }}" placeholder="Họ tên"
                     disabled required />
                 </div>
               </div>
@@ -60,7 +63,7 @@ Thông tin cá nhân
                   <i class="material-icons">phone</i>
                 </span>
                 <div class="form-line">
-                  <input type="text" class="form-control sodt" name="SDT" value="{{ Auth::user()->name }}"
+                  <input type="text" class="form-control sodt" name="SDT" value="{{ Auth::user()->SDT }}"
                     placeholder="Ex: 036-8376-080" disabled required>
                 </div>
               </div>

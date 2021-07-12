@@ -44,145 +44,93 @@ Phiếu đề nghị mua
             <tr>
               <th>Mã Phiếu</th>
               <th>Ngày lập phiếu</th>
+              <th>Ngày dự kiến hoàn thành</th>
               <th>Trạng thái</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row" style="vertical-align: middle;">MP04</th>
-              <td style="vertical-align: middle;">20/10/2021</td>
-              <td style="vertical-align: middle;">
-                <span class="label label-primary">Chờ duyệt</span>
-              </td>
-              <td style="vertical-align: middle;">
-                <a href="#" class="btn btn-default waves-effect">
-                  <i class="material-icons">edit</i>
-                </a>
-                <button class="btn btn-default waves-effect" data-toggle="modal" data-target="#PhieuDeNghi4">
-                  <i class="material-icons">delete</i>
-                </button>
-                <div class="modal fade in" id="PhieuDeNghi4" tabindex="-1" role="dialog" style="display: none;">
-                  <div class="modal-dialog modal-sm" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Bạn có chắc chắn muốn xóa?</h4>
+            @foreach ($data as $item)
+              <tr>
+                <th scope="row" style="vertical-align: middle;">{{ $item->ID }}</th>
+                <td style="vertical-align: middle;">{{ $item->NgayLapPhieu }}</td>
+                <td style="vertical-align: middle;">{{ $item->NgayDuKien }}</td>
+                <td style="vertical-align: middle;">
+                  @switch($item->TrangThai)
+                    @case(1)
+                      @if ($item->GhiChu)
+                        <span class="label label-danger">{{ $item->trangThai() }}</span>
+                      @else
+                        <span class="label label-primary">{{ $item->trangThai() }}</span>
+                      @endif
+                      @break
+                    @case(2)
+                      <span class="label label-warning">{{ $item->trangThai() }}</span>
+                      @break
+                    @default
+                      <span class="label label-success">{{ $item->trangThai() }}</span>
+                  @endswitch
+                </td>
+                <td style="vertical-align: middle;">
+                  @switch($item->TrangThai)
+                    @case(1)
+                      @if ($item->GhiChu)
+                        <button type="button" class="btn btn-default waves-effect" data-toggle="modal"
+                          data-target="#MaPhieuDeNghi1">
+                          <i class="material-icons">visibility</i>
+                        </button>
+                      @endif
+                      <div class="modal fade" id="MaPhieuDeNghi1" tabindex="-1" role="dialog" style="display: none;">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title">Nội dung cần sửa đổi</h4>
+                            </div>
+                            <div class="modal-body">
+                              {{ $item->GhiChu }}
+                            </div>
+                            <div class="modal-footer">
+                              <a href="#" class="btn btn-link waves-effect">Cập nhập</a>
+                              <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div class="modal-body">
-                        Mọi thông tin về phiếu đề nghị 4 sẽ biến mất hoàn toàn.
+                      <a href="{{ route('phieumua.edit', ['ID' => $item->ID]) }}" class="btn btn-default waves-effect">
+                        <i class="material-icons">edit</i>
+                      </a>
+                      <button class="btn btn-default waves-effect" data-toggle="modal" data-target="#PhieuDeNghi3">
+                        <i class="material-icons">delete</i>
+                      </button>
+                      <div class="modal fade in" id="PhieuDeNghi3" tabindex="-1" role="dialog" style="display: none;">
+                        <div class="modal-dialog modal-sm" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title">Bạn có chắc chắn muốn xóa?</h4>
+                            </div>
+                            <div class="modal-body">
+                              Mọi thông tin về phiếu đề nghị {{ $item->ID }} sẽ biến mất hoàn toàn.
+                            </div>
+                            <div class="modal-footer">
+                              <a href="#" class="btn btn-link waves-effect">Tiếp tục xóa</a>
+                              <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hủy</button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div class="modal-footer">
-                        <a href="#" class="btn btn-link waves-effect">Tiếp tục xóa</a>
-                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hủy</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" style="vertical-align: middle;">MP03</th>
-              <td style="vertical-align: middle;">20/10/2021</td>
-              <td style="vertical-align: middle;">
-                <span class="label label-danger">Cần sửa đổi</span>
-              </td>
-              <td style="vertical-align: middle;">
-                <button type="button" class="btn btn-default waves-effect" data-toggle="modal"
-                  data-target="#MaPhieuDeNghi1">
-                  <i class="material-icons">visibility</i>
-                </button>
-                <div class="modal fade" id="MaPhieuDeNghi1" tabindex="-1" role="dialog" style="display: none;">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Nội dung cần sửa đổi</h4>
-                      </div>
-                      <div class="modal-body">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sodales orci ante, sed ornare
-                        eros vestibulum ut. Ut accumsan
-                        vitae eros sit amet tristique. Nullam scelerisque nunc enim, non dignissim nibh faucibus
-                        ullamcorper.
-                        Fusce pulvinar libero vel ligula iaculis ullamcorper. Integer dapibus, mi ac tempor varius,
-                        purus
-                        nibh mattis erat, vitae porta nunc nisi non tellus. Vivamus mollis ante non massa egestas
-                        fringilla.
-                        Vestibulum egestas consectetur nunc at ultricies. Morbi quis consectetur nunc.
-                      </div>
-                      <div class="modal-footer">
-                        <a href="#" class="btn btn-link waves-effect">Cập nhập</a>
-                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <a href="#" class="btn btn-default waves-effect">
-                  <i class="material-icons">edit</i>
-                </a>
-                <button class="btn btn-default waves-effect" data-toggle="modal" data-target="#PhieuDeNghi3">
-                  <i class="material-icons">delete</i>
-                </button>
-                <div class="modal fade in" id="PhieuDeNghi3" tabindex="-1" role="dialog" style="display: none;">
-                  <div class="modal-dialog modal-sm" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Bạn có chắc chắn muốn xóa?</h4>
-                      </div>
-                      <div class="modal-body">
-                        Mọi thông tin về phiếu đề nghị 3 sẽ biến mất hoàn toàn.
-                      </div>
-                      <div class="modal-footer">
-                        <a href="#" class="btn btn-link waves-effect">Tiếp tục xóa</a>
-                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hủy</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" style="vertical-align: middle;">MP02</th>
-              <td style="vertical-align: middle;">20/10/2021</td>
-              <td style="vertical-align: middle;">
-                <span class="label label-warning">Chờ bàn giao (2/10)</span>
-              </td>
-              <td style="vertical-align: middle;">
-                <a href="{{ route('phieumua.detail', ['id'=>1]) }}" class="btn btn-default waves-effect">
-                  <i class="material-icons">visibility</i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" style="vertical-align: middle;">MP01</th>
-              <td style="vertical-align: middle;">20/10/2021</td>
-              <td style="vertical-align: middle;">
-                <span class="label label-success">Hoàn thành</span>
-              </td>
-              <td style="vertical-align: middle;">
-                <a href="#" class="btn btn-default waves-effect">
-                  <i class="material-icons">visibility</i>
-                </a>
-              </td>
-            </tr>
+                      @break
+                    @default
+                      <a href="{{ route('phieumua.detail', ['ID' => $item->ID]) }}" class="btn btn-default waves-effect">
+                        <i class="material-icons">visibility</i>
+                      </a>
+                  @endswitch
+                </td>
+              </tr> 
+            @endforeach
           </tbody>
         </table>
         <nav style="text-align: right;">
-          <ul class="pagination">
-            <li class="disabled">
-              <a href="javascript:void(0);">
-                <i class="material-icons">chevron_left</i>
-              </a>
-            </li>
-            <li class="active"><a href="javascript:void(0);">1</a></li>
-            <li><a href="javascript:void(0);" class="waves-effect">2</a></li>
-            <li><a href="javascript:void(0);" class="waves-effect">3</a></li>
-            <li><a href="javascript:void(0);" class="waves-effect">4</a></li>
-            <li><a href="javascript:void(0);" class="waves-effect">5</a></li>
-            <li>
-              <a href="javascript:void(0);" class="waves-effect">
-                <i class="material-icons">chevron_right</i>
-              </a>
-            </li>
-          </ul>
+          {{ $data->links('vendor.pagination.custom') }}
         </nav>
       </div>
     </div>

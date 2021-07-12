@@ -7,6 +7,7 @@ use App\Repositories\RepositoryInterface;
 interface PhieuDeNghiInterface extends RepositoryInterface
 {
     public function getIDPhieuMua();
-
+    public function listAll();
+    public function myListPhieuMua();
     // public function getIDPhieuSua();
 }

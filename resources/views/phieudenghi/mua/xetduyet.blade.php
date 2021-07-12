@@ -12,7 +12,20 @@ Chi tiết phiếu đề nghị mua
     <div class="card">
       <div class="header">
         <h2>Chi tiết phiếu đề nghị</h2>
-        <span class="label label-primary">Chờ duyệt</span>
+        @switch($phieu->TrangThai)
+          @case(1)
+            @if ($phieu->GhiChu)
+              <span class="label label-danger">{{ $phieu->trangThai() }}</span>
+            @else
+              <span class="label label-primary">{{ $phieu->trangThai() }}</span>
+            @endif
+            @break
+          @case(2)
+            <span class="label label-warning">{{ $phieu->trangThai() }}</span>
+            @break
+          @default
+            <span class="label label-success">{{ $phieu->trangThai() }}</span>
+        @endswitch
       </div>
       <div class="body">
         <div class="row clearfix">
@@ -20,7 +33,7 @@ Chi tiết phiếu đề nghị mua
             <label for="">Mã phiếu</label>
             <div class="input-group">
               <div class="form-line">
-                <p>MP04</p>
+                <p>{{ $phieu->ID }}</p>
               </div>
             </div>
           </div>
@@ -29,7 +42,7 @@ Chi tiết phiếu đề nghị mua
             <label for="">Loại phiếu</label>
             <div class="input-group">
               <div class="form-line">
-                <p>Mua</p>
+                <p>{{ $phieu->loaiPhieu() }}</p>
               </div>
             </div>
           </div>
@@ -39,7 +52,7 @@ Chi tiết phiếu đề nghị mua
             <label for="">Người yêu cầu</label>
             <div class="input-group">
               <div class="form-line">
-                <p>Nguyễn Văn A</p>
+                <p>{{ $phieu->nguoiDeNghi->HoTen }}</p>
               </div>
             </div>
           </div>
@@ -48,7 +61,7 @@ Chi tiết phiếu đề nghị mua
             <label for="">Chức vụ</label>
             <div class="input-group">
               <div class="form-line">
-                <p>Nhân viên quản lí vật tư</p>
+                <p>{{ $phieu->nguoiDeNghi->vaiTro() }}</p>
               </div>
             </div>
           </div>
@@ -58,7 +71,7 @@ Chi tiết phiếu đề nghị mua
             <label for="">Ngày yêu cầu</label>
             <div class="input-group">
               <div class="form-line">
-                <p>20/07/2021</p>
+                <p>{{ $phieu->NgayLapPhieu }}</p>
               </div>
             </div>
           </div>
@@ -66,7 +79,7 @@ Chi tiết phiếu đề nghị mua
             <label for="">Đơn vị</label>
             <div class="input-group">
               <div class="form-line">
-                <p>Khoa Điện</p>
+                <p>{{ $phieu->nguoiDeNghi->khoaPB->Ten }}</p>
               </div>
             </div>
           </div>
@@ -86,25 +99,23 @@ Chi tiết phiếu đề nghị mua
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th>Mã VPP</th>
                   <th>Tên văn phòng phẩm</th>
                   <th>Đơn vị tính</th>
                   <th>Số lượng</th>
+                  <th>Giá</th>
                 </tr>
               </thead>
               <tbody id="DSTB">
-                <tr id="TB04">
-                  <td style="vertical-align: middle;">TB04</td>
-                  <td style="vertical-align: middle;">Bút</td>
-                  <td style="vertical-align: middle;">Hộp</td>
-                  <td style="vertical-align: middle;">10</td>
-                </tr>
-                <tr id="TB03">
-                  <td style="vertical-align: middle;">TB03</td>
-                  <td style="vertical-align: middle;">Bút chì</td>
-                  <td style="vertical-align: middle;">Hộp</td>
-                  <td style="vertical-align: middle;">10</td>
-                </tr>
+                @foreach ($phieu->chiTietMua as $item)
+                  <tr id="{{ $item->VatTu->ID }}">
+                    <td style="vertical-align: middle;">{{ $item->VatTu->ID }}</td>
+                    <td style="vertical-align: middle;">{{ $item->VatTu->Ten }}</td>
+                    <td style="vertical-align: middle;">{{ $item->VatTu->DonViTinh }}</td>
+                    <td style="vertical-align: middle;">{{ $item->SoLuong }}</td>
+                    <td style="vertical-align: middle;"></td>
+                  </tr>
+                @endforeach
               </tbody>
             </table>
           </div>
@@ -112,68 +123,105 @@ Chi tiết phiếu đề nghị mua
       </div>
     </div>
     <!-- #END# Hover Rows -->
+    {{-- Kiểm tra nếu phiếu có ghi chú --}}
+    @if (!!$phieu->GhiChu)
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="header row">
+              <h2 style="margin-left: 20px;">Phản hồi đến người đề nghị</h2>
+            </div>
+            <div class="body table-responsive">
+              <div class="form-line">
+                <textarea rows="4" id="NoiDungGhiChu" class="form-control no-resize"
+                  placeholder="Nội dung cần phản hồi cho người đề nghị..." readonly>{{ $phieu->GhiChu }}</textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    @endif
     <div style="text-align: right;">
       <a href="{{ route('xetduyet.index') }}" class="btn bg-teal waves-effect" style="margin: 20px 0;">
         <i class="material-icons">keyboard_return</i>
         <span>Trở lại</span>
       </a>
-
-      <a href="#" class="btn bg-orange waves-effect" style="margin: 20px 0;" data-toggle="modal"
-        data-target="#PhanHoiModel">
-        <i class="material-icons">feedback</i>
-        <span>Phản hồi</span>
-      </a>
-      <div class="modal fade in" id="PhanHoiModel" tabindex="-1" role="dialog" style="display: none;">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title" style="text-align: left;">Nội dung phản hồi</h4>
-            </div>
-            <div class="modal-body">
-              <div class="form-line">
-                <textarea rows="4" id="NoiDungGhiChu" class="form-control no-resize"
-                  placeholder="Nội dung cần phản hồi cho người đề nghị..."></textarea>
+      {{-- Kiểm tra nếu phiếu có ghi chú và chưa duyệt --}}
+      @if (!$phieu->GhiChu && $phieu->TrangThai == 1)
+        <a href="#" class="btn bg-orange waves-effect" style="margin: 20px 0;" data-toggle="modal"
+          data-target="#PhanHoiModel">
+          <i class="material-icons">feedback</i>
+          <span>Phản hồi</span>
+        </a>
+        <div class="modal fade in" id="PhanHoiModel" tabindex="-1" role="dialog" style="display: none;">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" style="text-align: left;">Nội dung phản hồi</h4>
               </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" id="btn-phanhoi" class="btn btn-link waves-effect">Gửi</a>
+              <div class="modal-body">
+                <div class="form-line">
+                  <textarea rows="4" id="NoiDungGhiChu" class="form-control no-resize"
+                    placeholder="Nội dung cần phản hồi cho người đề nghị..."></textarea>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" id="btn-phanhoi" class="btn btn-link waves-effect">Gửi</a>
                 <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hủy</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      @endif
 
-      <a data-toggle="modal" data-target="#PheDuyet" class="btn bg-green waves-effect" style="margin: 20px 0;">
-        <i class="material-icons">done</i>
-        <span>Phê duyệt</span>
-      </a>
-      <div class="modal fade in" id="PheDuyet" tabindex="-1" role="dialog" style="display: none;text-align: left;">
-        <div class="modal-dialog modal-sm" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Phê duyệt phiếu đề nghị</h4>
-            </div>
-            <div class="modal-body">
-              <div class="col-12 demo-masked-input">
-                <label for="">Điền ngày dự kiến hoàn thành</label>
-                <div class="input-group">
-                  <span class="input-group-addon">
-                    <i class="material-icons">date_range</i>
-                  </span>
-                  <div class="form-line">
-                    <input type="text" class="form-control date" name="NgayDuKien" placeholder="Ex: 30/07/2016"
-                      required>
+      {{-- Kiểm tra nếu phiếu chưa duyệt --}}
+      @switch($phieu->TrangThai)
+        @case(1)
+          <a data-toggle="modal" data-target="#PheDuyet" class="btn bg-green waves-effect" style="margin: 20px 0;">
+            <i class="material-icons">done</i>
+            <span>Phê duyệt</span>
+          </a>
+          <div class="modal fade in" id="PheDuyet" tabindex="-1" role="dialog" style="display: none;text-align: left;">
+            <div class="modal-dialog modal-sm" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Phê duyệt phiếu đề nghị</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="col-12 demo-masked-input">
+                    <label for="">Điền ngày dự kiến hoàn thành</label>
+                    <div class="input-group">
+                      <span class="input-group-addon">
+                        <i class="material-icons">date_range</i>
+                      </span>
+                      <div class="form-line">
+                        <input type="text" class="form-control date" name="NgayDuKien" placeholder="Ex: 30/07/2016"
+                          required>
+                      </div>
+                    </div>
                   </div>
+                </div>
+                
+                <div class="modal-footer">
+                  <a id="btn-pheduyet" class="btn btn-link waves-effect">Phê duyệt</a>
+                  <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hủy</button>
                 </div>
               </div>
             </div>
-            <div class="modal-footer">
-              <a id="btn-pheduyet" class="btn btn-link waves-effect">Phê duyệt</a>
-              <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hủy</button>
-            </div>
-          </div>
-        </div>
-      </div>
+          </div>  
+          @break
+        @case(2)
+          <a href="#" class="btn bg-orange waves-effect" style="margin: 20px 0;">
+            <i class="material-icons">add</i>
+            <span>Tạo phiếu bàn giao</span>
+          </a>
+          @break
+        @default
+          <button onclick="window.print();" class="btn bg-green waves-effect" style="margin: 20px 0;">
+            <i class="material-icons">print</i>
+            <span>In</span>
+          </button>
+      @endswitch
     </div>
   </div>
 </div>

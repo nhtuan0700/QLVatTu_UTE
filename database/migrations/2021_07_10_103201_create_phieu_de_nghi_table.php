@@ -15,7 +15,7 @@ class CreatePhieuDeNghiTable extends Migration
     {
         Schema::create('PhieuDeNghi', function (Blueprint $table) {
             $table->char('ID', 10);
-            $table->char('ID_NguoiDeNghi', 10)->nullable(); 
+            $table->char('ID_NguoiDN', 10)->nullable(); 
             $table->char('ID_NVCSVC', 10)->nullable();
             $table->tinyInteger('LoaiPhieu');
             $table->dateTime('NgayLapPhieu')->nullable();
@@ -25,7 +25,7 @@ class CreatePhieuDeNghiTable extends Migration
             $table->string('GhiChu')->nullable();
 
             $table->primary('ID');
-            $table->foreign('ID_NguoiDeNghi')->references('ID')->on('NguoiDung');
+            $table->foreign('ID_NguoiDN')->references('ID')->on('NguoiDung');
             $table->foreign('ID_NVCSVC')->references('ID')->on('NguoiDung');
             // $table->timestamps();
         });

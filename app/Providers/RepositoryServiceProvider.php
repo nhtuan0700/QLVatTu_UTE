@@ -2,10 +2,14 @@
 
 namespace App\Providers;
 
+use App\Repositories\NguoiDung\NguoiDungInterface;
+use App\Repositories\NguoiDung\NguoiDungRepository;
 use App\Repositories\PhieuBanGiao\PhieuBanGiaoInterface;
 use App\Repositories\PhieuBanGiao\PhieuBanGiaoRepository;
 use App\Repositories\PhieuDeNghi\PhieuDeNghiInterface;
 use App\Repositories\PhieuDeNghi\PhieuDeNghiRepository;
+use App\Repositories\VatTu\VatTuInterface;
+use App\Repositories\VatTu\VatTuRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -19,6 +23,8 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->bind(PhieuDeNghiInterface::class, PhieuDeNghiRepository::class);
         $this->app->bind(PhieuBanGiaoInterface::class, PhieuBanGiaoRepository::class);
+        $this->app->bind(VatTuInterface::class, VatTuRepository::class);
+        $this->app->bind(NguoiDungInterface::class, NguoiDungRepository::class);
     }
 
     /**

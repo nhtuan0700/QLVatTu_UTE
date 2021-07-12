@@ -11,7 +11,11 @@ Chi tiết phiếu đề nghị mua
     <div class="card">
       <div class="header">
         <h2>Chi tiết phiếu đề nghị</h2>
-        <span class="label label-danger">Đang bàn giao (2/10)</span>
+        @if ($phieu->TrangThai == 2)
+          <span class="label label-danger">{{ $phieu->trangThai() }}</span>
+        @else
+          <span class="label label-success">{{ $phieu->trangThai() }}</span>
+        @endif
       </div>
       <div class="body">
         <div class="row clearfix">
@@ -19,7 +23,7 @@ Chi tiết phiếu đề nghị mua
             <label for="">Mã phiếu</label>
             <div class="input-group">
               <div class="form-line">
-                <p>MP04</p>
+                <p>{{ $phieu->ID }}</p>
               </div>
             </div>
           </div>
@@ -28,7 +32,7 @@ Chi tiết phiếu đề nghị mua
             <label for="">Loại phiếu</label>
             <div class="input-group">
               <div class="form-line">
-                <p>Mua</p>
+                <p>{{ $phieu->loaiPhieu() }}</p>
               </div>
             </div>
           </div>
@@ -38,7 +42,7 @@ Chi tiết phiếu đề nghị mua
             <label for="">Người yêu cầu</label>
             <div class="input-group">
               <div class="form-line">
-                <p>Nguyễn Văn A</p>
+                <p>{{ $phieu->nguoiDeNghi->HoTen }}</p>
               </div>
             </div>
           </div>
@@ -47,7 +51,7 @@ Chi tiết phiếu đề nghị mua
             <label for="">Chức vụ</label>
             <div class="input-group">
               <div class="form-line">
-                <p>Nhân viên quản lí vật tư</p>
+                <p>{{ $phieu->nguoiDeNghi->vaiTro() }}</p>
               </div>
             </div>
           </div>
@@ -57,7 +61,7 @@ Chi tiết phiếu đề nghị mua
             <label for="">Người xét duyệt</label>
             <div class="input-group">
               <div class="form-line">
-                <p>Nguyễn Văn b</p>
+                <p>{{ $phieu->nguoiXetDuyet->HoTen }}</p>
               </div>
             </div>
           </div>
@@ -66,7 +70,7 @@ Chi tiết phiếu đề nghị mua
             <label for="">Ngày lập phiếu</label>
             <div class="input-group">
               <div class="form-line">
-                <p>20/07/2021</p>
+                <p>{{ $phieu->NgayLapPhieu }}</p>
               </div>
             </div>
           </div>
@@ -76,7 +80,7 @@ Chi tiết phiếu đề nghị mua
             <label for="">Ngày dự kiến hoàn thành</label>
             <div class="input-group">
               <div class="form-line">
-                <p>30/11/2021</p>
+                <p>{{ $phieu->NgayDuKien }}</p>
               </div>
             </div>
           </div>
@@ -85,7 +89,7 @@ Chi tiết phiếu đề nghị mua
             <label for="">Đơn vị</label>
             <div class="input-group">
               <div class="form-line">
-                <p>Khoa Điện</p>
+                <p>{{ $phieu->nguoiDeNghi->khoaPB->Ten }}</p>
               </div>
             </div>
           </div>
@@ -104,32 +108,23 @@ Chi tiết phiếu đề nghị mua
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th>Mã VPP</th>
                   <th>Tên văn phòng phẩm</th>
                   <th>Đơn vị tính</th>
                   <th>Số lượng</th>
-                  <th>Tình trạng</th>
+                  <th>Giá</th>
                 </tr>
               </thead>
               <tbody id="DSTB">
-                <tr id="TB04">
-                  <td style="vertical-align: middle;">TB04</td>
-                  <td style="vertical-align: middle;">Bút</td>
-                  <td style="vertical-align: middle;">Hộp</td>
-                  <td style="vertical-align: middle;">10</td>
-                  <td style="vertical-align: middle;">
-                    <span class="label label-success">Hoàn tất</span>
-                  </td>
-                </tr>
-                <tr id="TB03">
-                  <td style="vertical-align: middle;">TB03</td>
-                  <td style="vertical-align: middle;">Bút chì</td>
-                  <td style="vertical-align: middle;">Hộp</td>
-                  <td style="vertical-align: middle;">10</td>
-                  <td style="vertical-align: middle;">
-                    <span class="label label-primary">Đang bàn giao (2/10)</span>
-                  </td>
-                </tr>
+                @foreach ($phieu->chiTietMua as $item)
+                  <tr id="{{ $item->VatTu->ID }}">
+                    <td style="vertical-align: middle;">{{ $item->VatTu->ID }}</td>
+                    <td style="vertical-align: middle;">{{ $item->VatTu->Ten }}</td>
+                    <td style="vertical-align: middle;">{{ $item->VatTu->DonViTinh }}</td>
+                    <td style="vertical-align: middle;">{{ $item->SoLuong }}</td>
+                    <td style="vertical-align: middle;">{{ $item->Gia }}</td>
+                  </tr>
+                @endforeach
               </tbody>
             </table>
           </div>
@@ -138,25 +133,32 @@ Chi tiết phiếu đề nghị mua
     </div>
     <!-- #END# Hover Rows -->
     <div style="text-align: right;">
-
       @if (Auth::user()->LoaiTK == 2)
-      <a href="#" class="btn bg-teal waves-effect" style="margin: 20px 0;">
-        <i class="material-icons">keyboard_return</i>
-        <span>Trở lại</span>
-      </a>
-      <a href="#" class="btn bg-orange waves-effect" style="margin: 20px 0;">
-        <i class="material-icons">add</i>
-        <span>Tạo phiếu bàn giao</span>
-      </a>
+        <a href="{{ route('xetduyet.index') }}" class="btn bg-teal waves-effect" style="margin: 20px 0;">
+          <i class="material-icons">keyboard_return</i>
+          <span>Trở lại</span>
+        </a>
+        <a href="#" class="btn bg-orange waves-effect" style="margin: 20px 0;">
+          <i class="material-icons">add</i>
+          <span>Tạo phiếu bàn giao</span>
+        </a>
       @else
-      <a href="#" class="btn bg-teal waves-effect" style="margin: 20px 0;">
-        <i class="material-icons">keyboard_return</i>
-        <span>Trở lại</span>
-      </a>
-      <a href="#" class="btn bg-green waves-effect" style="margin: 20px 0;">
-        <i class="material-icons">done</i>
-        <span>Hoàn thành</span>
-      </a>
+        <a href="{{ route('phieumua.index') }}" class="btn bg-teal waves-effect" style="margin: 20px 0;">
+          <i class="material-icons">keyboard_return</i>
+          <span>Trở lại</span>
+        </a>
+        @if ($phieu->TrangThai == 2)
+          <a href="#" class="btn bg-green waves-effect" style="margin: 20px 0;">
+            <i class="material-icons">done</i>
+            <span>Hoàn thành</span>
+          </a>
+        @else
+          <button onclick="window.print();" class="btn bg-green waves-effect" style="margin: 20px 0;">
+            <i class="material-icons">print</i>
+            <span>In</span>
+          </button>
+        @endif
+      
       @endif
     </div>
   </div>

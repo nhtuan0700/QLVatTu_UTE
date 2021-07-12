@@ -16,13 +16,18 @@ class XetDuyetController extends Controller
 
     public function index()
     {
-        return view('phieudenghi.index');
+        $data = $this->phieuDeNghiRepo->listAll();
+        return view('phieudenghi.index', compact('data'));
     }
 
-    public function detail()
+    public function detail($id)
     {
-        // Logic
-        return view('phieudenghi.mua.xetduyet');
+        $phieu = $this->phieuDeNghiRepo->findOrFail($id);
+        if ($phieu->LoaiPhieu == 1) {
+            return view('phieudenghi.mua.xetduyet', compact('phieu'));
+        } else {
+            return view('phieudenghi.sua.xetduyet', compact('phieu'));
+        }
     }
 
     public function xetduyet()

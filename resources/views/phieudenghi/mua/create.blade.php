@@ -72,50 +72,7 @@ Tạo phiếu đề nghị mua văn phòng phẩm
                 </tr>
               </thead>
               <tbody id="DSTB">
-                <tr id="TB04">
-                  <td style="vertical-align: middle;">TB04</td>
-                  <td style="vertical-align: middle;">Bút</td>
-                  <td style="vertical-align: middle;">Hộp</td>
-                  <td style="vertical-align: middle;">10</td>
-                  <td style="vertical-align: middle;">
-                    <button class="btn btn-default waves-effect XoaTB" data-tr="TB04">
-                      <i class="material-icons">delete</i>
-                    </button>
-                  </td>
-                </tr>
-                <tr id="TB03">
-                  <td style="vertical-align: middle;">TB03</td>
-                  <td style="vertical-align: middle;">Thước</td>
-                  <td style="vertical-align: middle;">Hộp</td>
-                  <td style="vertical-align: middle;">10</td>
-                  <td style="vertical-align: middle;">
-                    <button class="btn btn-default waves-effect XoaTB" data-tr="TB03">
-                      <i class="material-icons">delete</i>
-                    </button>
-                  </td>
-                </tr>
-                <tr id="TB02">
-                  <td style="vertical-align: middle;">TB02</td>
-                  <td style="vertical-align: middle;">Bút chì</td>
-                  <td style="vertical-align: middle;">Hộp</td>
-                  <td style="vertical-align: middle;">10</td>
-                  <td style="vertical-align: middle;">
-                    <button class="btn btn-default waves-effect XoaTB" data-tr="TB02">
-                      <i class="material-icons">delete</i>
-                    </button>
-                  </td>
-                </tr>
-                <tr id="TB01">
-                  <td style="vertical-align: middle;">TB01</td>
-                  <td style="vertical-align: middle;">Tẩy</td>
-                  <td style="vertical-align: middle;">Hộp</td>
-                  <td style="vertical-align: middle;">10</td>
-                  <td style="vertical-align: middle;">
-                    <button class="btn btn-default waves-effect XoaTB" data-tr="TB01">
-                      <i class="material-icons">delete</i>
-                    </button>
-                  </td>
-                </tr>
+                
               </tbody>
             </table>
             <div style="text-align: right; clear: both;">
@@ -152,8 +109,6 @@ Tạo phiếu đề nghị mua văn phòng phẩm
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <!-- noUISlider Css -->
 <link href="{{ asset('dist/plugins/nouislider/nouislider.min.css') }}" rel="stylesheet" />
-<!-- Jquery Core Js -->
-<script src="{{ asset('dist/plugins/jquery/jquery.min.js') }}"></script>
 @endsection
 
 @section('script')
@@ -173,7 +128,6 @@ Tạo phiếu đề nghị mua văn phòng phẩm
 <script src="{{ asset('dist/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js') }}"></script>
 <!-- noUISlider Plugin Js -->
 <script src="{{ asset('dist/plugins/nouislider/nouislider.js') }}"></script>
-<script src="{{ asset('dist/js/pages/forms/advanced-form-elements.js') }}"></script>
 
 <script>
   function isTB() {

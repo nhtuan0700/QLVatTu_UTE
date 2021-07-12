@@ -35,3 +35,8 @@ Breadcrumbs::for('thongke', function ($trail) {
     $trail->parent('home');
     $trail->push('Thống kê');
 });
+
+Breadcrumbs::for('profile', function ($trail) {
+    $trail->parent('home');
+    $trail->push('Trang cá nhân');
+});

@@ -57,31 +57,22 @@ Quản lý vật tư
             </tr>
           </thead>
           <tbody>
+            @foreach ($data as $item)
             <tr>
-              <th scope="row" style="vertical-align: middle;">1</th>
-              <td style="vertical-align: middle;">Bút bi</td>
-              <td style="vertical-align: middle;">Cây</td>
+              <th scope="row" style="vertical-align: middle;">
+                {{ $item->ID }}
+              </th>
+              <td style="vertical-align: middle;">{{ $item->Ten }}</td>
+              <td style="vertical-align: middle;">{{ $item->DonViTinh }}</td>
               <td style="vertical-align: middle;">
-                ...
+                {{ $item->LoaiVT == 1 ? $item->Phong : '...' }}
               </td>
               <td style="vertical-align: middle;">
+                @if ($item->LoaiVT == 1)
                 <span class="label label-primary">Văn phòng phẩm</span>
-              </td>
-              <td style="vertical-align: middle;">
-                <a href="chitietbangiao1.html" class="btn btn-default waves-effect">
-                  <i class="material-icons">edit</i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" style="vertical-align: middle;">2</th>
-              <td style="vertical-align: middle;">Màn hình</td>
-              <td style="vertical-align: middle;">Chiếc</td>
-              <td style="vertical-align: middle;">
-                Phòng CTSV
-              </td>
-              <td style="vertical-align: middle;">
+                @else
                 <span class="label label-warning">Thiết bị văn phòng</span>
+                @endif
               </td>
               <td style="vertical-align: middle;">
                 <a href="chitietbangiao1.html" class="btn btn-default waves-effect">
@@ -89,26 +80,11 @@ Quản lý vật tư
                 </a>
               </td>
             </tr>
+            @endforeach
           </tbody>
         </table>
         <nav style="text-align: right;">
-          <ul class="pagination">
-            <li class="disabled">
-              <a href="javascript:void(0);">
-                <i class="material-icons">chevron_left</i>
-              </a>
-            </li>
-            <li class="active"><a href="javascript:void(0);">1</a></li>
-            <li><a href="javascript:void(0);" class="waves-effect">2</a></li>
-            <li><a href="javascript:void(0);" class="waves-effect">3</a></li>
-            <li><a href="javascript:void(0);" class="waves-effect">4</a></li>
-            <li><a href="javascript:void(0);" class="waves-effect">5</a></li>
-            <li>
-              <a href="javascript:void(0);" class="waves-effect">
-                <i class="material-icons">chevron_right</i>
-              </a>
-            </li>
-          </ul>
+          {{ $data->links('vendor.pagination.custom') }}
         </nav>
       </div>
     </div>

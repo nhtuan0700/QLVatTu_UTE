@@ -14,7 +14,7 @@ class AddIdKhoaphongbanToNguoidungTable extends Migration
     public function up()
     {
         Schema::table('NguoiDung', function (Blueprint $table) {
-            $table->unsignedInteger('ID_KhoaPB')->nullable();
+            $table->char('ID_KhoaPB', 10)->nullable();
 
             $table->foreign('ID_KhoaPB')->references('ID')->on('KhoaPhongBan');
         });

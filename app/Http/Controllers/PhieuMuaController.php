@@ -17,10 +17,12 @@ class PhieuMuaController extends Controller
     
     public function index()
     {
-        return view('phieudenghi.mua.index');
+        // dd($this->phieuMuaRepo->myListPhieuMua());
+        $data = $this->phieuMuaRepo->myListPhieuMua();
+        return view('phieudenghi.mua.index', compact('data'));
     }
 
-    public function showFormCreate()
+    public function showCreate()
     {
         return view('phieudenghi.mua.create');
     }
@@ -32,7 +34,14 @@ class PhieuMuaController extends Controller
 
     public function detail($id)
     {
-        return view('phieudenghi.mua.detail');
+        $phieu = $this->phieuMuaRepo->findOrFail($id);
+        return view('phieudenghi.mua.detail', compact('phieu'));
+    }
+
+    public function showEdit($id)
+    {
+        $phieu = $this->phieuMuaRepo->findOrFail($id);
+        return view('phieudenghi.mua.edit', compact('phieu'));
     }
 
     public function update($id)

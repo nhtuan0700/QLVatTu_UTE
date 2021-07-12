@@ -5,6 +5,7 @@ namespace App\Repositories\PhieuDeNghi;
 use Carbon\Carbon;
 use App\Models\PhieuDeNghi;
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\Auth;
 
 class PhieuDeNghiRepository extends BaseRepository implements PhieuDeNghiInterface
 {
@@ -29,5 +30,16 @@ class PhieuDeNghiRepository extends BaseRepository implements PhieuDeNghiInterfa
         }
         $new_id = $prefix . $count;
         return $new_id;
+    }
+
+    public function listAll()
+    {
+        return $this->model->select()->orderby('TrangThai', 'asc')->orderby('NgayLapPhieu', 'asc')->paginate($this->limit);
+    }
+
+    public function myListPhieuMua()
+    {
+        return $this->model->select()->where('ID_NguoiDN', Auth::user()->ID)
+            ->orderby('TrangThai', 'asc')->orderby('NgayLapPhieu', 'asc')->paginate($this->limit);
     }
 }

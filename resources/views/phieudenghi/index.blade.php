@@ -44,107 +44,48 @@ Danh sách phiếu đề nghị
         <table class="table table-hover">
           <thead>
             <tr>
-              <th>#</th>
+              <th>Mã phiếu</th>
+              <th>Người yêu cầu</th>
               <th>Ngày lập phiếu</th>
-              <th>Tổng tiền</th>
               <th>Loại phiếu</th>
               <th>Trạng thái</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
+            @foreach ($data as $item)
             <tr>
-              <th scope="row" style="vertical-align: middle;">MP04</th>
-              <td style="vertical-align: middle;">20/10/2021</td>
-              <td style="vertical-align: middle;">1,200,000 vnđ</td>
-              <td style="vertical-align: middle;">Phiếu mua</td>
+              <th scope="row" style="vertical-align: middle;">{{ $item->ID }}</th>
+              <td style="vertical-align: middle;">{{ $item->nguoiDeNghi->HoTen }}</td>
+              <td style="vertical-align: middle;">{{ $item->NgayLapPhieu }}</td>
+              <td style="vertical-align: middle;">{{ $item->loaiPhieu() }}</td>
               <td style="vertical-align: middle;">
-                <span class="label label-primary">Chờ duyệt</span>
+                @switch($item->TrangThai)
+                  @case(1)
+                    @if ($item->GhiChu)
+                      <span class="label label-danger">{{ $item->trangThai() }}</span>
+                    @else
+                      <span class="label label-primary">{{ $item->trangThai() }}</span>
+                    @endif
+                    @break
+                  @case(2)
+                    <span class="label label-warning">{{ $item->trangThai() }}</span>
+                    @break
+                  @default
+                    <span class="label label-success">{{ $item->trangThai() }}</span>
+                @endswitch
               </td>
               <td style="vertical-align: middle;">
-                <a href="xemchitiet1.html" class="btn btn-default waves-effect">
-                  <i class="material-icons">visibility</i>
-                </a>
-                <div class="modal fade in" id="PhieuDeNghi4" tabindex="-1" role="dialog" style="display: none;">
-                  <div class="modal-dialog modal-sm" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Bạn có chắc chắn muốn xóa?</h4>
-                      </div>
-                      <div class="modal-body">
-                        Mọi thông tin về phiếu đề nghị 4 sẽ biến mất hoàn toàn.
-                      </div>
-                      <div class="modal-footer">
-                        <a href="#" class="btn btn-link waves-effect">Tiếp tục xóa</a>
-                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hủy</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" style="vertical-align: middle;">MP03</th>
-              <td style="vertical-align: middle;">20/10/2021</td>
-              <td style="vertical-align: middle;">1,200,000 vnđ</td>
-              <td style="vertical-align: middle;">Phiếu mua</td>
-              <td style="vertical-align: middle;">
-                <span class="label label-danger">Cần sửa đổi</span>
-              </td>
-              <td style="vertical-align: middle;">
-                <a href="xemchitiet2.html" class="btn btn-default waves-effect">
+                <a href="{{ route('xetduyet.detail', ['ID'=> $item->ID]) }}" class="btn btn-default waves-effect">
                   <i class="material-icons">visibility</i>
                 </a>
               </td>
             </tr>
-            <tr>
-              <th scope="row" style="vertical-align: middle;">MP02</th>
-              <td style="vertical-align: middle;">20/10/2021</td>
-              <td style="vertical-align: middle;">1,200,000 vnđ</td>
-              <td style="vertical-align: middle;">Phiếu mua</td>
-              <td style="vertical-align: middle;">
-                <span class="label label-warning">Chờ bàn giao (2/10)</span>
-              </td>
-              <td style="vertical-align: middle;">
-                <a href="{{ route('xetduyet.detail', ['id'=>1]) }}" class="btn btn-default waves-effect">
-                  <i class="material-icons">visibility</i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" style="vertical-align: middle;">MP01</th>
-              <td style="vertical-align: middle;">20/10/2021</td>
-              <td style="vertical-align: middle;">1,200,000 vnđ</td>
-              <td style="vertical-align: middle;">Phiếu mua</td>
-              <td style="vertical-align: middle;">
-                <span class="label label-success">Hoàn thành</span>
-              </td>
-              <td style="vertical-align: middle;">
-                <a href="xemchitietHT.html" class="btn btn-default waves-effect">
-                  <i class="material-icons">visibility</i>
-                </a>
-              </td>
-            </tr>
+            @endforeach
           </tbody>
         </table>
         <nav style="text-align: right;">
-          <ul class="pagination">
-            <li class="disabled">
-              <a href="javascript:void(0);">
-                <i class="material-icons">chevron_left</i>
-              </a>
-            </li>
-            <li class="active"><a href="javascript:void(0);">1</a></li>
-            <li><a href="javascript:void(0);" class="waves-effect">2</a></li>
-            <li><a href="javascript:void(0);" class="waves-effect">3</a></li>
-            <li><a href="javascript:void(0);" class="waves-effect">4</a></li>
-            <li><a href="javascript:void(0);" class="waves-effect">5</a></li>
-            <li>
-              <a href="javascript:void(0);" class="waves-effect">
-                <i class="material-icons">chevron_right</i>
-              </a>
-            </li>
-          </ul>
+          {{ $data->links('vendor.pagination.custom') }}
         </nav>
       </div>
     </div>

@@ -14,9 +14,11 @@ class CreateKhoaPhongbanTable extends Migration
     public function up()
     {
         Schema::create('KhoaPhongBan', function (Blueprint $table) {
-            $table->integerIncrements('ID');
+            $table->char('ID', 10);
             $table->string('Ten', 70);
             $table->tinyInteger('Loai');
+
+            $table->primary('ID');
             $table->timestamps();
         });
     }

@@ -3,14 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\Facade\FormatDate;
 
 class PhieuDeNghi extends Model
 {
-    public const PHIEUMUA = 1;
-    public const PHIEUSUA = 2;
-
     protected $fillable = [
-        'ID_NguoiDeNghi', 'ID_NVCSVC', 'LoaiPhieu',
+        'ID_NguoiDN', 'ID_NVCSVC', 'LoaiPhieu',
         'NgayLapPhieu', 'NgayDuKien', 'NgayHoanThanh',
         'TrangThai', 'GhiChu'
     ];
@@ -24,7 +22,7 @@ class PhieuDeNghi extends Model
 
     public function nguoiDeNghi()
     {
-        return $this->belongsTo(NguoiDung::class, 'ID_NguoiDeNghi', 'ID');
+        return $this->belongsTo(NguoiDung::class, 'ID_NguoiDN', 'ID');
     }
 
     public function nguoiXetDuyet()
@@ -39,11 +37,54 @@ class PhieuDeNghi extends Model
 
     public function chiTietSua()
     {
-        return $this->hasMany(ChiTietMua::class, 'ID_Phieu', 'ID');
+        return $this->hasMany(ChiTietSua::class, 'ID_Phieu', 'ID');
     }
 
     public function danhSachBanGiao()
     {
         return $this->hasMany(PhieuBanGiao::class, 'ID_PhieuDN', 'ID');
+    }
+
+    public function trangThai()
+    {
+        switch ($this->TrangThai) {
+            case 1:
+                if ($this->GhiChu) {
+                    return 'Cần sửa đổi';
+                }
+                return 'Chờ duyệt';
+                break;
+            case 2:
+                return 'Chờ bàn giao';
+                break;
+            case 3:
+                return 'Hoàn thành';
+                break;
+        }
+    }
+
+    public function loaiPhieu()
+    {
+        switch ($this->LoaiPhieu) {
+            case 1:
+                return 'Phiếu mua';
+                break;
+            case 2:
+                return 'Phiếu sửa';
+                break;
+        }
+    }
+
+    public function getNgayLapPhieuAttribute($date)
+    {
+        return FormatDate::formatDateTime($date);
+    }
+    public function getNgayDuKienAttribute($date)
+    {
+        return FormatDate::formatDateTime($date);
+    }
+    public function getNgayHoanThanhAttribute($date)
+    {
+        return FormatDate::formatDateTime($date);
     }
 }

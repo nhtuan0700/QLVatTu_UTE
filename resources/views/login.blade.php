@@ -12,18 +12,18 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet"
     type="text/css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-
   <!-- Bootstrap Core Css -->
   <link href="{{ asset('dist/plugins/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
-
   <!-- Waves Effect Css -->
   <link href="{{ asset('dist/plugins/node-waves/waves.css') }}" rel="stylesheet">
-
   <!-- Animation Css -->
   <link href="{{ asset('dist/plugins/animate-css/animate.css') }}" rel="stylesheet">
-
   <!-- Custom Css -->
   <link href="{{ asset('dist/css/style.css') }}" rel="stylesheet">
+  
+  <!-- Toastr -->
+  <link rel="stylesheet" href="{{ asset('dist/plugins/toastr/toastr.min.css') }}">
+  <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 </head>
 
 <body class="login-page">
@@ -85,19 +85,24 @@
 
   <!-- Jquery Core Js -->
   <script src="{{ asset('dist/plugins/jquery/jquery.min.js') }}"></script>
-
   <!-- Bootstrap Core Js -->
   <script src="{{ asset('dist/plugins/bootstrap/js/bootstrap.js') }}"></script>
-
   <!-- Waves Effect Plugin Js -->
   <script src="{{ asset('dist/plugins/node-waves/waves.js') }}"></script>
-
   <!-- Custom Js -->
   <script src="{{ asset('dist/js/admin.js') }}"></script>
 
-  <!-- Validation Plugin Js -->
-  {{-- <script src="{{ asset('dist/plugins/jquery-validation/jquery.validate.js') }}"></script> --}}
-  {{-- <script src="{{ asset('dist/js/pages/examples/sign-in.js') }}"></script> --}}
+  <script src="{{ asset('dist/plugins/toastr/toastr.min.js') }}"></script> 
+	@php
+    if (session('alert-success'))
+    {
+      echo '<script>toastr.success("'.session('alert-success').'")</script>';
+    }
+    if (session('alert-fail'))
+    {
+      echo '<script>toastr.error("'.session('alert-fail').'")</script>';
+    }
+  @endphp
 </body>
 
 </html>
