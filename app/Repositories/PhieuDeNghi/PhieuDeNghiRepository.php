@@ -67,4 +67,9 @@ class PhieuDeNghiRepository extends BaseRepository implements PhieuDeNghiInterfa
         DB::commit();
         return true;
     }
+    
+    public function confirmHoanThanh($id_PhieuDN)
+    {
+        $this->update($id_PhieuDN, ['NgayHoanThanh' => Carbon::now('Asia/Ho_Chi_Minh'), 'TrangThai' => 3]);
+    }
 }

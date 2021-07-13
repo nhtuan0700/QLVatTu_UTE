@@ -152,17 +152,18 @@ Chi tiết phiếu đề nghị mua
           <span>Trở lại</span>
         </a>
         @if ($phieu->TrangThai == 2 && $phieu->tongSoLuongBG() == $phieu->tongSoLuongDN())
-          <a href="#" class="btn bg-green waves-effect" style="margin: 20px 0;">
+          <a href="{{route('phieumua.confirm',$phieu->ID)}}" class="btn bg-green waves-effect" style="margin: 20px 0;">
             <i class="material-icons">done</i>
             <span>Hoàn thành</span>
           </a>
-        @else
+        @endif
+        @if($phieu->TrangThai == 3)
           <button onclick="window.print();" class="btn bg-green waves-effect" style="margin: 20px 0;">
             <i class="material-icons">print</i>
             <span>In</span>
           </button>
         @endif
-      
+
       @endif
     </div>
   </div>
