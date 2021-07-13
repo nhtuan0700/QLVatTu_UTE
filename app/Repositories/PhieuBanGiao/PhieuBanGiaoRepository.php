@@ -2,15 +2,16 @@
 
 namespace App\Repositories\PhieuBanGiao;
 
+use App\Models\PhieuBanGiao;
 use Carbon\Carbon;
-use App\Models\PhieuDeNghi;
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\Auth;
 
 class PhieuBanGiaoRepository extends BaseRepository implements PhieuBanGiaoInterface
 {
     public function getModel()
     {
-        return PhieuDeNghi::class;
+        return PhieuBanGiao::class;
     }
 
     public function getIDPhieuBG()
@@ -29,5 +30,18 @@ class PhieuBanGiaoRepository extends BaseRepository implements PhieuBanGiaoInter
         }
         $new_id = $prefix . $count;
         return $new_id;
+    }
+
+    public function list()
+    {
+        $query = $this->model->select();
+        return $query->orderby('ID_NguoiXN', 'asc')->orderby('NgayBanGiao', 'desc')->paginate($this->limit);
+    }
+
+    public function myList()
+    {
+        $query = PhieuBanGiao::join('PhieuDeNghi', 'PhieuDeNghi.ID', '=', 'PhieuBanGiao.ID_PhieuDN')
+            ->where('PhieuDeNghi.ID_NguoiDN', '=', Auth::user()->ID)->select('PhieuBanGiao.*');
+        return $query->orderby('ID_NguoiXN', 'asc')->orderby('NgayBanGiao', 'desc')->paginate($this->limit);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Facade\FormatDate;
 use Illuminate\Database\Eloquent\Model;
 
 class PhieuBanGiao extends Model
@@ -10,7 +11,7 @@ class PhieuBanGiao extends Model
         'ID_PhieuDN', 'ID_NVCSVC', 'ID_NguoiXN', 'LyDo', 'NgayBanGiao'
     ];
 
-    protected $table = 'ChiTietSua';
+    protected $table = 'PhieuBanGiao';
 
     protected $primaryKey = 'ID';
     public $incrementing = false;
@@ -22,6 +23,11 @@ class PhieuBanGiao extends Model
         return $this->hasMany(ChiTietBanGiao::class, 'ID_Phieu', 'ID');
     }
 
+    public function phieuDeNghi()
+    {
+        return $this->belongsTo(PhieuDeNghi::class, 'ID_PhieuDN', 'ID');
+    }
+
     public function nguoiLapPhieu()
     {
         return $this->belongsTo(NguoiDung::class, 'ID_NVCSVC', 'ID');
@@ -30,5 +36,21 @@ class PhieuBanGiao extends Model
     public function nguoiXacNhan()
     {
         return $this->belongsTo(NguoiDung::class, 'ID_NguoiXN', 'ID');
+    }
+
+    public function trangThai()
+    {
+        if (!$this->ID_NguoiXN) {
+            return 'Chờ xác nhận';
+        }
+        return 'Đã xác nhận';
+    }
+
+    public function getNgayBanGiaoAttribute($date)
+    {
+        if (!$date) {
+            return null;
+        }
+        return FormatDate::formatDateTime($date);
     }
 }

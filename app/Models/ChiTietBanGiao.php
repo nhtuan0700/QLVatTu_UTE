@@ -16,4 +16,9 @@ class ChiTietBanGiao extends Model
     {
         return $this->belongsTo(VatTu::class, 'ID_VatTu', 'ID');
     }
+
+    public function phieuBanGiao()
+    {
+        return $this->belongsTo(PhieuBanGiao::class, 'ID_Phieu', 'ID');
+    }
 }

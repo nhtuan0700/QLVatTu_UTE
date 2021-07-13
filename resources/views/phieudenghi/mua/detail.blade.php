@@ -12,7 +12,9 @@ Chi tiết phiếu đề nghị mua
       <div class="header">
         <h2>Chi tiết phiếu đề nghị</h2>
         @if ($phieu->TrangThai == 2)
-          <span class="label label-danger">{{ $phieu->trangThai() }}</span>
+          <span class="label label-warning">
+            {{ $phieu->trangThai() }} ({{ $phieu->tongSoLuongBG().'/'.$phieu->tongSoLuongDN() }})
+          </span>
         @else
           <span class="label label-success">{{ $phieu->trangThai() }}</span>
         @endif
@@ -113,6 +115,7 @@ Chi tiết phiếu đề nghị mua
                   <th>Đơn vị tính</th>
                   <th>Số lượng</th>
                   <th>Giá</th>
+                  <th>Đã bàn giao</th>
                 </tr>
               </thead>
               <tbody id="DSTB">
@@ -123,6 +126,7 @@ Chi tiết phiếu đề nghị mua
                     <td style="vertical-align: middle;">{{ $item->VatTu->DonViTinh }}</td>
                     <td style="vertical-align: middle;">{{ $item->SoLuong }}</td>
                     <td style="vertical-align: middle;">{{ $item->Gia }}</td>
+                    <td style="vertical-align: middle;">{{ $item->soLuongDaBG() }}</td>
                   </tr>
                 @endforeach
               </tbody>
@@ -147,7 +151,7 @@ Chi tiết phiếu đề nghị mua
           <i class="material-icons">keyboard_return</i>
           <span>Trở lại</span>
         </a>
-        @if ($phieu->TrangThai == 2)
+        @if ($phieu->TrangThai == 2 && $phieu->tongSoLuongBG() == $phieu->tongSoLuongDN())
           <a href="#" class="btn bg-green waves-effect" style="margin: 20px 0;">
             <i class="material-icons">done</i>
             <span>Hoàn thành</span>

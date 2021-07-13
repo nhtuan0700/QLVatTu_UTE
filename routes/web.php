@@ -62,7 +62,7 @@ Route::middleware('auth')->group(function () {
             Route::get('them', 'VatTuController@showCreateForm')->name('create');
             Route::post('bangiao', 'VatTuController@create');
         });
-        Route::get('chitiet/{id?}', 'VatTuController@detail')->name('detail');
+        Route::get('chitiet/{ID?}', 'VatTuController@detail')->name('detail');
     });
 
     Route::group(['prefix' => 'nguoidung', 'as' => 'nguoidung.'], function () {

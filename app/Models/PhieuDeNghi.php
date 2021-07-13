@@ -81,10 +81,30 @@ class PhieuDeNghi extends Model
     }
     public function getNgayDuKienAttribute($date)
     {
+        if (!$date) {
+            return null;
+        }
         return FormatDate::formatDateTime($date);
     }
     public function getNgayHoanThanhAttribute($date)
     {
+        if (!$date) {
+            return null;
+        }
         return FormatDate::formatDateTime($date);
+    }
+
+    public function tongSoLuongDN()
+    {
+        return $this->chiTietMua->sum('SoLuong');
+    }
+
+    public function tongSoLuongBG()
+    {
+        $count = 0;
+        foreach ($this->chiTietMua as $item) {
+            $count += $item->soLuongDaBG();
+        }
+        return $count;
     }
 }

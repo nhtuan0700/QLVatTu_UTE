@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             PhieuDeNghiSeeder::class,
             ChiTietMuaSeeder::class,
             ChiTietSuaSeeder::class,
+            PhieuBanGiaoSeeder::class,
+            ChiTietBanGiaoSeeder::class,
         ]);
     }
 }

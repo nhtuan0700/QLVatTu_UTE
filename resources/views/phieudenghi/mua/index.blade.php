@@ -54,7 +54,7 @@ Phiếu đề nghị mua
               <tr>
                 <th scope="row" style="vertical-align: middle;">{{ $item->ID }}</th>
                 <td style="vertical-align: middle;">{{ $item->NgayLapPhieu }}</td>
-                <td style="vertical-align: middle;">{{ $item->NgayDuKien }}</td>
+                <td style="vertical-align: middle;">{{ $item->NgayDuKien ?? '...' }}</td>
                 <td style="vertical-align: middle;">
                   @switch($item->TrangThai)
                     @case(1)
@@ -65,7 +65,9 @@ Phiếu đề nghị mua
                       @endif
                       @break
                     @case(2)
-                      <span class="label label-warning">{{ $item->trangThai() }}</span>
+                      <span class="label label-warning">
+                        {{ $item->trangThai() }} ({{ $item->tongSoLuongBG().'/'.$item->tongSoLuongDN() }})
+                      </span>
                       @break
                     @default
                       <span class="label label-success">{{ $item->trangThai() }}</span>

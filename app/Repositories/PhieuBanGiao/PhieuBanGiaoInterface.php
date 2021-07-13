@@ -7,4 +7,8 @@ use App\Repositories\RepositoryInterface;
 interface PhieuBanGiaoInterface extends RepositoryInterface
 {
     public function getIDPhieuBG();
+
+    public function list();
+
+    public function myList();
 }

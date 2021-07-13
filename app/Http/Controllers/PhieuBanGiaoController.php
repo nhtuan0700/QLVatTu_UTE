@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PhieuBanGiao\CreatePhieuBanGiao;
 use App\Repositories\PhieuBanGiao\PhieuBanGiaoInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PhieuBanGiaoController extends Controller
 {
@@ -17,7 +18,12 @@ class PhieuBanGiaoController extends Controller
 
     public function index()
     {
-        return view('phieubangiao.index');
+        if (Auth::user()->LoaiTK == 2) {
+            $data = $this->phieuBanGiaoRepo->list();
+        } else {
+            $data = $this->phieuBanGiaoRepo->myList();
+        }
+        return view('phieubangiao.index', compact('data'));
     }
 
     public function showCreateform()
@@ -32,6 +38,7 @@ class PhieuBanGiaoController extends Controller
 
     public function detail($id)
     {
-        return view('phieubangiao.detail');
+        $phieu = $this->phieuBanGiaoRepo->findOrFail($id);
+        return view('phieubangiao.detail', compact('phieu'));
     }
 }
