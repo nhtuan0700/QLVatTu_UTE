@@ -13,7 +13,7 @@ Chi tiết phiếu bàn giao
 				<h2>Chi tiết phiếu bàn giao</h2>
 				@if (!$phieu->ID_NguoiXN)
 					<span class="label label-warning">{{ $phieu->trangThai() }}</span>
-				@else		
+				@else
 					<span class="label label-success">{{ $phieu->trangThai() }}</span>
 				@endif
 			</div>
@@ -165,7 +165,7 @@ Chi tiết phiếu bàn giao
 							<span>In</span>
 						</button>
 					@else
-						<a href="#" class="btn bg-green waves-effect" style="margin: 20px 0;">
+						<a href="{{route('phieubangiao.confirm',$phieu->ID)}}" class="btn bg-green waves-effect" style="margin: 20px 0;" methods="put">
 							<i class="material-icons">done</i>
 							<span>Xác nhận</span>
 						</a>

@@ -42,4 +42,8 @@ class PhieuDeNghiRepository extends BaseRepository implements PhieuDeNghiInterfa
         return $this->model->select()->where('ID_NguoiDN', Auth::user()->ID)
             ->orderby('TrangThai', 'asc')->orderby('NgayLapPhieu', 'asc')->paginate($this->limit);
     }
+    public function confirmHoanThanh($id_PhieuDN)
+    {
+        $this->update($id_PhieuDN,['NgayHoanThanh'=>Carbon::now('Asia/Ho_Chi_Minh'),'TrangThai' => 3]);
+    }
 }

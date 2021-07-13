@@ -201,14 +201,14 @@ Chi tiết phiếu đề nghị mua
                     </div>
                   </div>
                 </div>
-                
+
                 <div class="modal-footer">
                   <a id="btn-pheduyet" class="btn btn-link waves-effect">Phê duyệt</a>
                   <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hủy</button>
                 </div>
               </div>
             </div>
-          </div>  
+          </div>
           @break
         @case(2)
           <a href="#" class="btn bg-orange waves-effect" style="margin: 20px 0;">

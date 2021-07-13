@@ -12,7 +12,7 @@ class PhieuDeNghi extends Model
         'NgayLapPhieu', 'NgayDuKien', 'NgayHoanThanh',
         'TrangThai', 'GhiChu'
     ];
-
+    public $timestamps = false;
     protected $table = 'PhieuDenghi';
 
     protected $primaryKey = 'ID';

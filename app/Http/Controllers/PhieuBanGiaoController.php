@@ -6,6 +6,7 @@ use App\Http\Requests\PhieuBanGiao\CreatePhieuBanGiao;
 use App\Repositories\PhieuBanGiao\PhieuBanGiaoInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class PhieuBanGiaoController extends Controller
 {
@@ -40,5 +41,10 @@ class PhieuBanGiaoController extends Controller
     {
         $phieu = $this->phieuBanGiaoRepo->findOrFail($id);
         return view('phieubangiao.detail', compact('phieu'));
+    }
+    public function confirmPhieuBG($id_phieuBG)
+    {
+        $this->phieuBanGiaoRepo->confirmPhieuBG($id_phieuBG);
+        return back()->with('alert-success','Xác nhận phiếu bàn giao thành công');
     }
 }

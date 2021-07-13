@@ -14,7 +14,7 @@ class PhieuMuaController extends Controller
     {
         $this->phieuMuaRepo = $phieuDeNghiInterface;
     }
-    
+
     public function index()
     {
         // dd($this->phieuMuaRepo->myListPhieuMua());
@@ -26,7 +26,7 @@ class PhieuMuaController extends Controller
     {
         return view('phieudenghi.mua.create');
     }
-    
+
     public function create(CreatePhieuMua $request)
     {
 
@@ -48,14 +48,15 @@ class PhieuMuaController extends Controller
     {
 
     }
-    
+
     public function delete($id)
     {
-        
+
     }
 
-    public function confirm()
+    public function confirmHoanThanhPhieuDN($id_phieuBG)
     {
-
+        $this->phieuMuaRepo->confirmHoanThanh($id_phieuBG);
+        return back()->with('alert-success','Xác nhận hoàn thành phiếu đề nghị thành công');
     }
 }
