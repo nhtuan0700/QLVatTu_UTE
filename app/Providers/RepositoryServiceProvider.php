@@ -10,6 +10,8 @@ use App\Repositories\PhieuDeNghi\PhieuDeNghiInterface;
 use App\Repositories\PhieuDeNghi\PhieuDeNghiRepository;
 use App\Repositories\VatTu\VatTuInterface;
 use App\Repositories\VatTu\VatTuRepository;
+use App\Repositories\HanMuc\HanMucInterface;
+use App\Repositories\HanMuc\HanMucRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -25,6 +27,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PhieuBanGiaoInterface::class, PhieuBanGiaoRepository::class);
         $this->app->bind(VatTuInterface::class, VatTuRepository::class);
         $this->app->bind(NguoiDungInterface::class, NguoiDungRepository::class);
+        $this->app->bind(HanMucInterface::class, HanMucRepository::class);
     }
 
     /**
