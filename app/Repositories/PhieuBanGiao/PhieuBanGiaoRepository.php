@@ -6,6 +6,7 @@ use App\Models\PhieuBanGiao;
 use Carbon\Carbon;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PhieuBanGiaoRepository extends BaseRepository implements PhieuBanGiaoInterface
 {
@@ -48,5 +49,41 @@ class PhieuBanGiaoRepository extends BaseRepository implements PhieuBanGiaoInter
     public function confirmPhieuBG($id_phieuBG)
     {
         $this->update($id_phieuBG,['ID_NguoiXN' => Auth::user()->ID,'NgayBanGiao' => Carbon::now('Asia/Ho_Chi_Minh')]);
+    }
+    public function themPhieuBanGiao($data)
+    {
+        $newID = $this->getIDPhieuBG();
+        $this->model->insert([
+            'ID' => $newID,
+            'ID_PhieuDN' => $data['ID_PhieuDN'],
+            'ID_NVCSVC' => Auth::user()->ID
+        ]);
+        try {
+            foreach ($data['data'] as  $item)
+            {
+                DB::table('ChiTietBanGiao')->insert([
+                    'ID_Phieu' => $newID,
+                    'ID_VatTu' => $item['idTB'],
+                    'SoLuong' => $item['soLuong'],
+                ]);
+            }
+            return true;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    public function themChiTietBG($data)
+    {
+        $data=array($data)[0][0];
+        try {
+            DB::table('chitietbangiao')->insert([
+                    'ID_Phieu' => $data['idPhieu'],
+                'ID_VatTu' => $data['idTB'],
+                'SoLuong' => $data['soLuong'],
+            ]);
+            return true;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

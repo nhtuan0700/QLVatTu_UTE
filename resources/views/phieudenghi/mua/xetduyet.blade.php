@@ -28,63 +28,64 @@ Chi tiết phiếu đề nghị mua
         @endswitch
       </div>
       <div class="body">
-        <div class="row clearfix">
-          <div class="col-md-6 demo-masked-input">
-            <label for="">Mã phiếu</label>
-            <div class="input-group">
-              <div class="form-line">
-                <p>{{ $phieu->ID }}</p>
-              </div>
-            </div>
-          </div>
+            <div class="row clearfix">
+                <div class="col-md-6 demo-masked-input">
+                    <label for="">Mã phiếu</label>
+                    <div class="input-group">
+                        <div class="form-line">
+                            <p>{{ $phieu->ID }}</p>
+                            <input type="hidden" id="ID_PhieuDN" value="{{$phieu->ID}}" >
+                            <input type="hidden" id="ID_NVCSVC" value="{{$phieu->NguoiDeNghi->ID}}" >
+                        </div>
+                    </div>
+                </div>
 
-          <div class="col-md-6 demo-masked-input">
-            <label for="">Loại phiếu</label>
-            <div class="input-group">
-              <div class="form-line">
-                <p>{{ $phieu->loaiPhieu() }}</p>
-              </div>
+                <div class="col-md-6 demo-masked-input">
+                    <label for="">Loại phiếu</label>
+                    <div class="input-group">
+                        <div class="form-line">
+                            <p>{{ $phieu->loaiPhieu() }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="row clearfix">
-          <div class="col-md-6 demo-masked-input">
-            <label for="">Người yêu cầu</label>
-            <div class="input-group">
-              <div class="form-line">
-                <p>{{ $phieu->nguoiDeNghi->HoTen }}</p>
-              </div>
-            </div>
-          </div>
+            <div class="row clearfix">
+                <div class="col-md-6 demo-masked-input">
+                    <label for="">Người yêu cầu</label>
+                    <div class="input-group">
+                        <div class="form-line">
+                            <p>{{ $phieu->nguoiDeNghi->HoTen }}</p>
+                        </div>
+                    </div>
+                </div>
 
-          <div class="col-md-6 demo-masked-input">
-            <label for="">Chức vụ</label>
-            <div class="input-group">
-              <div class="form-line">
-                <p>{{ $phieu->nguoiDeNghi->vaiTro() }}</p>
-              </div>
+                <div class="col-md-6 demo-masked-input">
+                    <label for="">Chức vụ</label>
+                    <div class="input-group">
+                        <div class="form-line">
+                            <p>{{ $phieu->nguoiDeNghi->vaiTro() }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="row clearfix">
-          <div class="col-md-6 demo-masked-input">
-            <label for="">Ngày yêu cầu</label>
-            <div class="input-group">
-              <div class="form-line">
-                <p>{{ $phieu->NgayLapPhieu }}</p>
-              </div>
+            <div class="row clearfix">
+                <div class="col-md-6 demo-masked-input">
+                    <label for="">Ngày yêu cầu</label>
+                    <div class="input-group">
+                        <div class="form-line">
+                            <p>{{ $phieu->NgayLapPhieu }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 demo-masked-input">
+                    <label for="">Đơn vị</label>
+                    <div class="input-group">
+                        <div class="form-line">
+                            <p>{{ $phieu->nguoiDeNghi->khoaPB->Ten }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-md-6 demo-masked-input">
-            <label for="">Đơn vị</label>
-            <div class="input-group">
-              <div class="form-line">
-                <p>{{ $phieu->nguoiDeNghi->khoaPB->Ten }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
 
@@ -102,8 +103,9 @@ Chi tiết phiếu đề nghị mua
                   <th>Mã VPP</th>
                   <th>Tên văn phòng phẩm</th>
                   <th>Đơn vị tính</th>
-                  <th>Số lượng</th>
                   <th>Giá</th>
+                  <th>Đã bàn giao / Tổng số lượng</th>
+                    <th>Bàn giao thêm</th>
                 </tr>
               </thead>
               <tbody id="DSTB">
@@ -112,8 +114,15 @@ Chi tiết phiếu đề nghị mua
                     <td style="vertical-align: middle;">{{ $item->VatTu->ID }}</td>
                     <td style="vertical-align: middle;">{{ $item->VatTu->Ten }}</td>
                     <td style="vertical-align: middle;">{{ $item->VatTu->DonViTinh }}</td>
-                    <td style="vertical-align: middle;">{{ $item->SoLuong }}</td>
-                    <td style="vertical-align: middle;"></td>
+                      <td style="vertical-align: middle;">{{ $item->Gia }}</td>
+                    <td style="vertical-align: middle;">{{ $item->soLuongDaBG() }}/{{ $item->SoLuong }}</td>
+                    <td style="vertical-align: middle;">
+                        <div class="form-group" style="margin-bottom: 0">
+                            <div class="form-line">
+                                <input type="number" name="SL_VatTu[]" class="form-control" min="0" max="{{$item->SoLuong - $item->soLuongDaBG() }}">
+                            </div>
+                        </div>
+                    </td>
                   </tr>
                 @endforeach
               </tbody>
@@ -166,7 +175,7 @@ Chi tiết phiếu đề nghị mua
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" id="btn-phanhoi" class="btn btn-link waves-effect">Gửi</a>
+                  <button type="button" id="btn-phanhoi" class="btn btn-link waves-effect">Gửi</button>
                 <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hủy</button>
               </div>
             </div>
@@ -211,7 +220,7 @@ Chi tiết phiếu đề nghị mua
           </div>
           @break
         @case(2)
-          <a href="#" class="btn bg-orange waves-effect" style="margin: 20px 0;">
+          <a id="btn-guiyeucau" class="btn bg-orange waves-effect" style="margin: 20px 0;">
             <i class="material-icons">add</i>
             <span>Tạo phiếu bàn giao</span>
           </a>
@@ -254,5 +263,52 @@ Chi tiết phiếu đề nghị mua
           location.href = "phieudenghi.html";
       });
   })
+  $("#btn-guiyeucau").click(function() {
+      var ID_PhieuDN = document.getElementById("ID_PhieuDN").value;
+      var dt = [];
+      $('#DSTB tr').each(function() {
+          var idTB = $(this).find("td").eq(0).html();
+          var soLuong = $(this).find("td").find('div').find('div').find('input').eq(0).val();
+          dt.push({
+              idTB,
+              soLuong
+          });
+      });
+      $.ajax({
+          url: "{{route('phieubangiao.createBanGiao')}}",
+          dataType: 'json',
+          type: 'POST',
+          data: {
+              data: dt,
+              ID_PhieuDN: ID_PhieuDN,
+              _token: '{!! csrf_token() !!}',
+          },
+          success: function(response) {
+              if (response) {
+                  swal({
+                      title: "Hoàn thành",
+                      text: "Tạo mới phiếu bàn giao thành công",
+                      type: "success",
+                      confirmButtonColor: "rgb(140, 212, 245)",
+                      confirmButtonText: "Ok",
+                      closeOnConfirm: false
+                  }, function() {
+                      location.href = "{{route('phieubangiao.index')}}";
+                  });
+              }
+              else{
+                  swal({
+                      title: "Lỗi",
+                      text: "Lỗi khi tạo mới phiếu bàn giao",
+                      type: "alert",
+                      confirmButtonColor: "rgb(140, 212, 245)",
+                      confirmButtonText: "Ok",
+                  });
+              }
+          }
+      });
+  });
+
 </script>
+
 @endsection

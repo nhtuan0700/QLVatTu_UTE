@@ -13,4 +13,8 @@ interface PhieuBanGiaoInterface extends RepositoryInterface
     public function myList();
 
     public function confirmPhieuBG($id_phieuBG);
+
+    public function themChiTietBG($data);
+
+    public function themPhieuBanGiao($data);
 }

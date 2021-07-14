@@ -10,6 +10,10 @@ Tạo phiếu bàn giao
 	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 		<div class="card">
 			<div class="header row">
+                <a href="{{ route('xetduyet.index') }}" class="btn bg-orange waves-effect" style="float: left; margin-left: 10px;">
+                    <i class="material-icons">add</i>
+                    <span>Thêm phiếu bàn giao</span>
+                </a>
 				<div class="col-md-4" style="float:right;">
 					<div class="input-group" style="margin-bottom: 0 !important;">
 						<div class="form-line">
