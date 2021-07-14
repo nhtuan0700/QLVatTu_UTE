@@ -12,7 +12,6 @@ use App\Repositories\PhieuBanGiao\PhieuBanGiaoInterface;
 class PhieuBanGiaoController extends Controller
 {
     protected $phieuBanGiaoRepo;
-
     public function __construct(PhieuBanGiaoInterface $phieuBanGiaoInterface)
     {
         $this->phieuBanGiaoRepo = $phieuBanGiaoInterface;
@@ -33,9 +32,10 @@ class PhieuBanGiaoController extends Controller
         return view('phieubangiao.create');
     }
 
-    public function create(CreatePhieuBanGiao $request)
+    public function create(Request $request)
     {
-
+        $data = $this->phieuBanGiaoRepo->themPhieuBanGiao($request);
+        return response()->json($data);
     }
 
     public function detail($id)
@@ -55,5 +55,10 @@ class PhieuBanGiaoController extends Controller
         };
         $this->phieuBanGiaoRepo->xacNhan($id_phieuBG);
         return back()->with('alert-success','Xác nhận phiếu bàn giao thành công');
+    }
+    public function createChiTietPhieuBG(Request $request)
+    {
+        $them=$this->phieuBanGiaoRepo->themChiTietBG($request->input('data'));
+        return response()->json($them);
     }
 }

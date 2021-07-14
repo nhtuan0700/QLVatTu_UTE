@@ -30,59 +30,63 @@ Chi tiết phiếu đề nghị mua
         @endswitch
       </div>
       <div class="body">
-        <div class="row clearfix">
-          <div class="col-md-6 demo-masked-input">
-            <label for="">Mã phiếu</label>
-            <div class="input-group">
-              <div class="form-line">
-                <p>{{ $phieu->ID }}</p>
-              </div>
-            </div>
-          </div>
+            <div class="row clearfix">
+                <div class="col-md-6 demo-masked-input">
+                    <label for="">Mã phiếu</label>
+                    <div class="input-group">
+                        <div class="form-line">
+                            <p>{{ $phieu->ID }}</p>
+                            <input type="hidden" id="ID_PhieuDN" value="{{$phieu->ID}}" >
+                            <input type="hidden" id="ID_NVCSVC" value="{{$phieu->NguoiDeNghi->ID}}" >
+                        </div>
+                    </div>
+                </div>
 
-          <div class="col-md-6 demo-masked-input">
-            <label for="">Loại phiếu</label>
-            <div class="input-group">
-              <div class="form-line">
-                <p>{{ $phieu->loaiPhieu() }}</p>
-              </div>
+                <div class="col-md-6 demo-masked-input">
+                    <label for="">Loại phiếu</label>
+                    <div class="input-group">
+                        <div class="form-line">
+                            <p>{{ $phieu->loaiPhieu() }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="row clearfix">
-          <div class="col-md-6 demo-masked-input">
-            <label for="">Người yêu cầu</label>
-            <div class="input-group">
-              <div class="form-line">
-                <p>{{ $phieu->nguoiDeNghi->HoTen }}</p>
-              </div>
-            </div>
-          </div>
+            <div class="row clearfix">
+                <div class="col-md-6 demo-masked-input">
+                    <label for="">Người yêu cầu</label>
+                    <div class="input-group">
+                        <div class="form-line">
+                            <p>{{ $phieu->nguoiDeNghi->HoTen }}</p>
+                        </div>
+                    </div>
+                </div>
 
-          <div class="col-md-6 demo-masked-input">
-            <label for="">Chức vụ</label>
-            <div class="input-group">
-              <div class="form-line">
-                <p>{{ $phieu->nguoiDeNghi->vaiTro() }}</p>
-              </div>
+                <div class="col-md-6 demo-masked-input">
+                    <label for="">Chức vụ</label>
+                    <div class="input-group">
+                        <div class="form-line">
+                            <p>{{ $phieu->nguoiDeNghi->vaiTro() }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="row clearfix">
-          <div class="col-md-6 demo-masked-input">
-            <label for="">Ngày yêu cầu</label>
-            <div class="input-group">
-              <div class="form-line">
-                <p>{{ $phieu->NgayLapPhieu }}</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 demo-masked-input">
-            <label for="">Đơn vị</label>
-            <div class="input-group">
-              <div class="form-line">
-                <p>{{ $phieu->nguoiDeNghi->khoaPB->Ten }}</p>
-              </div>
+            <div class="row clearfix">
+                <div class="col-md-6 demo-masked-input">
+                    <label for="">Ngày yêu cầu</label>
+                    <div class="input-group">
+                        <div class="form-line">
+                            <p>{{ $phieu->NgayLapPhieu }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 demo-masked-input">
+                    <label for="">Đơn vị</label>
+                    <div class="input-group">
+                        <div class="form-line">
+                            <p>{{ $phieu->nguoiDeNghi->khoaPB->Ten }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
           </div>
         </div>
@@ -116,7 +120,6 @@ Chi tiết phiếu đề nghị mua
                   <th>Mã VPP</th>
                   <th>Tên văn phòng phẩm</th>
                   <th>Đơn vị tính</th>
-                  <th>Số lượng</th>
                   <th>Giá</th>
                   @if ($phieu->TrangThai != 1)
                     <th>Đã bàn giao</th>
@@ -199,7 +202,7 @@ Chi tiết phiếu đề nghị mua
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" id="btn-phanhoi" class="btn btn-link waves-effect">Gửi</a>
+                  <button type="button" id="btn-phanhoi" class="btn btn-link waves-effect">Gửi</button>
                 <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hủy</button>
               </div>
             </div>
@@ -358,4 +361,5 @@ Chi tiết phiếu đề nghị mua
     return [flag, data]
   }
 </script>
+
 @endsection

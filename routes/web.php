@@ -72,6 +72,7 @@ Route::middleware('auth')->group(function () {
         Route::middleware('acl:phieubangiao-detail')->group(function () {
             Route::get('chitiet/{ID?}', 'PhieuBanGiaoController@detail')->name('detail');
         });
+        Route::post('bangiao', 'PhieuBanGiaoController@create')->name('createBanGiao');
     });
 
     Route::group(['prefix' => 'vattu', 'as' => 'vattu.'], function () {
