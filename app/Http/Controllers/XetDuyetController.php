@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\PhieuDeNghi\PhieuDeNghiInterface;
 use Illuminate\Http\Request;
+use App\Repositories\PhieuDeNghi\PhieuDeNghiInterface;
 
 class XetDuyetController extends Controller
 {
@@ -30,8 +30,19 @@ class XetDuyetController extends Controller
         }
     }
 
-    public function xetduyet()
+    public function xetDuyet(Request $request, $id)
     {
-        
+        $data = $request->only('vattu','NgayDuKien');
+        if ($this->phieuDeNghiRepo->xetDuyetMua($data, $id)) {
+            return response()->json(['message' => 'Thành công']);
+        }
+        return response()->json(['message' => 'Thất bại'], 404);
+    }
+
+    public function ghiChu(Request $request, $id)
+    {
+        $data = $request->get('GhiChu');
+        $this->phieuDeNghiRepo->findOrFail($id)->update(['GhiChu' => $data]);
+        return response()->json($data);
     }
 }

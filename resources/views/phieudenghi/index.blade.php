@@ -69,7 +69,9 @@ Danh sách phiếu đề nghị
                     @endif
                     @break
                   @case(2)
-                    <span class="label label-warning">{{ $item->trangThai() }}</span>
+                    <span class="label label-warning">
+                      {{ $item->trangThai() }} ({{ $item->tongSoLuongBG().'/'.$item->tongSoLuongDN() }})
+                    </span>
                     @break
                   @default
                     <span class="label label-success">{{ $item->trangThai() }}</span>

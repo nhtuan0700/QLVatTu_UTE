@@ -3,7 +3,9 @@
 namespace App\Repositories\PhieuDeNghi;
 
 use Carbon\Carbon;
+use App\Models\ChiTietMua;
 use App\Models\PhieuDeNghi;
+use Illuminate\Support\Facades\DB;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,5 +43,28 @@ class PhieuDeNghiRepository extends BaseRepository implements PhieuDeNghiInterfa
     {
         return $this->model->select()->where('ID_NguoiDN', Auth::user()->ID)
             ->orderby('TrangThai', 'asc')->orderby('NgayLapPhieu', 'asc')->paginate($this->limit);
+    }
+
+    public function xetDuyetMua($data, $id)
+    {
+        try {
+            DB::beginTransaction();
+            PhieuDeNghi::find($id)->update([
+                'ID_NVCSVC' => Auth::user()->ID, 'NgayDuKien' => $data['NgayDuKien'],
+                'TrangThai' => 2
+            ]);
+            foreach ($data['vattu'] as $item) {
+                if (!is_numeric($item['Gia']) || intval($item['Gia']) <= 1000) {
+                    throw new \Exception();
+                }
+                $chiTiet = ChiTietMua::where('ID_Phieu', '=', $id)->where('ID_VatTu', '=', $item['ID_VatTu']);
+                $chiTiet->update(['Gia' => $item['Gia']]);
+            }
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return false;
+        }
+        DB::commit();
+        return true;
     }
 }

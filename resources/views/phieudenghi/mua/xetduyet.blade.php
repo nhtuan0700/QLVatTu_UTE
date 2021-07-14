@@ -21,7 +21,9 @@ Chi tiết phiếu đề nghị mua
             @endif
             @break
           @case(2)
-            <span class="label label-warning">{{ $phieu->trangThai() }}</span>
+            <span class="label label-warning">
+              {{ $phieu->trangThai() }} ({{ $phieu->tongSoLuongBG().'/'.$phieu->tongSoLuongDN() }})
+            </span>
             @break
           @default
             <span class="label label-success">{{ $phieu->trangThai() }}</span>
@@ -84,6 +86,18 @@ Chi tiết phiếu đề nghị mua
             </div>
           </div>
         </div>
+        @if ($phieu->TrangThai != 1)
+          <div class="row clearfix">
+            <div class="col-md-6 demo-masked-input">
+                <label for="">Ngày hoàn thành dự kiến</label>
+                <div class="input-group">
+                    <div class="form-line">
+                        <p>{{ $phieu->NgayDuKien }}</p>
+                    </div>
+                </div>
+            </div>
+          </div>
+        @endif
 
       </div>
     </div>
@@ -104,6 +118,10 @@ Chi tiết phiếu đề nghị mua
                   <th>Đơn vị tính</th>
                   <th>Số lượng</th>
                   <th>Giá</th>
+                  @if ($phieu->TrangThai != 1)
+                    <th>Đã bàn giao</th>
+                    <th>Đang bàn giao</th>
+                  @endif
                 </tr>
               </thead>
               <tbody id="DSTB">
@@ -113,7 +131,22 @@ Chi tiết phiếu đề nghị mua
                     <td style="vertical-align: middle;">{{ $item->VatTu->Ten }}</td>
                     <td style="vertical-align: middle;">{{ $item->VatTu->DonViTinh }}</td>
                     <td style="vertical-align: middle;">{{ $item->SoLuong }}</td>
-                    <td style="vertical-align: middle;"></td>
+                    @if ($phieu->TrangThai == 1)
+                      <td style="vertical-align: middle;">
+                        <div class="form-line">
+                          <input type="number" class="form-control" name="Gia" data-id="{{ $item->VatTu->ID }}" style="width: 35%" 
+                            required>
+                        </div>
+                      </td>
+                    @else
+                      <td style="vertical-align: middle;">{{ $item->Gia }}</td>
+                      <td style="vertical-align: middle;">
+                        {{ $item->soLuongDaBG() }}
+                      </td>
+                      <td style="vertical-align: middle;">
+                        {{ $item->soLuongDangBG() }}
+                      </td>
+                    @endif
                   </tr>
                 @endforeach
               </tbody>
@@ -161,7 +194,7 @@ Chi tiết phiếu đề nghị mua
               </div>
               <div class="modal-body">
                 <div class="form-line">
-                  <textarea rows="4" id="NoiDungGhiChu" class="form-control no-resize"
+                  <textarea rows="4" id="GhiChu" class="form-control no-resize"
                     placeholder="Nội dung cần phản hồi cho người đề nghị..."></textarea>
                 </div>
               </div>
@@ -195,7 +228,7 @@ Chi tiết phiếu đề nghị mua
                         <i class="material-icons">date_range</i>
                       </span>
                       <div class="form-line">
-                        <input type="text" class="form-control date" name="NgayDuKien" placeholder="Ex: 30/07/2016"
+                        <input type="date" class="form-control date" name="NgayDuKien" placeholder="Ex: 30/07/2016"
                           required>
                       </div>
                     </div>
@@ -211,10 +244,12 @@ Chi tiết phiếu đề nghị mua
           </div>  
           @break
         @case(2)
-          <a href="#" class="btn bg-orange waves-effect" style="margin: 20px 0;">
-            <i class="material-icons">add</i>
-            <span>Tạo phiếu bàn giao</span>
-          </a>
+          @if ($phieu->tongSoLuongBG() < $phieu->tongSoLuongDN())
+            <a href="#" class="btn bg-orange waves-effect" style="margin: 20px 0;">
+              <i class="material-icons">add</i>
+              <span>Tạo phiếu bàn giao</span>
+            </a>
+          @endif
           @break
         @default
           <button onclick="window.print();" class="btn bg-green waves-effect" style="margin: 20px 0;">
@@ -230,29 +265,97 @@ Chi tiết phiếu đề nghị mua
 
 @section('script')
 <script>
-  $("#btn-phanhoi").click(function () {
-      swal({
-          title: "Hoàn thành",
-          text: "Bạn vừa gửi phản hồi thành công",
-          type: "success",
-          confirmButtonColor: "rgb(140, 212, 245)",
-          confirmButtonText: "Ok",
-          closeOnConfirm: false
-      }, function () {
-          location.href = "phieudenghi.html";
-      });
+  $(function() {
+    $("#btn-phanhoi").click(function () {
+      var ghiChu = $('textarea#GhiChu').val()
+      if (!ghiChu) {
+        toastr.error("Chưa điền nội dung phản hồi")
+      } else {
+        $.ajax({
+          url: `{{ route('xetduyet.ghiChu', ['ID' => $phieu->ID]) }}`,
+          type: 'post',
+          dataType : "json",
+          data: {
+            _method: 'put',
+            _token: $('meta[name=csrf-token]').attr('content'),
+            GhiChu: ghiChu
+          },
+          success: function(result) {
+            console.log(result)
+            swal({
+                title: "Hoàn thành",
+                text: "Gửi phản hồi thành công",
+                type: "success",
+                confirmButtonColor: "rgb(140, 212, 245)",
+                confirmButtonText: "Ok",
+                closeOnConfirm: false
+            }, function () {
+                location.reload()
+            })
+          },
+          error: function(error) {
+            toastr.error("Gửi phản hồi thất bại")
+          }
+        })
+      }
+    })
+
+    $("#btn-pheduyet").click(function () {
+      var [flag, data] = getData()
+      var ngayDuKien = $('input[name=NgayDuKien]').val()
+      if (flag == false) {
+        toastr.error("Giá chưa hợp lệ")
+        return;
+      }
+      if (!ngayDuKien) {
+        toastr.error("Ngày dự kiến không để trống")
+        return;
+      }
+      $.ajax({
+        url: `{{ route('xetduyet.confirm', ['ID' => $phieu->ID]) }}`,
+        type: 'post',
+        dataType : "json",
+        data: {
+          _method: 'put',
+          _token: $('meta[name=csrf-token]').attr('content'),
+          vattu: data,
+          NgayDuKien: ngayDuKien
+        },
+        success: function(result) {
+          console.log(result)
+          swal({
+              title: "Hoàn thành",
+              text: "Xử lý phiếu thành công",
+              type: "success",
+              confirmButtonColor: "rgb(140, 212, 245)",
+              confirmButtonText: "Ok",
+              closeOnConfirm: false
+          }, function () {
+              location.reload()
+          })
+        },
+        error: function(error) {
+          toastr.error("Xử lý duyệt thất bại")
+        }
+      })
+    })
   })
-  $("#btn-pheduyet").click(function () {
-      swal({
-          title: "Hoàn thành",
-          text: "Phê duyệt phiếu đề nghị thành công",
-          type: "success",
-          confirmButtonColor: "rgb(140, 212, 245)",
-          confirmButtonText: "Ok",
-          closeOnConfirm: false
-      }, function () {
-          location.href = "phieudenghi.html";
-      });
-  })
+  
+  function getData() {
+    var data = []
+    var flag = true
+    $('input[name=Gia]').each(function(e) {
+      var gia = $(this).val();
+      if(!gia || gia <= 1000 || !Number.isInteger(Number(gia))) {
+        flag = false
+      } 
+      item = {
+        ID_VatTu: $(this).data('id'),
+        Gia: gia
+      }
+      data.push(item)
+    })
+    return [flag, data]
+  }
 </script>
 @endsection

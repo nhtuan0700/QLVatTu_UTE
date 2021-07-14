@@ -19,7 +19,7 @@ class CreatePhieuDeNghiTable extends Migration
             $table->char('ID_NVCSVC', 10)->nullable();
             $table->tinyInteger('LoaiPhieu');
             $table->dateTime('NgayLapPhieu')->nullable();
-            $table->dateTime('NgayDuKien')->nullable();
+            $table->date('NgayDuKien')->nullable();
             $table->dateTime('NgayHoanThanh')->nullable();
             $table->tinyInteger('TrangThai');
             $table->string('GhiChu')->nullable();

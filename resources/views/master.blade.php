@@ -7,6 +7,7 @@
   <title>@yield('title') | Hệ thống quản lí vật tư, văn phòng phẩm tại ĐH Sư phạm Kỹ thuật (UTE)</title>
   <!-- Favicon-->
   <link rel="icon" href="{{asset('iconute.ico')}}" type="image/x-icon">
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet"
@@ -27,6 +28,10 @@
   <link rel="stylesheet" href="{{ asset('dist/plugins/toastr/toastr.min.css') }}">
   @yield('link_head')
   <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+  <!-- Sweetalert Css -->
+  <link href="{{ asset('dist/plugins/sweetalert/sweetalert.css') }}" rel="stylesheet" />
+  <!-- SweetAlert Plugin Js -->
+  <script src="{{ asset('dist/plugins/sweetalert/sweetalert.min.js') }}"></script>
 </head>
 
 <body class="theme-red">

@@ -14,9 +14,9 @@ class PhieuDeNghi extends Model
     ];
 
     protected $table = 'PhieuDenghi';
-
     protected $primaryKey = 'ID';
     public $incrementing = false;
+    public $timestamps = false;
 
     const CREATED_AT = 'NgayLapPhieu';
 
@@ -84,7 +84,7 @@ class PhieuDeNghi extends Model
         if (!$date) {
             return null;
         }
-        return FormatDate::formatDateTime($date);
+        return FormatDate::formatDate($date);
     }
     public function getNgayHoanThanhAttribute($date)
     {

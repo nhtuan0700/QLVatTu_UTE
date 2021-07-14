@@ -39,8 +39,10 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'xetduyet', 'as' => 'xetduyet.'], function () {
         Route::middleware('acl:phieudenghi-xetduyet')->group(function () {
             Route::get('danhsach', 'XetDuyetController@index')->name('index');
+            Route::get('chitiet/{ID?}', 'XetDuyetController@detail')->name('detail');
+            Route::put('/phieudenghi/{ID?}', 'XetDuyetController@xetDuyet')->name('confirm');
+            Route::put('/ghichu/{ID?}', 'XetDuyetController@ghiChu')->name('ghiChu');
         });
-        Route::get('chitiet/{ID?}', 'XetDuyetController@detail')->name('detail');
     });
 
     Route::group(['prefix' => 'phieubangiao', 'as' => 'phieubangiao.'], function () {

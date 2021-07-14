@@ -12,7 +12,7 @@ class ChiTietMua extends Model
     ];
 
     protected $table = 'ChiTietMua';
-
+    public $timestamps = false;
     public function vatTu()
     {
         return $this->belongsTo(VatTu::class, 'ID_VatTu', 'ID');
@@ -23,14 +23,23 @@ class ChiTietMua extends Model
         return $this->belongsTo(PhieuDeNghi::class, 'ID_Phieu', 'ID');
     }
 
-    public function soLuongDangBG($id_phieuBG)
+    public function soLuongDangBG($id_phieuBG = null)
     {
-        $query = DB::table('ChiTietBanGiao')->join('PhieuBanGiao', 'PhieuBanGiao.ID', '=', 'ChiTietBanGiao.ID_Phieu')
-            ->where('ChiTietBanGiao.ID_VatTu', '=', $this->ID_VatTu)
-            ->where('PhieuBanGiao.ID_PhieuDN', '=', $this->phieu->ID)
-            ->where('PhieuBanGiao.ID', '=', $id_phieuBG)
-            ->select('ChiTietBanGiao.SoLuong')
-            ->first();
+        if ($id_phieuBG) {
+            $query = DB::table('ChiTietBanGiao')->join('PhieuBanGiao', 'PhieuBanGiao.ID', '=', 'ChiTietBanGiao.ID_Phieu')
+                ->where('ChiTietBanGiao.ID_VatTu', '=', $this->ID_VatTu)
+                ->where('PhieuBanGiao.ID_PhieuDN', '=', $this->phieu->ID)
+                ->where('PhieuBanGiao.ID', '=', $id_phieuBG)
+                ->select('ChiTietBanGiao.SoLuong')
+                ->first();
+        } else {
+            $query = DB::table('ChiTietBanGiao')->join('PhieuBanGiao', 'PhieuBanGiao.ID', '=', 'ChiTietBanGiao.ID_Phieu')
+                ->where('ChiTietBanGiao.ID_VatTu', '=', $this->ID_VatTu)
+                ->where('PhieuBanGiao.ID_PhieuDN', '=', $this->phieu->ID)
+                ->whereNull('PhieuBanGiao.ID_NguoiXN')
+                ->select('ChiTietBanGiao.SoLuong')
+                ->first();
+        }
         return !!$query ? $query->SoLuong : 0;
     }
 
