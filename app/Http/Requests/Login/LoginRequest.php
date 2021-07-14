@@ -35,7 +35,7 @@ class LoginRequest extends FormRequest
             'TaiKhoan' => 'Tài khoản',
             'MatKhau' => 'Mật khẩu'
         ];
-    }
+    } 
 
     public function messages()
     {

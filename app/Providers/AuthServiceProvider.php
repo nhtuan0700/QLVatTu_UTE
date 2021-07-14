@@ -70,7 +70,7 @@ class AuthServiceProvider extends ServiceProvider
 
             Gate::define('phieudenghi-hoanThanhPolicy', '\App\Policies\PhieuDeNghiPolicy@hoanThanh');
             Gate::define('phieudenghi-detailPolicy', '\App\Policies\PhieuDeNghiPolicy@detail');
-            Gate::define('phieudenghi-editPolicy', '\App\Policies\PhieuBanGiaoPolicy@edit');
+            Gate::define('phieudenghi-editPolicy', '\App\Policies\PhieuDeNghiPolicy@edit');
             Gate::define('phieubangiao-detailPolicy', '\App\Policies\PhieuBanGiaoPolicy@detail');
             Gate::define('phieubangiao-xacNhanPolicy', '\App\Policies\PhieuBanGiaoPolicy@xacNhan');
         }

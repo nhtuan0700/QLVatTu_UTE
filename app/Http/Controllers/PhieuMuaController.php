@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\PhieuMua\CreatePhieuMua;
 use App\Repositories\PhieuDeNghi\PhieuDeNghiInterface;
+use Illuminate\Http\Request;
 
 class PhieuMuaController extends Controller
 {
@@ -28,8 +29,14 @@ class PhieuMuaController extends Controller
         return view('phieudenghi.mua.create');
     }
 
-    public function create(CreatePhieuMua $request)
+    public function create(Request $request)
     {
+        $data = $request->get('data');
+        $status = $this->phieuMuaRepo->themPhieuMua($data);
+        if ($status) {
+            return response()->json($data);
+        }
+        return response()->json(['message' => 'error'], 404);
     }
 
     public function detail($id)
@@ -47,15 +54,32 @@ class PhieuMuaController extends Controller
         if (Gate::denies('phieudenghi-editPolicy', $phieu)) {
             return redirect(route('index'))->with('alert-fail', 'Không thể truy cập');
         };
-        return view('phieudenghi.mua.edit', compact('phieu'));
+        // return view('phieudenghi.mua.edit', compact('phieu'));
+        return view('phieudenghi.mua.edit')->with(compact('phieu'))
+            ->with(compact('id'));
     }
 
-    public function update($id)
+    public function edit(Request $request, $id)
     {
+        $phieu = $this->phieuMuaRepo->findOrFail($id);
+        if (Gate::denies('phieudenghi-editPolicy', $phieu)) {
+            return redirect(route('index'))->with('alert-fail', 'Không thể truy cập');
+        };
+        $data = $request->get('data');
+        $status = $this->phieuMuaRepo->suaPhieuMua($data, $id);
+        if ($status) {
+            return response()->json($data);
+        }
+        return response()->json(['message' => 'error'], 404);
+        // return response()->json($data);
     }
 
     public function delete($id)
     {
+        if ($this->phieuMuaRepo->xoaPhieuMua($id)) {
+            return back()->with('alert-success', 'Xóa thành công');
+        }
+        return back()->with('alert-success', 'Xóa thất bại');
     }
 
     public function hoanThanh($id)
@@ -66,5 +90,9 @@ class PhieuMuaController extends Controller
         };
         $this->phieuMuaRepo->hoanThanhPhieuMua($id);
         return back()->with('alert-success', 'Xác nhận hoàn thành phiếu đề nghị thành công');
+    }
+
+    public function confirm()
+    {
     }
 }

@@ -2,11 +2,13 @@
 
 namespace App\Repositories\PhieuDeNghi;
 
+use App\Models\HanMuc;
 use Carbon\Carbon;
 use App\Models\ChiTietMua;
 use App\Models\PhieuDeNghi;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\BaseRepository;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 
 class PhieuDeNghiRepository extends BaseRepository implements PhieuDeNghiInterface
@@ -67,9 +69,112 @@ class PhieuDeNghiRepository extends BaseRepository implements PhieuDeNghiInterfa
         DB::commit();
         return true;
     }
-    
+
     public function hoanThanhPhieuMua($id)
     {
         $this->update($id, ['NgayHoanThanh' => now(), 'TrangThai' => 3]);
+    }
+
+    public function themPhieuMua($data)
+    {
+        $newID = $this->getIDPhieuMua();
+        DB::beginTransaction();
+        try {
+            $this->model->insert([
+                'ID' => $newID,
+                'LoaiPhieu' => 1,
+                'NgayLapPhieu' => now(),
+                'TrangThai' => 1,
+                'ID_NguoiDN' => Auth::user()->ID
+            ]);
+            foreach ($data as $item) {
+                $idVatTu = $item['idTB'];
+                $soLuong = $item['soLuong'];
+
+                DB::table('chitietmua')->insert([
+                    'ID_Phieu' => $newID,
+                    'ID_VatTu' => $idVatTu,
+                    'SoLuong' => $soLuong,
+                ]);
+
+                $hanMuc = HanMuc::where('ID_VPP', '=',  $idVatTu)
+                    ->where('ID_KhoaPB', '=', Auth::user()->khoaPB->ID);
+                $hanMucDaSD = $hanMuc->first()->HanMucDaSuDung;
+                $hanMucToiDa = $hanMuc->first()->HanMucToiDa;
+                if ($hanMucDaSD + $soLuong > $hanMucToiDa) {
+                    throw new Exception();
+                }
+
+                $hanMuc->update(['HanMucDaSuDung' => $hanMucDaSD + $soLuong]);
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+            return false;
+        }
+        DB::commit();
+        return true;
+    }
+
+    public function xoaPhieuMua($id)
+    {
+        try {
+            $phieu = $this->model->findOrFail($id);
+            $chiTietMua = $phieu->chiTietMua;
+
+            foreach ($chiTietMua as $item) {
+                $hanMuc = HanMuc::where('ID_VPP', '=',  $item->ID_VatTu)
+                    ->where('ID_KhoaPB', '=', Auth::user()->khoaPB->ID);
+                $hanMucDaSD = $hanMuc->first()->HanMucDaSuDung;
+                $hanMuc->update(['HanMucDaSuDung' => $hanMucDaSD - $item->SoLuong]);
+            }
+
+            DB::table('chitietmua')->where('ID_Phieu', '=', $id)->delete();
+            $this->model->where('ID', '=', $id)->delete();
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function suaPhieuMua($data, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $phieu = $this->model->findOrFail($id);
+            $chiTietMua = $phieu->chiTietMua;
+            foreach ($chiTietMua as $item) {
+                $hanMuc = HanMuc::where('ID_VPP', '=',  $item->ID_VatTu)
+                    ->where('ID_KhoaPB', '=', Auth::user()->khoaPB->ID);
+                $hanMucDaSD = $hanMuc->first()->HanMucDaSuDung;
+                $hanMuc->update(['HanMucDaSuDung' => $hanMucDaSD - $item->SoLuong]);
+            }
+            DB::table('chitietmua')->where('ID_Phieu', '=', $id)->delete();
+
+            foreach ($data as $item) {
+                $idVatTu = $item['idTB'];
+                $soLuong = $item['soLuong'];
+
+                DB::table('chitietmua')->insert([
+                    'ID_Phieu' => $id,
+                    'ID_VatTu' => $idVatTu,
+                    'SoLuong' => $soLuong,
+                ]);
+
+                $hanMuc = HanMuc::where('ID_VPP', '=',  $idVatTu)
+                    ->where('ID_KhoaPB', '=', Auth::user()->khoaPB->ID);
+                $hanMucDaSD = $hanMuc->first()->HanMucDaSuDung;
+                $hanMucToiDa = $hanMuc->first()->HanMucToiDa;
+                if ($hanMucDaSD + $soLuong > $hanMucToiDa) {
+                    throw new Exception();
+                }
+
+                $hanMuc->update(['HanMucDaSuDung' => $hanMucDaSD + $soLuong]);
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+            return false;
+        }
+        DB::commit();
+        return true;
     }
 }

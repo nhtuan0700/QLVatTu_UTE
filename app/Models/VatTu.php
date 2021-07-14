@@ -13,4 +13,9 @@ class VatTu extends Model
     protected $table = 'VatTu';
 
     protected $primaryKey = 'ID';
+    
+    public function HanMuc()
+    {
+        return $this->hasMany(HanMuc::class, 'ID_VPP', 'ID');
+    }
 }

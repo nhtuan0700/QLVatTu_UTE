@@ -1,6 +1,6 @@
 @extends('master')
 @section('title')
-Tạo phiếu đề nghị mua văn phòng phẩm
+Chỉnh sửa phiếu đề nghị mua văn phòng phẩm
 @endsection
 @section('breadcrumb')
 {{ Breadcrumbs::render('phieumua') }}
@@ -13,42 +13,32 @@ Tạo phiếu đề nghị mua văn phòng phẩm
         <h2>Thêm văn phòng phẩm</h2>
       </div>
       <div class="body">
-        <form id="form_validation" method="POST" action="{{ route('phieumua.create') }}">
-          @csrf
-          @method('post')
-          <div class="col-12">
-            <label for="">Chọn văn phòng phẩm</label>
-            <div class="form-group">
-              <div class="form-line">
-                <select class="form-control dsvanphongpham" title="Chọn 1 văn phòng phẩm" data-live-search="true"
-                  name="MaVPP" required>
-                </select>
-              </div>
+        <div class="col-12">
+          <label for="">Chọn văn phòng phẩm</label>
+          <div class="form-group">
+            <div class="form-line">
+              <select class="form-control dsvanphongpham" title="Chọn 1 văn phòng phẩm" data-live-search="true" name="MaVPP" required>
+              </select>
             </div>
           </div>
-          <div class="col-12">
-            <label for="">Số lượng</label>
-            <div class="input-group">
-              <div class="form-line">
-                <input type="number" name="SoLuong" min="1" max="100" class="form-control"
-                  placeholder="Nhập số lượng muốn mua">
-              </div>
-              <span class="input-group-addon">Hộp</span>
+        </div>
+        <div class="col-12">
+          <label for="">Số lượng</label>
+          <div class="input-group">
+            <div class="form-line">
+              <input type="number" id="SoLuong" min="" max="" class="form-control" placeholder="Nhập số lượng muốn mua">
             </div>
-            <em>Hạn mức còn lại: 100 hộp.</em>
-            <a href="" style="text-decoration: underline;">Tăng hạn mức</a> <br />
-          </div><br><br>
-          <div style="text-align: right; clear: both;">
-            <button type="button" id="btn-reset" class="btn bg-red waves-effect" style="margin-left:10px">
-              <i class="material-icons">restart_alt</i>
-              <span>Reset</span>
-            </button>
-            <button type="submit" id="btn-them" class="btn bg-blue waves-effect">
-              <i class="material-icons">add</i>
-              <span>Thêm</span>
-            </button>
+            <span class="input-group-addon" id="DonVi">Hộp</span>
           </div>
-        </form>
+          <em>Hạn mức còn lại: <span id="txtConLai"></span>&nbsp;<span id="txtDonVi"></span>.</em>
+          <a href="" style="text-decoration: underline;">Tăng hạn mức</a> <br />
+        </div><br><br>
+        <div style="text-align: right; clear: both;">
+          <button type="button" id="btn-them" class="btn bg-blue waves-effect" disabled>
+            <i class="material-icons">add</i>
+            <span>Thêm</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -72,30 +62,34 @@ Tạo phiếu đề nghị mua văn phòng phẩm
                 </tr>
               </thead>
               <tbody id="DSTB">
+                <tr style="display:none">
+                  <td>-1</td>
+                </tr>
                 @foreach ($phieu->chiTietMua as $item)
-                  <tr id="VPP-{{ $item->VatTu->ID }}">
-                    <td style="vertical-align: middle;">{{ $item->VatTu->ID }}</td>
-                    <td style="vertical-align: middle;">{{ $item->VatTu->Ten }}</td>
-                    <td style="vertical-align: middle;">{{ $item->VatTu->DonViTinh }}</td>
-                    <td style="vertical-align: middle;">{{ $item->SoLuong }}</td>
-                    <td style="vertical-align: middle;"></td>
-                    <td style="vertical-align: middle;">
-                      <button class="btn btn-default waves-effect XoaTB" data-tr="VPP-{{ $item->VatTu->ID }}">
-                        <i class="material-icons">delete</i>
-                      </button>
-                    </td>
-                  </tr>
+                <tr id="VPP-{{ $item->VatTu->ID }}">
+                  <td style="vertical-align: middle;">{{ $item->VatTu->ID }}</td>
+                  <td style="vertical-align: middle;">{{ $item->VatTu->Ten }}</td>
+                  <td style="vertical-align: middle;">{{ $item->VatTu->DonViTinh }}</td>
+                  <td style="vertical-align: middle;">{{ $item->SoLuong }}</td>
+                  <td style="vertical-align: middle;">
+                    <button class="btn btn-default waves-effect XoaTB" data-id="{{ $item->VatTu->ID }}" 
+                      data-tr="VPP-{{ $item->VatTu->ID }}">
+                      <i class="material-icons">delete</i>
+                    </button>
+                  </td>
+                </tr>
                 @endforeach
               </tbody>
             </table>
             <div style="text-align: right; clear: both;">
               <a href="{{ route('phieumua.index') }}" class="btn bg-red waves-effect" style="margin-left:10px">
-                <i class="material-icons">delete</i>
-                <span>Hủy</span>
+                <i class="material-icons">keyboard_return</i>
+                <span>Trở lại</span>
               </a>
-              <button type="submit" id="btn-guiyeucau" class="btn bg-green waves-effect" disabled>
-                <i class="material-icons">send</i>
-                <span>Gửi yêu cầu</span>
+
+              <button type="button" id="btn-edit" class="btn bg-green waves-effect">
+                <i class="material-icons">save</i>
+                <span>Cập nhật</span>
               </button>
             </div>
           </div>
@@ -122,6 +116,7 @@ Tạo phiếu đề nghị mua văn phòng phẩm
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <!-- noUISlider Css -->
 <link href="{{ asset('dist/plugins/nouislider/nouislider.min.css') }}" rel="stylesheet" />
+<link href="{{ asset('dist/plugins/sweetalert/sweetalert.css') }}" rel="stylesheet" />
 @endsection
 
 @section('script')
@@ -141,50 +136,156 @@ Tạo phiếu đề nghị mua văn phòng phẩm
 <script src="{{ asset('dist/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js') }}"></script>
 <!-- noUISlider Plugin Js -->
 <script src="{{ asset('dist/plugins/nouislider/nouislider.js') }}"></script>
+<!-- SweetAlert Plugin Js -->
+<script src="{{ asset('dist/plugins/sweetalert/sweetalert.min.js') }}"></script>
 
 <script>
-  function isTB() {
-    if ($("#DSTB tr").length > 0) {
-        $("#btn-guiyeucau").attr("disabled", false);
-    }
-    else {
-        $("#btn-guiyeucau").attr("disabled", true);
-    }
-  }
+  $(function() {
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
 
-  isTB();
-
-  $(".XoaTB").click(function () {
-    $("#" + $(this).attr("data-tr")).remove();
-    isTB();
-  });
-  function formatState(state) {
-    if (!state.id) {
-        return state.text;
-    }
-    var $state = $(
-        '<span>' + state.text + '</span>'
-    );
-    return $state;
-  }
-  $('.dsvanphongpham').select2({
-    placeholder: 'Lựa chọn 1 văn phòng phẩm',
-    ajax: {
-        url: 'https://api.github.com/search/repositories',
-        dataType: 'json'
-    },
-    templateResult: formatState
-  });
-  $("#btn-guiyeucau").click(function () {
-    var data=[];
-    $('#DSTB tr').each(function () {
+    $('#btn-edit').click(function() {
+      var dt = [];
+      $('#DSTB tr:not(:first)').each(function() {
         var idTB = $(this).find("td").eq(0).html();
         var soLuong = $(this).find("td").eq(3).html();
-        data.push({idTB,soLuong});
+        dt.push({
+          idTB,
+          soLuong
+        });
+      });
+      if (dt.length == 0) {
+        toastr.error("Danh sách văn phòng phẩm không được trống")
+      } else {
+        $.ajax({
+          url: `{{ route("phieumua.edit", ['ID' => $phieu->ID]) }}`,
+          dataType: 'json',
+          type: 'POST',
+          data: {
+            _method: 'PUT',
+            data: dt,
+            _token: '{!! csrf_token() !!}',
+          },
+          success: function(response) {
+            console.log(response)
+            swal({
+              title: "Hoàn thành",
+              text: "Cập nhật phiếu đề nghị thành công",
+              type: "success",
+              confirmButtonColor: "rgb(140, 212, 245)",
+              confirmButtonText: "Ok",
+              closeOnConfirm: false
+            }, function () {
+                location.reload()
+            })
+          },
+          error: function() {
+            toastr.error("Văn phòng phẩm vượt quá mức cho phép")
+          }
+        });
+      }
+    })
+
+    function formatState(state) {
+      if (!state.id) {
+        return state.text;
+      }
+      var $state = $(
+        '<span>' + state.text + '<br/><small>Hạn mức còn lại:' + state.hmConLai + '</small></span>'
+      );
+      return $state;
+    }
+    
+    $('.dsvanphongpham').select2({
+      placeholder: 'Lựa chọn 1 văn phòng phẩm',
+      tags: false,
+      multiple: false,
+      templateResult: formatState,
+      minimumInputLength: 1,
+      minimumResultsForSearch: 10,
+      ajax: {
+        url: "{{route('vpp')}}",
+        dataType: "json",
+        type: "POST",
+        data: function(params) {
+          var data = [];
+          $('#DSTB tr').each(function() {
+            var idTB = $(this).find("td").eq(0).html();
+            data.push(idTB);
+          });
+          var queryParameters = {
+            q: params.term,
+            selected: data,
+            _token: '{{csrf_token()}}'
+          }
+          return queryParameters;
+        },
+        processResults: function(data) {
+          return {
+            results: $.map(data, function(item) {
+              return {
+                text: item.Ten,
+                id: item.ID,
+                hmConLai: (item.HanMucToiDa - item.HanMucDaSuDung)
+              }
+            })
+          };
+        }
+      }
     });
-    console.log(data);
-    alert("Kiểm tra dữ liệu lấy đc ở F12 > Console")
-    // Gửi data bằng ajax 
-  });
+
+    $(".dsvanphongpham").change(function() {
+      $.ajax({
+        url: '{{route("cthanmuc")}}',
+        dataType: 'json',
+        type: 'POST',
+        data: {
+          id: $(this).val(),
+          _token: '{!! csrf_token() !!}',
+        },
+        success: function(response) {
+          var conlai = response[0].HanMucToiDa - response[0].HanMucDaSuDung;
+          var min = (conlai == 0) ? 0 : 1;
+          var max = (conlai == 0) ? 0 : conlai;
+          $("#SoLuong").attr('min', min);
+          $("#SoLuong").attr('max', max);
+          $("#SoLuong").val(min);
+          $("#txtConLai").text(conlai);
+          $("#txtDonVi").text(response[0].DonViTinh);
+          $("#DonVi").text(response[0].DonViTinh);
+          if (conlai > 0) {
+            $("#btn-them").attr("disabled", false);
+          }
+        }
+      });
+    });
+    
+    $("#btn-them").click(function() {
+      var id = $(".dsvanphongpham :selected").val();
+      var ten = $(".dsvanphongpham :selected").text();
+      var dvt = $("#DonVi").text();
+      var sl = $("#SoLuong").val();
+      elm = `<tr id="VPP-${id}"><td>${id}</td><td>${ten}</td><td>${dvt}</td><td>${sl}</td> 
+            <td style="vertical-align: middle;">
+              <button class="btn btn-default waves-effect XoaTB" data-id="${id}" data-tr="VPP-${id}" onclick="removeItem(this)">
+                <i class="material-icons">delete</i>
+              </button>
+            </td></tr>`
+      $("#DSTB tr:first").after(elm);
+      $("#btn-them").attr("disabled", true);
+    })
+
+    $(".XoaTB").click(function() {
+      removeItem($(this))
+    })
+  })
+
+  function removeItem(elm) {
+    let id = $(elm).data('tr')
+    $("#" + id).remove()
+  }
 </script>
 @endsection
