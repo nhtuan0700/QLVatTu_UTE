@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Auth;
 class HanMucController extends Controller
 {
     protected $hanMucRepo;
+    
     public function __construct(HanMucInterface $hanMucInterface)
     {
         $this->hanMucRepo = $hanMucInterface;
     }
+
     public function getHanMuc(Request $request)
     {
         $data = $this->hanMucRepo->getHanMuc($request->input('id'));

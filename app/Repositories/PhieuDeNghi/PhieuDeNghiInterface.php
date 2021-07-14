@@ -15,4 +15,5 @@ interface PhieuDeNghiInterface extends RepositoryInterface
     public function themPhieuMua($data);
     public function suaPhieuMua($data, $id);
     public function xoaPhieuMua($id);
+    public function timKiem($q,$trangthai);
 }
