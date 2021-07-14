@@ -165,10 +165,15 @@ Chi tiết phiếu bàn giao
 							<span>In</span>
 						</button>
 					@else
-						<a href="{{route('phieubangiao.confirm',$phieu->ID)}}" class="btn bg-green waves-effect" style="margin: 20px 0;" methods="put">
-							<i class="material-icons">done</i>
-							<span>Xác nhận</span>
-						</a>
+						<form action="{{route('phieubangiao.xacNhan', ['ID' => $phieu->ID])}}" method="post" 
+								style="display: inline-block;">
+							@csrf
+							@method('put')
+							<button type="submit" class="btn bg-green waves-effect" style="margin: 20px 0;">
+								<i class="material-icons">done</i>
+								<span>Xác nhận</span>
+							</button>
+						</form>
 					@endif
 			@endif
 		</div>

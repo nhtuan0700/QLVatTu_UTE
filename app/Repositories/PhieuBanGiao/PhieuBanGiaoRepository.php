@@ -45,8 +45,8 @@ class PhieuBanGiaoRepository extends BaseRepository implements PhieuBanGiaoInter
         return $query->orderby('ID_NguoiXN', 'asc')->orderby('NgayBanGiao', 'desc')->paginate($this->limit);
     }
 
-    public function confirmPhieuBG($id_phieuBG)
+    public function xacNhan($id_phieuBG)
     {
-        $this->update($id_phieuBG,['ID_NguoiXN' => Auth::user()->ID,'NgayBanGiao' => Carbon::now('Asia/Ho_Chi_Minh')]);
+        $this->update($id_phieuBG, ['ID_NguoiXN' => Auth::user()->ID, 'NgayBanGiao' => now()]);
     }
 }

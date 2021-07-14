@@ -55,7 +55,7 @@ Route::middleware('auth')->group(function () {
             Route::post('bangiao', 'PhieuBanGiaoController@create');
         });
         Route::get('chitiet/{ID?}', 'PhieuBanGiaoController@detail')->name('detail');
-        Route::get('xacnhanBG/{ID?}','PhieuBanGiaoController@confirmPhieuBG')->name('confirm');
+        Route::put('xacnhan/{ID?}','PhieuBanGiaoController@xacNhan')->name('xacNhan');
     });
 
     Route::group(['prefix' => 'vattu', 'as' => 'vattu.'], function () {

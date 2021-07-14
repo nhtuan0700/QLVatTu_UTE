@@ -7,7 +7,7 @@ class FormatHelper
 {
     public function formatDateTime($date)
     {
-        return Carbon::parse($date)->format('d/m/Y H:m:s');
+        return Carbon::parse($date)->format('d/m/Y H:i:s');
     }
 
     public function formatDate($date)

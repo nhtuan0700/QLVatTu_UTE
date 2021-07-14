@@ -42,9 +42,10 @@ class PhieuBanGiaoController extends Controller
         $phieu = $this->phieuBanGiaoRepo->findOrFail($id);
         return view('phieubangiao.detail', compact('phieu'));
     }
-    public function confirmPhieuBG($id_phieuBG)
+
+    public function xacNhan($id_phieuBG)
     {
-        $this->phieuBanGiaoRepo->confirmPhieuBG($id_phieuBG);
+        $this->phieuBanGiaoRepo->xacNhan($id_phieuBG);
         return back()->with('alert-success','Xác nhận phiếu bàn giao thành công');
     }
 }
