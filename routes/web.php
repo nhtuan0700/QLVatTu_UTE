@@ -34,7 +34,7 @@ Route::middleware('auth')->group(function () {
         Route::get('sua/{ID?}', 'PhieuMuaController@showEdit')->name('edit');
         Route::put('sua/{ID?}', 'PhieuMuaController@update');
         Route::get('chitiet/{ID?}', 'PhieuMuaController@detail')->name('detail');
-        Route::get('HTPhieuMua/{ID?}', 'PhieuMuaController@confirmHoanThanhPhieuDN')->name('confirm');
+        Route::put('hoanthanh/{ID?}', 'PhieuMuaController@hoanThanh')->name('hoanThanh');
     });
 
     Route::group(['prefix' => 'xetduyet', 'as' => 'xetduyet.'], function () {

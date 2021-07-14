@@ -68,8 +68,8 @@ class PhieuDeNghiRepository extends BaseRepository implements PhieuDeNghiInterfa
         return true;
     }
     
-    public function confirmHoanThanh($id_PhieuDN)
+    public function hoanThanhPhieuMua($id)
     {
-        $this->update($id_PhieuDN, ['NgayHoanThanh' => Carbon::now('Asia/Ho_Chi_Minh'), 'TrangThai' => 3]);
+        $this->update($id, ['NgayHoanThanh' => now(), 'TrangThai' => 3]);
     }
 }

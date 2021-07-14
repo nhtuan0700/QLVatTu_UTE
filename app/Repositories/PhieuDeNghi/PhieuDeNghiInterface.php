@@ -10,6 +10,6 @@ interface PhieuDeNghiInterface extends RepositoryInterface
     public function listAll();
     public function xetDuyetMua($data, $id);
     public function myListPhieuMua();
-    public function confirmHoanThanh($id_phieuBG);
+    public function hoanThanhPhieuMua($id);
     // public function getIDPhieuSua();
 }

@@ -29,7 +29,6 @@ class PhieuMuaController extends Controller
 
     public function create(CreatePhieuMua $request)
     {
-
     }
 
     public function detail($id)
@@ -46,17 +45,15 @@ class PhieuMuaController extends Controller
 
     public function update($id)
     {
-
     }
 
     public function delete($id)
     {
-
     }
 
-    public function confirmHoanThanhPhieuDN($id_phieuBG)
+    public function hoanThanh($id)
     {
-        $this->phieuMuaRepo->confirmHoanThanh($id_phieuBG);
-        return back()->with('alert-success','Xác nhận hoàn thành phiếu đề nghị thành công');
+        $this->phieuMuaRepo->hoanThanhPhieuMua($id);
+        return back()->with('alert-success', 'Xác nhận hoàn thành phiếu đề nghị thành công');
     }
 }
