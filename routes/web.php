@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('login', 'LoginController@showLoginForm')->name('login');
 Route::post('login', 'LoginController@login');
 Route::get('/logout', 'LoginController@logout')->name('logout');
-
+ 
 Route::middleware('auth')->group(function () {
     Route::get('', 'HomeController@index')->name('index');
 
@@ -28,8 +29,9 @@ Route::middleware('auth')->group(function () {
             Route::get('them', 'PhieuMuaController@showCreate')->name('create');
             Route::post('them', 'PhieuMuaController@create');
         });
-        Route::middleware('acl:phieudenghi-delete')->group(function () {
-            Route::delete('xoa/{ID?}', 'PhieuMuaController@delete')->name('delete');
+        
+        Route::middleware('acl:phieumua-delete')->group(function () {
+            Route::get('xoa/{ID}', 'PhieuMuaController@delete')->name('delete');
         });
         Route::middleware('acl:phieudenghi-detail')->group(function () {
             Route::get('chitiet/{ID?}', 'PhieuMuaController@detail')->name('detail');
@@ -88,8 +90,16 @@ Route::middleware('auth')->group(function () {
             Route::get('danhsach', 'NguoiDungController@index')->name('index');
         });
     });
-
     Route::get('thongke', 'ThongKeController@index')->name('thongke');
 
     Route::get('trangcanhan', 'NguoiDungController@profile')->name('profile');
+    
 });
+Route::group(['prefix' => 'api'],function(){
+    Route::post('vanphongpham','VatTuController@listVPP')->name('vpp');
+    Route::post('chitiethanmuc','HanMucController@getHanMuc')->name('cthanmuc');
+    Route::post('themphieumua','PhieuMuaController@create')->name('themphieumua');
+    Route::post('xoachitietmua','PhieuMuaController@xoaCTMua')->name('xoachitietmua');
+    Route::post('themchitietmua','PhieuMuaController@themCTMua')->name('themchitietmua');
+});
+

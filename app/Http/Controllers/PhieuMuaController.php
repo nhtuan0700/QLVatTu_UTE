@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\PhieuMua\CreatePhieuMua;
 use App\Repositories\PhieuDeNghi\PhieuDeNghiInterface;
+use Illuminate\Http\Request;
 
 class PhieuMuaController extends Controller
 {
@@ -28,8 +29,10 @@ class PhieuMuaController extends Controller
         return view('phieudenghi.mua.create');
     }
 
-    public function create(CreatePhieuMua $request)
+    public function create(Request $request)
     {
+        $data = $this->phieuMuaRepo->themPhieuMua($request->input('data'));
+        return response()->json($data);
     }
 
     public function detail($id)
@@ -47,7 +50,9 @@ class PhieuMuaController extends Controller
         if (Gate::denies('phieudenghi-editPolicy', $phieu)) {
             return redirect(route('index'))->with('alert-fail', 'Không thể truy cập');
         };
-        return view('phieudenghi.mua.edit', compact('phieu'));
+        // return view('phieudenghi.mua.edit', compact('phieu'));
+        return view('phieudenghi.mua.edit')->with(compact('phieu'))
+            ->with(compact('id'));
     }
 
     public function update($id)
@@ -56,6 +61,8 @@ class PhieuMuaController extends Controller
 
     public function delete($id)
     {
+        $stt = $this->phieuMuaRepo->xoaPhieuMua($id);
+        return back();
     }
 
     public function hoanThanh($id)
@@ -66,5 +73,21 @@ class PhieuMuaController extends Controller
         };
         $this->phieuMuaRepo->hoanThanhPhieuMua($id);
         return back()->with('alert-success', 'Xác nhận hoàn thành phiếu đề nghị thành công');
+    }
+
+    public function xoaCTMua(Request $request)
+    {
+        $xoa = $this->phieuMuaRepo->xoaChiTietMua($request->input('idPhieu'), $request->input('idVatTu'));
+        return response()->json($xoa);
+    }
+
+    public function themCTMua(Request $request)
+    {
+        $them = $this->phieuMuaRepo->themChiTietMua($request->input('data'));
+        return response()->json($them);
+    }
+
+    public function confirm()
+    {
     }
 }

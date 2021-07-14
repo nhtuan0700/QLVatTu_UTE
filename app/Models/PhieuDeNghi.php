@@ -44,6 +44,11 @@ class PhieuDeNghi extends Model
         return $this->hasMany(PhieuBanGiao::class, 'ID_PhieuDN', 'ID');
     }
 
+    public function NguoiTaoPhieu()
+    {
+        return $this->hasMany(NguoiDung::class, 'ID', 'ID_NguoiDN');
+    }
+
     public function trangThai()
     {
         switch ($this->TrangThai) {
@@ -81,7 +86,7 @@ class PhieuDeNghi extends Model
     public function getNgayDuKienAttribute($date)
     {
         if (!$date) {
-            return null;
+            return null; 
         }
         return FormatDate::formatDate($date);
     }
@@ -97,7 +102,7 @@ class PhieuDeNghi extends Model
     {
         return $this->chiTietMua->sum('SoLuong');
     }
-
+ 
     public function tongSoLuongBG()
     {
         $count = 0;

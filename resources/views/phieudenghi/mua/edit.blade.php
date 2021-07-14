@@ -1,6 +1,6 @@
 @extends('master')
 @section('title')
-Tạo phiếu đề nghị mua văn phòng phẩm
+Chỉnh sửa phiếu đề nghị mua văn phòng phẩm
 @endsection
 @section('breadcrumb')
 {{ Breadcrumbs::render('phieumua') }}
@@ -13,42 +13,32 @@ Tạo phiếu đề nghị mua văn phòng phẩm
         <h2>Thêm văn phòng phẩm</h2>
       </div>
       <div class="body">
-        <form id="form_validation" method="POST" action="{{ route('phieumua.create') }}">
-          @csrf
-          @method('post')
-          <div class="col-12">
-            <label for="">Chọn văn phòng phẩm</label>
-            <div class="form-group">
-              <div class="form-line">
-                <select class="form-control dsvanphongpham" title="Chọn 1 văn phòng phẩm" data-live-search="true"
-                  name="MaVPP" required>
-                </select>
-              </div>
+        <div class="col-12">
+          <label for="">Chọn văn phòng phẩm</label>
+          <div class="form-group">
+            <div class="form-line">
+              <select class="form-control dsvanphongpham" title="Chọn 1 văn phòng phẩm" data-live-search="true" name="MaVPP" required>
+              </select>
             </div>
           </div>
-          <div class="col-12">
-            <label for="">Số lượng</label>
-            <div class="input-group">
-              <div class="form-line">
-                <input type="number" name="SoLuong" min="1" max="100" class="form-control"
-                  placeholder="Nhập số lượng muốn mua">
-              </div>
-              <span class="input-group-addon">Hộp</span>
+        </div>
+        <div class="col-12">
+          <label for="">Số lượng</label>
+          <div class="input-group">
+            <div class="form-line">
+              <input type="number" id="SoLuong" min="" max="" class="form-control" placeholder="Nhập số lượng muốn mua">
             </div>
-            <em>Hạn mức còn lại: 100 hộp.</em>
-            <a href="" style="text-decoration: underline;">Tăng hạn mức</a> <br />
-          </div><br><br>
-          <div style="text-align: right; clear: both;">
-            <button type="button" id="btn-reset" class="btn bg-red waves-effect" style="margin-left:10px">
-              <i class="material-icons">restart_alt</i>
-              <span>Reset</span>
-            </button>
-            <button type="submit" id="btn-them" class="btn bg-blue waves-effect">
-              <i class="material-icons">add</i>
-              <span>Thêm</span>
-            </button>
+            <span class="input-group-addon" id="DonVi">Hộp</span>
           </div>
-        </form>
+          <em>Hạn mức còn lại: <span id="txtConLai"></span>&nbsp;<span id="txtDonVi"></span>.</em>
+          <a href="" style="text-decoration: underline;">Tăng hạn mức</a> <br />
+        </div><br><br>
+        <div style="text-align: right; clear: both;">
+          <button type="button" id="btn-them" class="btn bg-blue waves-effect" disabled>
+            <i class="material-icons">add</i>
+            <span>Thêm</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -72,31 +62,29 @@ Tạo phiếu đề nghị mua văn phòng phẩm
                 </tr>
               </thead>
               <tbody id="DSTB">
+                <tr style="display:none">
+                  <td>-1</td>
+                </tr>
                 @foreach ($phieu->chiTietMua as $item)
-                  <tr id="VPP-{{ $item->VatTu->ID }}">
-                    <td style="vertical-align: middle;">{{ $item->VatTu->ID }}</td>
-                    <td style="vertical-align: middle;">{{ $item->VatTu->Ten }}</td>
-                    <td style="vertical-align: middle;">{{ $item->VatTu->DonViTinh }}</td>
-                    <td style="vertical-align: middle;">{{ $item->SoLuong }}</td>
-                    <td style="vertical-align: middle;"></td>
-                    <td style="vertical-align: middle;">
-                      <button class="btn btn-default waves-effect XoaTB" data-tr="VPP-{{ $item->VatTu->ID }}">
-                        <i class="material-icons">delete</i>
-                      </button>
-                    </td>
-                  </tr>
+                <tr id="VPP-{{ $item->VatTu->ID }}">
+                  <td style="vertical-align: middle;">{{ $item->VatTu->ID }}</td>
+                  <td style="vertical-align: middle;">{{ $item->VatTu->Ten }}</td>
+                  <td style="vertical-align: middle;">{{ $item->VatTu->DonViTinh }}</td>
+                  <td style="vertical-align: middle;">{{ $item->SoLuong }}</td>
+                  <td style="vertical-align: middle;">
+                    <button class="btn btn-default waves-effect XoaTB" data-id="{{ $item->VatTu->ID }}" data-tr="VPP-{{ $item->VatTu->ID }}">
+                      <i class="material-icons">delete</i>
+                    </button>
+                  </td>
+                </tr>
                 @endforeach
               </tbody>
             </table>
             <div style="text-align: right; clear: both;">
               <a href="{{ route('phieumua.index') }}" class="btn bg-red waves-effect" style="margin-left:10px">
-                <i class="material-icons">delete</i>
-                <span>Hủy</span>
+                <i class="material-icons">keyboard_return</i>
+                <span>Trở lại</span>
               </a>
-              <button type="submit" id="btn-guiyeucau" class="btn bg-green waves-effect" disabled>
-                <i class="material-icons">send</i>
-                <span>Gửi yêu cầu</span>
-              </button>
             </div>
           </div>
         </div>
@@ -122,6 +110,7 @@ Tạo phiếu đề nghị mua văn phòng phẩm
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <!-- noUISlider Css -->
 <link href="{{ asset('dist/plugins/nouislider/nouislider.min.css') }}" rel="stylesheet" />
+<link href="{{ asset('dist/plugins/sweetalert/sweetalert.css') }}" rel="stylesheet" />
 @endsection
 
 @section('script')
@@ -141,50 +130,127 @@ Tạo phiếu đề nghị mua văn phòng phẩm
 <script src="{{ asset('dist/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js') }}"></script>
 <!-- noUISlider Plugin Js -->
 <script src="{{ asset('dist/plugins/nouislider/nouislider.js') }}"></script>
+<!-- SweetAlert Plugin Js -->
+<script src="{{ asset('dist/plugins/sweetalert/sweetalert.min.js') }}"></script>
 
 <script>
-  function isTB() {
-    if ($("#DSTB tr").length > 0) {
-        $("#btn-guiyeucau").attr("disabled", false);
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
-    else {
-        $("#btn-guiyeucau").attr("disabled", true);
-    }
-  }
-
-  isTB();
-
-  $(".XoaTB").click(function () {
-    $("#" + $(this).attr("data-tr")).remove();
-    isTB();
   });
+
+
+
+  $(".XoaTB").click(function() {
+    $("#" + $(this).attr("data-tr")).remove();
+    $.ajax({
+      url: "{{route('xoachitietmua')}}",
+      dataType: 'json',
+      type: 'POST',
+      data: {
+        idPhieu: "{{ $id }}",
+        idVatTu: $(this).attr("data-id"),
+        _token: '{!! csrf_token() !!}',
+      },
+      success: function(data) {
+        console.log(data);
+      }
+    });
+  });
+
   function formatState(state) {
     if (!state.id) {
-        return state.text;
+      return state.text;
     }
     var $state = $(
-        '<span>' + state.text + '</span>'
+      '<span>' + state.text + '<br/><small>Hạn mức còn lại:' + state.hmConLai + '</small></span>'
     );
     return $state;
   }
   $('.dsvanphongpham').select2({
     placeholder: 'Lựa chọn 1 văn phòng phẩm',
+    tags: false,
+    multiple: false,
+    templateResult: formatState,
+    minimumInputLength: 1,
+    minimumResultsForSearch: 10,
     ajax: {
-        url: 'https://api.github.com/search/repositories',
-        dataType: 'json'
-    },
-    templateResult: formatState
+      url: "{{route('vpp')}}",
+      dataType: "json",
+      type: "POST",
+      data: function(params) {
+        var data = [];
+        $('#DSTB tr').each(function() {
+          var idTB = $(this).find("td").eq(0).html();
+          data.push(idTB);
+        });
+        var queryParameters = {
+          q: params.term,
+          selected: data,
+          _token: '{{csrf_token()}}'
+        }
+        return queryParameters;
+      },
+      processResults: function(data) {
+        return {
+          results: $.map(data, function(item) {
+            return {
+              text: item.Ten,
+              id: item.ID,
+              hmConLai: (item.HanMucToiDa - item.HanMucDaSuDung)
+            }
+          })
+        };
+      }
+    }
   });
-  $("#btn-guiyeucau").click(function () {
-    var data=[];
-    $('#DSTB tr').each(function () {
-        var idTB = $(this).find("td").eq(0).html();
-        var soLuong = $(this).find("td").eq(3).html();
-        data.push({idTB,soLuong});
+
+  $(".dsvanphongpham").change(function() {
+    $.ajax({
+      url: '{{route("cthanmuc")}}',
+      dataType: 'json',
+      type: 'POST',
+      data: {
+        id: $(this).val(),
+        _token: '{!! csrf_token() !!}',
+      },
+      success: function(response) {
+        var conlai = response[0].HanMucToiDa - response[0].HanMucDaSuDung;
+        var min = (conlai == 0) ? 0 : 1;
+        var max = (conlai == 0) ? 0 : conlai;
+        $("#SoLuong").attr('min', min);
+        $("#SoLuong").attr('max', max);
+        $("#SoLuong").val(min);
+        $("#txtConLai").text(conlai);
+        $("#txtDonVi").text(response[0].DonViTinh);
+        $("#DonVi").text(response[0].DonViTinh);
+        $("#btn-them").attr("disabled", false);
+      }
     });
-    console.log(data);
-    alert("Kiểm tra dữ liệu lấy đc ở F12 > Console")
-    // Gửi data bằng ajax 
   });
+  $("#btn-them").click(function() {
+    var id = $(".dsvanphongpham :selected").val();
+    var sl = $("#SoLuong").val();
+    
+    var data=[{
+      'idPhieu':"{{ $id }}",
+      'idTB':id,
+      'soLuong':sl
+    }];
+    $.ajax({
+      url: "{{route('themchitietmua')}}",
+      dataType: 'json',
+      type: 'POST',
+      data: {
+        data:data,
+        _token: '{!! csrf_token() !!}',
+      },
+      success: function(data) {
+        location.reload();
+      }
+    });
+  });
+  
 </script>
 @endsection
