@@ -57,72 +57,78 @@ Phiếu đề nghị mua
               <td style="vertical-align: middle;">
                 @switch($item->TrangThai)
                 @case(1)
-                @if ($item->GhiChu)
-                <span class="label label-danger">{{ $item->trangThai() }}</span>
-                @else
-                <span class="label label-primary">{{ $item->trangThai() }}</span>
-                @endif
-                @break
+                  @if ($item->GhiChu)
+                    <span class="label label-danger">{{ $item->trangThai() }}</span>
+                  @else
+                    <span class="label label-primary">{{ $item->trangThai() }}</span>
+                  @endif
+                  @break
                 @case(2)
-                <span class="label label-warning">
-                  {{ $item->trangThai() }} ({{ $item->tongSoLuongBG().'/'.$item->tongSoLuongDN() }})
-                </span>
-                @break
+                  <span class="label label-warning">
+                    {{ $item->trangThai() }} ({{ $item->tongSoLuongBG().'/'.$item->tongSoLuongDN() }})
+                  </span>
+                 @break
                 @default
-                <span class="label label-success">{{ $item->trangThai() }}</span>
+                 <span class="label label-success">{{ $item->trangThai() }}</span>
                 @endswitch
               </td>
               <td style="vertical-align: middle;">
                 @switch($item->TrangThai)
                 @case(1)
-                @if ($item->GhiChu)
-                <button type="button" class="btn btn-default waves-effect" data-toggle="modal" data-target="#MaPhieuDeNghi1">
-                  <i class="material-icons">visibility</i>
-                </button>
-                @endif
-                <div class="modal fade" id="MaPhieuDeNghi1" tabindex="-1" role="dialog" style="display: none;">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Nội dung cần sửa đổi</h4>
-                      </div>
-                      <div class="modal-body">
-                        {{ $item->GhiChu }}
-                      </div>
-                      <div class="modal-footer">
-                        <a href="#" class="btn btn-link waves-effect">Cập nhập</a>
-                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <a href="{{ route('phieumua.edit', ['ID' => $item->ID]) }}" class="btn btn-default waves-effect">
-                  <i class="material-icons">edit</i>
-                </a>
-                <button class="btn btn-default waves-effect" data-toggle="modal" data-target="#{{ $item->ID }}">
-                  <i class="material-icons">delete</i>
-                </button>
-                <div class="modal fade in" id="{{ $item->ID }}" tabindex="-1" role="dialog" style="display: none;">
-                  <div class="modal-dialog modal-sm" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Bạn có chắc chắn muốn xóa?</h4>
-                      </div>
-                      <div class="modal-body">
-                        Mọi thông tin về phiếu đề nghị {{ $item->ID }} sẽ biến mất hoàn toàn.
-                      </div>
-                      <div class="modal-footer">
-                        <a href="/phieumua/xoa/{{ $item->ID }}" class="btn btn-link waves-effect">Tiếp tục xóa</a>
-                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hủy</button>
+                  @if ($item->GhiChu)
+                    <button type="button" class="btn btn-default waves-effect" data-toggle="modal" data-target="#MaPhieuDeNghi1">
+                      <i class="material-icons">visibility</i>
+                    </button>
+                    <div class="modal fade" id="MaPhieuDeNghi1" tabindex="-1" role="dialog" style="display: none;">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 class="modal-title">Nội dung cần sửa đổi</h4>
+                          </div>
+                          <div class="modal-body">
+                            <p>{{ $item->GhiChu }}</p>
+                          </div>
+                          <div class="modal-footer">
+                            <a href="{{ route('phieumua.edit', ['ID' => $item->ID]) }}" class="btn btn-link waves-effect">Cập nhập</a>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                @break
+                  @endif
+                  
+                    <a href="{{ route('phieumua.edit', ['ID' => $item->ID]) }}" class="btn btn-default waves-effect">
+                      <i class="material-icons">edit</i>
+                    </a>
+                    <button class="btn btn-default waves-effect" data-toggle="modal" data-target="#{{ $item->ID }}">
+                      <i class="material-icons">delete</i>
+                    </button>
+                    <div class="modal fade in" id="{{ $item->ID }}" tabindex="-1" role="dialog" style="display: none;">
+                      <div class="modal-dialog modal-sm" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 class="modal-title">Bạn có chắc chắn muốn xóa?</h4>
+                          </div>
+                          <div class="modal-body">
+                            Mọi thông tin về phiếu đề nghị {{ $item->ID }} sẽ biến mất hoàn toàn.
+                          </div>
+                          <div class="modal-footer">
+                            <form action="{{ route('phieumua.delete', ['ID'=>$item->ID]) }}" method="post" style="display: inline-block">
+                              @method('delete')
+                              @csrf
+                              <button class="btn btn-link waves-effect">
+                                Tiếp tục xóa</button>
+                            </form>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hủy</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  @break
                 @default
-                <a href="{{ route('phieumua.detail', ['ID' => $item->ID]) }}" class="btn btn-default waves-effect">
-                  <i class="material-icons">visibility</i>
-                </a>
+                  <a href="{{ route('phieumua.detail', ['ID' => $item->ID]) }}" class="btn btn-default waves-effect">
+                    <i class="material-icons">visibility</i>
+                  </a>
                 @endswitch
               </td>
             </tr>

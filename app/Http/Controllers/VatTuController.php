@@ -22,12 +22,12 @@ class VatTuController extends Controller
 
     public function listVPP(Request $request)
     {
-        $q=$request->has('q')?$request->input('q'):'';
-        $selected = $request->has('selected')?$request->input('selected'):[-1];
-        $data=$this->vatTuRepo->vpp($q,$selected);
-        foreach($data as $item){
-            $item['HanMucToiDa']=array_values($item->HanMuc->where('ID_KhoaPB','=',Auth::user()->ID_KhoaPB)->all())[0]['HanMucToiDa'];
-            $item['HanMucDaSuDung']=array_values($item->HanMuc->where('ID_KhoaPB','=',Auth::user()->ID_KhoaPB)->all())[0]['HanMucDaSuDung'];
+        $q = $request->has('q') ? $request->get('q') : '';
+        $selected = $request->has('selected') ? $request->get('selected') : [-1];
+        $data = $this->vatTuRepo->listVPP($q, $selected);
+        foreach ($data as $item) {
+            $item['HanMucToiDa'] = array_values($item->HanMuc->where('ID_KhoaPB', '=', Auth::user()->ID_KhoaPB)->all())[0]['HanMucToiDa'];
+            $item['HanMucDaSuDung'] = array_values($item->HanMuc->where('ID_KhoaPB', '=', Auth::user()->ID_KhoaPB)->all())[0]['HanMucDaSuDung'];
         }
         return response()->json($data);
     }

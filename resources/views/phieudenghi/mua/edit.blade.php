@@ -72,7 +72,8 @@ Chỉnh sửa phiếu đề nghị mua văn phòng phẩm
                   <td style="vertical-align: middle;">{{ $item->VatTu->DonViTinh }}</td>
                   <td style="vertical-align: middle;">{{ $item->SoLuong }}</td>
                   <td style="vertical-align: middle;">
-                    <button class="btn btn-default waves-effect XoaTB" data-id="{{ $item->VatTu->ID }}" data-tr="VPP-{{ $item->VatTu->ID }}">
+                    <button class="btn btn-default waves-effect XoaTB" data-id="{{ $item->VatTu->ID }}" 
+                      data-tr="VPP-{{ $item->VatTu->ID }}">
                       <i class="material-icons">delete</i>
                     </button>
                   </td>
@@ -85,6 +86,11 @@ Chỉnh sửa phiếu đề nghị mua văn phòng phẩm
                 <i class="material-icons">keyboard_return</i>
                 <span>Trở lại</span>
               </a>
+
+              <button type="button" id="btn-edit" class="btn bg-green waves-effect">
+                <i class="material-icons">save</i>
+                <span>Cập nhật</span>
+              </button>
             </div>
           </div>
         </div>
@@ -134,123 +140,152 @@ Chỉnh sửa phiếu đề nghị mua văn phòng phẩm
 <script src="{{ asset('dist/plugins/sweetalert/sweetalert.min.js') }}"></script>
 
 <script>
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
-
-
-
-  $(".XoaTB").click(function() {
-    $("#" + $(this).attr("data-tr")).remove();
-    $.ajax({
-      url: "{{route('xoachitietmua')}}",
-      dataType: 'json',
-      type: 'POST',
-      data: {
-        idPhieu: "{{ $id }}",
-        idVatTu: $(this).attr("data-id"),
-        _token: '{!! csrf_token() !!}',
-      },
-      success: function(data) {
-        console.log(data);
+  $(function() {
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-  });
 
-  function formatState(state) {
-    if (!state.id) {
-      return state.text;
-    }
-    var $state = $(
-      '<span>' + state.text + '<br/><small>Hạn mức còn lại:' + state.hmConLai + '</small></span>'
-    );
-    return $state;
-  }
-  $('.dsvanphongpham').select2({
-    placeholder: 'Lựa chọn 1 văn phòng phẩm',
-    tags: false,
-    multiple: false,
-    templateResult: formatState,
-    minimumInputLength: 1,
-    minimumResultsForSearch: 10,
-    ajax: {
-      url: "{{route('vpp')}}",
-      dataType: "json",
-      type: "POST",
-      data: function(params) {
-        var data = [];
-        $('#DSTB tr').each(function() {
-          var idTB = $(this).find("td").eq(0).html();
-          data.push(idTB);
+    $('#btn-edit').click(function() {
+      var dt = [];
+      $('#DSTB tr:not(:first)').each(function() {
+        var idTB = $(this).find("td").eq(0).html();
+        var soLuong = $(this).find("td").eq(3).html();
+        dt.push({
+          idTB,
+          soLuong
         });
-        var queryParameters = {
-          q: params.term,
-          selected: data,
-          _token: '{{csrf_token()}}'
-        }
-        return queryParameters;
-      },
-      processResults: function(data) {
-        return {
-          results: $.map(data, function(item) {
-            return {
-              text: item.Ten,
-              id: item.ID,
-              hmConLai: (item.HanMucToiDa - item.HanMucDaSuDung)
-            }
-          })
-        };
+      });
+      if (dt.length == 0) {
+        toastr.error("Danh sách văn phòng phẩm không được trống")
+      } else {
+        $.ajax({
+          url: `{{ route("phieumua.edit", ['ID' => $phieu->ID]) }}`,
+          dataType: 'json',
+          type: 'POST',
+          data: {
+            _method: 'PUT',
+            data: dt,
+            _token: '{!! csrf_token() !!}',
+          },
+          success: function(response) {
+            console.log(response)
+            swal({
+              title: "Hoàn thành",
+              text: "Cập nhật phiếu đề nghị thành công",
+              type: "success",
+              confirmButtonColor: "rgb(140, 212, 245)",
+              confirmButtonText: "Ok",
+              closeOnConfirm: false
+            }, function () {
+                location.reload()
+            })
+          },
+          error: function() {
+            toastr.error("Văn phòng phẩm vượt quá mức cho phép")
+          }
+        });
       }
-    }
-  });
+    })
 
-  $(".dsvanphongpham").change(function() {
-    $.ajax({
-      url: '{{route("cthanmuc")}}',
-      dataType: 'json',
-      type: 'POST',
-      data: {
-        id: $(this).val(),
-        _token: '{!! csrf_token() !!}',
-      },
-      success: function(response) {
-        var conlai = response[0].HanMucToiDa - response[0].HanMucDaSuDung;
-        var min = (conlai == 0) ? 0 : 1;
-        var max = (conlai == 0) ? 0 : conlai;
-        $("#SoLuong").attr('min', min);
-        $("#SoLuong").attr('max', max);
-        $("#SoLuong").val(min);
-        $("#txtConLai").text(conlai);
-        $("#txtDonVi").text(response[0].DonViTinh);
-        $("#DonVi").text(response[0].DonViTinh);
-        $("#btn-them").attr("disabled", false);
+    function formatState(state) {
+      if (!state.id) {
+        return state.text;
       }
-    });
-  });
-  $("#btn-them").click(function() {
-    var id = $(".dsvanphongpham :selected").val();
-    var sl = $("#SoLuong").val();
+      var $state = $(
+        '<span>' + state.text + '<br/><small>Hạn mức còn lại:' + state.hmConLai + '</small></span>'
+      );
+      return $state;
+    }
     
-    var data=[{
-      'idPhieu':"{{ $id }}",
-      'idTB':id,
-      'soLuong':sl
-    }];
-    $.ajax({
-      url: "{{route('themchitietmua')}}",
-      dataType: 'json',
-      type: 'POST',
-      data: {
-        data:data,
-        _token: '{!! csrf_token() !!}',
-      },
-      success: function(data) {
-        location.reload();
+    $('.dsvanphongpham').select2({
+      placeholder: 'Lựa chọn 1 văn phòng phẩm',
+      tags: false,
+      multiple: false,
+      templateResult: formatState,
+      minimumInputLength: 1,
+      minimumResultsForSearch: 10,
+      ajax: {
+        url: "{{route('vpp')}}",
+        dataType: "json",
+        type: "POST",
+        data: function(params) {
+          var data = [];
+          $('#DSTB tr').each(function() {
+            var idTB = $(this).find("td").eq(0).html();
+            data.push(idTB);
+          });
+          var queryParameters = {
+            q: params.term,
+            selected: data,
+            _token: '{{csrf_token()}}'
+          }
+          return queryParameters;
+        },
+        processResults: function(data) {
+          return {
+            results: $.map(data, function(item) {
+              return {
+                text: item.Ten,
+                id: item.ID,
+                hmConLai: (item.HanMucToiDa - item.HanMucDaSuDung)
+              }
+            })
+          };
+        }
       }
     });
-  });
-  
+
+    $(".dsvanphongpham").change(function() {
+      $.ajax({
+        url: '{{route("cthanmuc")}}',
+        dataType: 'json',
+        type: 'POST',
+        data: {
+          id: $(this).val(),
+          _token: '{!! csrf_token() !!}',
+        },
+        success: function(response) {
+          var conlai = response[0].HanMucToiDa - response[0].HanMucDaSuDung;
+          var min = (conlai == 0) ? 0 : 1;
+          var max = (conlai == 0) ? 0 : conlai;
+          $("#SoLuong").attr('min', min);
+          $("#SoLuong").attr('max', max);
+          $("#SoLuong").val(min);
+          $("#txtConLai").text(conlai);
+          $("#txtDonVi").text(response[0].DonViTinh);
+          $("#DonVi").text(response[0].DonViTinh);
+          if (conlai > 0) {
+            $("#btn-them").attr("disabled", false);
+          }
+        }
+      });
+    });
+    
+    $("#btn-them").click(function() {
+      var id = $(".dsvanphongpham :selected").val();
+      var ten = $(".dsvanphongpham :selected").text();
+      var dvt = $("#DonVi").text();
+      var sl = $("#SoLuong").val();
+      elm = `<tr id="VPP-${id}"><td>${id}</td><td>${ten}</td><td>${dvt}</td><td>${sl}</td> 
+            <td style="vertical-align: middle;">
+              <button class="btn btn-default waves-effect XoaTB" data-id="${id}" data-tr="VPP-${id}" onclick="removeItem(this)">
+                <i class="material-icons">delete</i>
+              </button>
+            </td></tr>`
+      $("#DSTB tr:first").after(elm);
+      $("#btn-them").attr("disabled", true);
+    })
+
+    $(".XoaTB").click(function() {
+      removeItem($(this))
+    })
+  })
+
+  function removeItem(elm) {
+    let id = $(elm).data('tr')
+    $("#" + id).remove()
+  }
 </script>
 @endsection

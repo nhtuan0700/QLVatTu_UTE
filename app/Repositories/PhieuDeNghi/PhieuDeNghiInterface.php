@@ -13,7 +13,6 @@ interface PhieuDeNghiInterface extends RepositoryInterface
     public function hoanThanhPhieuMua($id);
     // public function getIDPhieuSua();
     public function themPhieuMua($data);
+    public function suaPhieuMua($data, $id);
     public function xoaPhieuMua($id);
-    public function xoaChiTietMua($idPhieu,$idVatTu);
-    public function themChiTietMua($data);
 }

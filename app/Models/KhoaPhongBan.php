@@ -13,4 +13,5 @@ class KhoaPhongBan extends Model
     protected $table = 'KhoaPhongBan';
 
     protected $primaryKey = 'ID';
+    public $incrementing = false;
 }

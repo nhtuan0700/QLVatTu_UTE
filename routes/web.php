@@ -30,8 +30,8 @@ Route::middleware('auth')->group(function () {
             Route::post('them', 'PhieuMuaController@create');
         });
         
-        Route::middleware('acl:phieumua-delete')->group(function () {
-            Route::get('xoa/{ID}', 'PhieuMuaController@delete')->name('delete');
+        Route::middleware('acl:phieudenghi-delete')->group(function () {
+            Route::delete('xoa/{ID}', 'PhieuMuaController@delete')->name('delete');
         });
         Route::middleware('acl:phieudenghi-detail')->group(function () {
             Route::get('chitiet/{ID?}', 'PhieuMuaController@detail')->name('detail');
@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
         });
         Route::middleware('acl:phieudenghi-edit')->group(function () {
             Route::get('sua/{ID?}', 'PhieuMuaController@showEdit')->name('edit');
-            Route::put('sua/{ID?}', 'PhieuMuaController@update');
+            Route::put('sua/{ID?}', 'PhieuMuaController@edit');
         });
         Route::middleware('acl:phieudenghi-hoanthanh')->group(function () {
             Route::put('hoanthanh/{ID?}', 'PhieuMuaController@hoanThanh')->name('hoanThanh');
@@ -95,11 +95,9 @@ Route::middleware('auth')->group(function () {
     Route::get('trangcanhan', 'NguoiDungController@profile')->name('profile');
     
 });
+
 Route::group(['prefix' => 'api'],function(){
     Route::post('vanphongpham','VatTuController@listVPP')->name('vpp');
     Route::post('chitiethanmuc','HanMucController@getHanMuc')->name('cthanmuc');
-    Route::post('themphieumua','PhieuMuaController@create')->name('themphieumua');
-    Route::post('xoachitietmua','PhieuMuaController@xoaCTMua')->name('xoachitietmua');
-    Route::post('themchitietmua','PhieuMuaController@themCTMua')->name('themchitietmua');
 });
 

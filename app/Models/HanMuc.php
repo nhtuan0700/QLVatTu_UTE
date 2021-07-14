@@ -11,6 +11,8 @@ class HanMuc extends Model
     ];
 
     protected $table = 'HanMuc';
+    protected $primaryKey = ['ID_KhoaPB', 'ID_VPP'];
+    public $incrementing = false;
     
     public function VatTu()
     {

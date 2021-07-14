@@ -16,9 +16,11 @@ class VatTuRepository extends BaseRepository implements VatTuInterface
     {
         return $this->model->select()->paginate($this->limit);
     }
-    public function vpp($q,$selected){
-        return $this->model->select('VatTu.*')->where('LoaiVT','=',1)
-                                     ->where('Ten','like','%'.$q.'%','AND')
-                                     ->whereNotIn('ID',$selected)->get();
+    
+    public function listVPP($q, $selected)
+    {
+        return $this->model->select('VatTu.*')->where('LoaiVT', '=', 1)
+            ->where('Ten', 'like', '%' . $q . '%', 'AND')
+            ->whereNotIn('ID', $selected)->get();
     }
 }

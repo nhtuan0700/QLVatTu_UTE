@@ -31,8 +31,12 @@ class PhieuMuaController extends Controller
 
     public function create(Request $request)
     {
-        $data = $this->phieuMuaRepo->themPhieuMua($request->input('data'));
-        return response()->json($data);
+        $data = $request->get('data');
+        $status = $this->phieuMuaRepo->themPhieuMua($data);
+        if ($status) {
+            return response()->json($data);
+        }
+        return response()->json(['message' => 'error'], 404);
     }
 
     public function detail($id)
@@ -55,14 +59,27 @@ class PhieuMuaController extends Controller
             ->with(compact('id'));
     }
 
-    public function update($id)
+    public function edit(Request $request, $id)
     {
+        $phieu = $this->phieuMuaRepo->findOrFail($id);
+        if (Gate::denies('phieudenghi-editPolicy', $phieu)) {
+            return redirect(route('index'))->with('alert-fail', 'Không thể truy cập');
+        };
+        $data = $request->get('data');
+        $status = $this->phieuMuaRepo->suaPhieuMua($data, $id);
+        if ($status) {
+            return response()->json($data);
+        }
+        return response()->json(['message' => 'error'], 404);
+        // return response()->json($data);
     }
 
     public function delete($id)
     {
-        $stt = $this->phieuMuaRepo->xoaPhieuMua($id);
-        return back();
+        if ($this->phieuMuaRepo->xoaPhieuMua($id)) {
+            return back()->with('alert-success', 'Xóa thành công');
+        }
+        return back()->with('alert-success', 'Xóa thất bại');
     }
 
     public function hoanThanh($id)
@@ -73,18 +90,6 @@ class PhieuMuaController extends Controller
         };
         $this->phieuMuaRepo->hoanThanhPhieuMua($id);
         return back()->with('alert-success', 'Xác nhận hoàn thành phiếu đề nghị thành công');
-    }
-
-    public function xoaCTMua(Request $request)
-    {
-        $xoa = $this->phieuMuaRepo->xoaChiTietMua($request->input('idPhieu'), $request->input('idVatTu'));
-        return response()->json($xoa);
-    }
-
-    public function themCTMua(Request $request)
-    {
-        $them = $this->phieuMuaRepo->themChiTietMua($request->input('data'));
-        return response()->json($them);
     }
 
     public function confirm()

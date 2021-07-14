@@ -124,119 +124,117 @@ Tạo phiếu đề nghị mua văn phòng phẩm
 <!-- SweetAlert Plugin Js -->
 <script src="{{ asset('dist/plugins/sweetalert/sweetalert.min.js') }}"></script>
 <script>
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
-
-  function isTB() {
-
-    if ($("#DSTB tr:not(:first)").length > 0) {
-      $("#btn-guiyeucau").attr("disabled", false);
-    } else {
-      $("#btn-guiyeucau").attr("disabled", true);
-    }
-  }
-
-  isTB();
-
-  $(".XoaTB").click(function() {
-    $("#" + $(this).attr("data-tr")).remove();
-    isTB();
-  });
-
-  function formatState(state) {
-    if (!state.id) {
-      return state.text;
-    }
-    var $state = $(
-      '<span>' + state.text + '<br/><small>Hạn mức còn lại:' + state.hmConLai + '</small></span>'
-    );
-    return $state;
-  }
-  $('.dsvanphongpham').select2({
-    placeholder: 'Lựa chọn 1 văn phòng phẩm',
-    tags: false,
-    multiple: false,
-    templateResult: formatState,
-    minimumInputLength: 1,
-    minimumResultsForSearch: 10,
-    ajax: {
-      url: "{{route('vpp')}}",
-      dataType: "json",
-      type: "POST",
-      data: function(params) {
-        var data = [];
-        $('#DSTB tr').each(function() {
-          var idTB = $(this).find("td").eq(0).html();
-          data.push(idTB);
-        });
-        var queryParameters = {
-          q: params.term,
-          selected: data,
-          _token: '{{csrf_token()}}'
-        }
-        return queryParameters;
-      },
-      processResults: function(data) {
-        return {
-          results: $.map(data, function(item) {
-            return {
-              text: item.Ten,
-              id: item.ID,
-              hmConLai: (item.HanMucToiDa - item.HanMucDaSuDung)
-            }
-          })
-        };
-      }
-    }
-  });
-
-  $(".dsvanphongpham").change(function() {
-    $.ajax({
-      url: '{{route("cthanmuc")}}',
-      dataType: 'json',
-      type: 'POST',
-      data: {
-        id: $(this).val(),
-        _token: '{!! csrf_token() !!}',
-      },
-      success: function(response) {
-        var conlai = response[0].HanMucToiDa - response[0].HanMucDaSuDung;
-        var min = (conlai == 0) ? 0 : 1;
-        var max = (conlai == 0) ? 0 : conlai;
-        $("#SoLuong").attr('min', min);
-        $("#SoLuong").attr('max', max);
-        $("#SoLuong").val(min);
-        $("#txtConLai").text(conlai);
-        $("#txtDonVi").text(response[0].DonViTinh);
-        $("#DonVi").text(response[0].DonViTinh);
-        $("#btn-them").attr("disabled", false);
+  $(function() {
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-  });
-  $("#btn-guiyeucau").click(function() {
-    var dt = [];
-    $('#DSTB tr:not(:first)').each(function() {
-      var idTB = $(this).find("td").eq(0).html();
-      var soLuong = $(this).find("td").eq(3).html();
-      dt.push({
-        idTB,
-        soLuong
+
+    function isTB() {
+      if ($("#DSTB tr:not(:first)").length > 0) {
+        $("#btn-guiyeucau").attr("disabled", false);
+      } else {
+        $("#btn-guiyeucau").attr("disabled", true);
+      }
+    }
+
+    isTB();
+
+    function formatState(state) {
+      if (!state.id) {
+        return state.text;
+      }
+      var $state = $(
+        '<span>' + state.text + '<br/><small>Hạn mức còn lại:' + state.hmConLai + '</small></span>'
+      );
+      return $state;
+    }
+    
+    $('.dsvanphongpham').select2({
+      placeholder: 'Lựa chọn 1 văn phòng phẩm',
+      tags: false,
+      multiple: false,
+      templateResult: formatState,
+      minimumInputLength: 1,
+      minimumResultsForSearch: 10,
+      ajax: {
+        url: "{{route('vpp')}}",
+        dataType: "json",
+        type: "POST",
+        data: function(params) {
+          var data = [];
+          $('#DSTB tr').each(function() {
+            var idTB = $(this).find("td").eq(0).html();
+            data.push(idTB);
+          });
+          var queryParameters = {
+            q: params.term,
+            selected: data,
+            _token: '{{csrf_token()}}'
+          }
+          return queryParameters;
+        },
+        processResults: function(data) {
+          return {
+            results: $.map(data, function(item) {
+              return {
+                text: item.Ten,
+                id: item.ID,
+                hmConLai: (item.HanMucToiDa - item.HanMucDaSuDung)
+              }
+            })
+          };
+        }
+      }
+    });
+
+    $(".dsvanphongpham").change(function() {
+      $.ajax({
+        url: '{{route("cthanmuc")}}',
+        dataType: 'json',
+        type: 'POST',
+        data: {
+          id: $(this).val(),
+          _token: '{!! csrf_token() !!}',
+        },
+        success: function(response) {
+          var conlai = response[0].HanMucToiDa - response[0].HanMucDaSuDung;
+          var min = (conlai == 0) ? 0 : 1;
+          var max = (conlai == 0) ? 0 : conlai;
+          $("#SoLuong").attr('min', min);
+          $("#SoLuong").attr('max', max);
+          $("#SoLuong").val(min);
+          $("#txtConLai").text(conlai);
+          $("#txtDonVi").text(response[0].DonViTinh);
+          $("#DonVi").text(response[0].DonViTinh);
+          if (conlai > 0) {
+            $("#btn-them").attr("disabled", false);
+          }
+        }
       });
     });
 
-    $.ajax({
-      url: '{{route("themphieumua")}}',
-      dataType: 'json',
-      type: 'POST',
-      data: {
-        data: dt,
-        _token: '{!! csrf_token() !!}',
-      },
-      success: function(response) {
-        if (response) {
+    $("#btn-guiyeucau").click(function() {
+      var dt = [];
+      $('#DSTB tr:not(:first)').each(function() {
+        var idTB = $(this).find("td").eq(0).html();
+        var soLuong = $(this).find("td").eq(3).html();
+        dt.push({
+          idTB,
+          soLuong
+        });
+      });
+
+      $.ajax({
+        url: '{{ route("phieumua.create") }}',
+        dataType: 'json',
+        type: 'POST',
+        data: {
+          data: dt,
+          _token: '{!! csrf_token() !!}',
+        },
+        success: function(response) {
           swal({
             title: "Hoàn thành",
             text: "Tạo mới phiếu đề nghị thành công",
@@ -245,29 +243,35 @@ Tạo phiếu đề nghị mua văn phòng phẩm
             confirmButtonText: "Ok",
             closeOnConfirm: false
           }, function() {
-            location.href = "{{route('phieumua.index')}}";
+            location.href = "{{ route('phieumua.index') }}";
           });
+        },
+        error: function(error) {
+          toastr.error("Văn phòng phẩm vượt quá mức cho phép")
         }
-        else{
-          swal({
-            title: "Lỗi",
-            text: "Lỗi khi tạo mới phiếu đề nghị",
-            type: "alert",
-            confirmButtonColor: "rgb(140, 212, 245)",
-            confirmButtonText: "Ok",
-          });
-        }
-      }
+      });
     });
-  });
-  $("#btn-them").click(function() {
-    var id = $(".dsvanphongpham :selected").val();
-    var ten = $(".dsvanphongpham :selected").text();
-    var dvt = $("#DonVi").text();
-    var sl = $("#SoLuong").val();
-    $("#DSTB tr:first").after("<tr><td>" + id + "</td><td>" + ten + "</td><td>" + dvt + "</td><td>" + sl + "</td></tr>");
-    $("#btn-them").attr("disabled", true);
-    isTB();
+    
+    $("#btn-them").click(function() {
+      var id = $(".dsvanphongpham :selected").val();
+      var ten = $(".dsvanphongpham :selected").text();
+      var dvt = $("#DonVi").text();
+      var sl = $("#SoLuong").val();
+      elm = `<tr id="VPP-${id}"><td>${id}</td><td>${ten}</td><td>${dvt}</td><td>${sl}</td> 
+            <td style="vertical-align: middle;">
+              <button class="btn btn-default waves-effect XoaTB" data-id="${id}" data-tr="VPP-${id}" onclick="removeItem(this)">
+                <i class="material-icons">delete</i>
+              </button>
+            </td></tr>`
+      $("#DSTB tr:first").after(elm)
+      $("#btn-them").attr("disabled", true)
+      isTB();
+    })
   })
+
+  function removeItem(elm) {
+    let id = $(elm).data('tr')
+    $("#" + id).remove()
+  }
 </script>
 @endsection

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\PhieuDeNghi;
 
+use App\Models\HanMuc;
 use Carbon\Carbon;
 use App\Models\ChiTietMua;
 use App\Models\PhieuDeNghi;
@@ -76,75 +77,104 @@ class PhieuDeNghiRepository extends BaseRepository implements PhieuDeNghiInterfa
 
     public function themPhieuMua($data)
     {
-        $dayNow = now()->format('m');
-        $yearNow = substr(now()->format('Y'), 2, 2);
-        $ngayLP = now()->format('Y-m-d H:i:s');
-
-        $maxid = $this->model->select()->where('LoaiPhieu', '=', 1)
-            ->where('ID_NguoiDN', '=', Auth::user()->ID)
-            ->max('ID');
-
-        $day = substr($maxid, 2, 4);
-        $stt = substr($maxid, 6, 4);
-
-        $stt = ($day == $dayNow . $yearNow) ? ($stt + 1) : 1;
-        $newID = 'PM' . $dayNow . $yearNow . str_pad($stt, 4, "0", STR_PAD_LEFT);;
-
-        $this->model->insert([
-            'ID' => $newID,
-            'LoaiPhieu' => 1,
-            'NgayLapPhieu' => $ngayLP,
-            'TrangThai' => 1,
-            'ID_NguoiDN' => Auth::user()->ID
-        ]);
+        $newID = $this->getIDPhieuMua();
+        DB::beginTransaction();
         try {
-            for ($i = 0; $i < count($data); $i++) {
+            $this->model->insert([
+                'ID' => $newID,
+                'LoaiPhieu' => 1,
+                'NgayLapPhieu' => now(),
+                'TrangThai' => 1,
+                'ID_NguoiDN' => Auth::user()->ID
+            ]);
+            foreach ($data as $item) {
+                $idVatTu = $item['idTB'];
+                $soLuong = $item['soLuong'];
+
                 DB::table('chitietmua')->insert([
                     'ID_Phieu' => $newID,
-                    'ID_VatTu' => $data[$i]['idTB'],
-                    'SoLuong' => $data[$i]['soLuong'],
+                    'ID_VatTu' => $idVatTu,
+                    'SoLuong' => $soLuong,
                 ]);
+
+                $hanMuc = HanMuc::where('ID_VPP', '=',  $idVatTu)
+                    ->where('ID_KhoaPB', '=', Auth::user()->khoaPB->ID);
+                $hanMucDaSD = $hanMuc->first()->HanMucDaSuDung;
+                $hanMucToiDa = $hanMuc->first()->HanMucToiDa;
+                if ($hanMucDaSD + $soLuong > $hanMucToiDa) {
+                    throw new Exception();
+                }
+
+                $hanMuc->update(['HanMucDaSuDung' => $hanMucDaSD + $soLuong]);
             }
-            return true;
         } catch (Exception $e) {
-            return $e->getMessage();
+            DB::rollBack();
+            return false;
         }
+        DB::commit();
+        return true;
     }
 
     public function xoaPhieuMua($id)
     {
         try {
+            $phieu = $this->model->findOrFail($id);
+            $chiTietMua = $phieu->chiTietMua;
+
+            foreach ($chiTietMua as $item) {
+                $hanMuc = HanMuc::where('ID_VPP', '=',  $item->ID_VatTu)
+                    ->where('ID_KhoaPB', '=', Auth::user()->khoaPB->ID);
+                $hanMucDaSD = $hanMuc->first()->HanMucDaSuDung;
+                $hanMuc->update(['HanMucDaSuDung' => $hanMucDaSD - $item->SoLuong]);
+            }
+
             DB::table('chitietmua')->where('ID_Phieu', '=', $id)->delete();
             $this->model->where('ID', '=', $id)->delete();
-            return "Xóa thành công phiếu " . $id;
-        } catch (Exception $e) {
-            return "Đã có lỗi xảy ra";
-        }
-    }
-    public function xoaChiTietMua($idPhieu, $idVatTu)
-    {
-        try {
-            DB::table('chitietmua')->where('ID_Phieu', '=', $idPhieu)
-                ->where('ID_VatTu', '=', $idVatTu)
-                ->delete();
-            return "Thành công";
+            return true;
         } catch (Exception $e) {
             return false;
         }
     }
 
-    public function themChiTietMua($data)
+    public function suaPhieuMua($data, $id)
     {
-        $data = array($data)[0][0];
+        DB::beginTransaction();
         try {
-            DB::table('chitietmua')->insert([
-                'ID_Phieu' => $data['idPhieu'],
-                'ID_VatTu' => $data['idTB'],
-                'SoLuong' => $data['soLuong'],
-            ]);
-            return true;
+            $phieu = $this->model->findOrFail($id);
+            $chiTietMua = $phieu->chiTietMua;
+            foreach ($chiTietMua as $item) {
+                $hanMuc = HanMuc::where('ID_VPP', '=',  $item->ID_VatTu)
+                    ->where('ID_KhoaPB', '=', Auth::user()->khoaPB->ID);
+                $hanMucDaSD = $hanMuc->first()->HanMucDaSuDung;
+                $hanMuc->update(['HanMucDaSuDung' => $hanMucDaSD - $item->SoLuong]);
+            }
+            DB::table('chitietmua')->where('ID_Phieu', '=', $id)->delete();
+
+            foreach ($data as $item) {
+                $idVatTu = $item['idTB'];
+                $soLuong = $item['soLuong'];
+
+                DB::table('chitietmua')->insert([
+                    'ID_Phieu' => $id,
+                    'ID_VatTu' => $idVatTu,
+                    'SoLuong' => $soLuong,
+                ]);
+
+                $hanMuc = HanMuc::where('ID_VPP', '=',  $idVatTu)
+                    ->where('ID_KhoaPB', '=', Auth::user()->khoaPB->ID);
+                $hanMucDaSD = $hanMuc->first()->HanMucDaSuDung;
+                $hanMucToiDa = $hanMuc->first()->HanMucToiDa;
+                if ($hanMucDaSD + $soLuong > $hanMucToiDa) {
+                    throw new Exception();
+                }
+
+                $hanMuc->update(['HanMucDaSuDung' => $hanMucDaSD + $soLuong]);
+            }
         } catch (Exception $e) {
-            return $e->getMessage();
+            DB::rollBack();
+            return false;
         }
+        DB::commit();
+        return true;
     }
 }
