@@ -116,6 +116,9 @@ Chi tiết phiếu đề nghị mua
                   <th>Số lượng</th>
                   <th>Giá</th>
                   <th>Đã bàn giao</th>
+                  @if ($phieu->TrangThai == 2)
+                    <th>Đang bàn giao</th>
+                  @endif
                 </tr>
               </thead>
               <tbody id="DSTB">
@@ -127,6 +130,9 @@ Chi tiết phiếu đề nghị mua
                     <td style="vertical-align: middle;">{{ $item->SoLuong }}</td>
                     <td style="vertical-align: middle;">{{ $item->Gia }}</td>
                     <td style="vertical-align: middle;">{{ $item->soLuongDaBG() }}</td>
+                    @if ($phieu->TrangThai == 2)
+                      <td style="vertical-align: middle;">{{ $item->soLuongDangBG() }}</td>
+                    @endif
                   </tr>
                 @endforeach
               </tbody>
