@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
         Route::get('sua/{ID?}', 'PhieuMuaController@showEdit')->name('edit');
         Route::put('sua/{ID?}', 'PhieuMuaController@update');
         Route::get('chitiet/{ID?}', 'PhieuMuaController@detail')->name('detail');
+        Route::put('hoanthanh/{ID?}', 'PhieuMuaController@hoanThanh')->name('hoanThanh');
     });
 
     Route::group(['prefix' => 'xetduyet', 'as' => 'xetduyet.'], function () {
@@ -54,6 +55,7 @@ Route::middleware('auth')->group(function () {
             Route::post('bangiao', 'PhieuBanGiaoController@create');
         });
         Route::get('chitiet/{ID?}', 'PhieuBanGiaoController@detail')->name('detail');
+        Route::put('xacnhan/{ID?}','PhieuBanGiaoController@xacNhan')->name('xacNhan');
     });
 
     Route::group(['prefix' => 'vattu', 'as' => 'vattu.'], function () {
@@ -74,6 +76,6 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('thongke', 'ThongKeController@index')->name('thongke');
-    
+
     Route::get('trangcanhan', 'NguoiDungController@profile')->name('profile');
 });

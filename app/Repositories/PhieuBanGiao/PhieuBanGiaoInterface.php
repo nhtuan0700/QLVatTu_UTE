@@ -11,4 +11,6 @@ interface PhieuBanGiaoInterface extends RepositoryInterface
     public function list();
 
     public function myList();
+
+    public function xacNhan($id_phieuBG);
 }

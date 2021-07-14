@@ -67,4 +67,9 @@ class PhieuDeNghiRepository extends BaseRepository implements PhieuDeNghiInterfa
         DB::commit();
         return true;
     }
+    
+    public function hoanThanhPhieuMua($id)
+    {
+        $this->update($id, ['NgayHoanThanh' => now(), 'TrangThai' => 3]);
+    }
 }

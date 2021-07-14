@@ -33,7 +33,11 @@
   width: max-content;
 }
 
-#toast-container > .toast-error { 
-  background-color: #BD362F;
+#toast-container > .toast-error,
+#toast-container > .toast-success { 
   opacity: 1; 
+}
+
+#toast-container > .toast-error {
+  background-color: #BD362F;
 }

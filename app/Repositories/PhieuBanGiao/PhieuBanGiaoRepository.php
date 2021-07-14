@@ -44,4 +44,9 @@ class PhieuBanGiaoRepository extends BaseRepository implements PhieuBanGiaoInter
             ->where('PhieuDeNghi.ID_NguoiDN', '=', Auth::user()->ID)->select('PhieuBanGiao.*');
         return $query->orderby('ID_NguoiXN', 'asc')->orderby('NgayBanGiao', 'desc')->paginate($this->limit);
     }
+
+    public function xacNhan($id_phieuBG)
+    {
+        $this->update($id_phieuBG, ['ID_NguoiXN' => Auth::user()->ID, 'NgayBanGiao' => now()]);
+    }
 }
