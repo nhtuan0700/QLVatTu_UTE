@@ -16,6 +16,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Model' => 'App\Policies\ModelPolicy',
+        'App\Models\PhieuDeNghi' => '\App\Policies\PhieuDeNghiPolicy',
+        'App\Models\PhieuBanGiao' => '\App\Policies\PhieuBanGiaoPolicy'
     ];
 
     /**
@@ -39,12 +41,12 @@ class AuthServiceProvider extends ServiceProvider
             'thongke', 'hanmuc'
         ];
         $QLVT = [
-            'phieumua-list', 'phieumua-create', 'phieumua-detail', 'phieumua-edit', 'phieumua-delete', 'phieumua-finish',
-            'phieubangiao-xacnhan', 'phieubangiao-list', 'vattu-list'
+            'phieumua-list', 'phieumua-create', 'phieudenghi-detail', 'phieudenghi-edit', 'phieudenghi-delete', 'phieudenghi-hoanthanh',
+            'phieubangiao-detail', 'phieubangiao-xacnhan', 'phieubangiao-list', 'vattu-list'
         ];
         $GV = [
-            'phieusua-list', 'phieusua-create', 'phieusua-detail', 'phieusua-edit', 'phieusua-delete', 'phieusua-finish',
-            'vattu-list'
+            'phieusua-list', 'phieusua-create', 'phieudenghi-detail', 'phieudenghi-edit', 'phieudenghi-delete', 'phieudenghi-hoanthanh',
+            'phieubangiao-detail', 'phieubangiao-detail','vattu-list'
         ];
         $array = array_unique(array_merge($ADMIN, $CSVC, $QLVT, $GV));
 
@@ -65,6 +67,12 @@ class AuthServiceProvider extends ServiceProvider
                     }
                 });
             }
+
+            Gate::define('phieudenghi-hoanThanhPolicy', '\App\Policies\PhieuDeNghiPolicy@hoanThanh');
+            Gate::define('phieudenghi-detailPolicy', '\App\Policies\PhieuDeNghiPolicy@detail');
+            Gate::define('phieudenghi-editPolicy', '\App\Policies\PhieuBanGiaoPolicy@edit');
+            Gate::define('phieubangiao-detailPolicy', '\App\Policies\PhieuBanGiaoPolicy@detail');
+            Gate::define('phieubangiao-xacNhanPolicy', '\App\Policies\PhieuBanGiaoPolicy@xacNhan');
         }
     }
 }

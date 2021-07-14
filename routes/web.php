@@ -28,21 +28,31 @@ Route::middleware('auth')->group(function () {
             Route::get('them', 'PhieuMuaController@showCreate')->name('create');
             Route::post('them', 'PhieuMuaController@create');
         });
-        Route::middleware('acl:phieumua-delete')->group(function () {
+        Route::middleware('acl:phieudenghi-delete')->group(function () {
             Route::delete('xoa/{ID?}', 'PhieuMuaController@delete')->name('delete');
         });
-        Route::get('sua/{ID?}', 'PhieuMuaController@showEdit')->name('edit');
-        Route::put('sua/{ID?}', 'PhieuMuaController@update');
-        Route::get('chitiet/{ID?}', 'PhieuMuaController@detail')->name('detail');
-        Route::put('hoanthanh/{ID?}', 'PhieuMuaController@hoanThanh')->name('hoanThanh');
+        Route::middleware('acl:phieudenghi-detail')->group(function () {
+            Route::get('chitiet/{ID?}', 'PhieuMuaController@detail')->name('detail');
+        });
+        Route::middleware('acl:phieudenghi-detail')->group(function () {
+            Route::get('chitiet/{ID?}', 'PhieuMuaController@detail')->name('detail');
+        });
+        Route::middleware('acl:phieudenghi-edit')->group(function () {
+            Route::get('sua/{ID?}', 'PhieuMuaController@showEdit')->name('edit');
+            Route::put('sua/{ID?}', 'PhieuMuaController@update');
+        });
+        Route::middleware('acl:phieudenghi-hoanthanh')->group(function () {
+            Route::put('hoanthanh/{ID?}', 'PhieuMuaController@hoanThanh')->name('hoanThanh');
+        });
+
     });
 
     Route::group(['prefix' => 'xetduyet', 'as' => 'xetduyet.'], function () {
         Route::middleware('acl:phieudenghi-xetduyet')->group(function () {
             Route::get('danhsach', 'XetDuyetController@index')->name('index');
             Route::get('chitiet/{ID?}', 'XetDuyetController@detail')->name('detail');
-            Route::put('/phieudenghi/{ID?}', 'XetDuyetController@xetDuyet')->name('confirm');
-            Route::put('/ghichu/{ID?}', 'XetDuyetController@ghiChu')->name('ghiChu');
+            Route::put('phieudenghi/{ID?}', 'XetDuyetController@xetDuyet')->name('confirm');
+            Route::put('ghichu/{ID?}', 'XetDuyetController@ghiChu')->name('ghiChu');
         });
     });
 
@@ -54,8 +64,12 @@ Route::middleware('auth')->group(function () {
             Route::get('them', 'PhieuBanGiaoController@showCreateForm')->name('create');
             Route::post('bangiao', 'PhieuBanGiaoController@create');
         });
-        Route::get('chitiet/{ID?}', 'PhieuBanGiaoController@detail')->name('detail');
-        Route::put('xacnhan/{ID?}','PhieuBanGiaoController@xacNhan')->name('xacNhan');
+        Route::middleware('acl:phieubangiao-xacnhan')->group(function () {
+            Route::put('xacnhan/{ID?}','PhieuBanGiaoController@xacNhan')->name('xacNhan');
+        });
+        Route::middleware('acl:phieubangiao-detail')->group(function () {
+            Route::get('chitiet/{ID?}', 'PhieuBanGiaoController@detail')->name('detail');
+        });
     });
 
     Route::group(['prefix' => 'vattu', 'as' => 'vattu.'], function () {

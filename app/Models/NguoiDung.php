@@ -2,17 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Helpers\Facade\FormatDate;
 
-class NguoiDung extends Model implements AuthenticatableContract
+class NguoiDung extends Authenticatable 
 {
     use Notifiable;
-    use Authenticatable;
     public const ADMIN = 1;
     public const CSVC = 2;
     public const QLVT = 3;

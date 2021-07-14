@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\PhieuMua\CreatePhieuMua;
 use App\Repositories\PhieuDeNghi\PhieuDeNghiInterface;
-use Illuminate\Support\Facades\Auth;
 
 class PhieuMuaController extends Controller
 {
@@ -34,12 +35,18 @@ class PhieuMuaController extends Controller
     public function detail($id)
     {
         $phieu = $this->phieuMuaRepo->findOrFail($id);
+        if (Gate::denies('phieudenghi-detailPolicy', $phieu)) {
+            return redirect(route('index'))->with('alert-fail', 'Không thể truy cập');
+        };
         return view('phieudenghi.mua.detail', compact('phieu'));
     }
 
     public function showEdit($id)
     {
         $phieu = $this->phieuMuaRepo->findOrFail($id);
+        if (Gate::denies('phieudenghi-editPolicy', $phieu)) {
+            return redirect(route('index'))->with('alert-fail', 'Không thể truy cập');
+        };
         return view('phieudenghi.mua.edit', compact('phieu'));
     }
 
@@ -53,6 +60,10 @@ class PhieuMuaController extends Controller
 
     public function hoanThanh($id)
     {
+        $phieu = $this->phieuMuaRepo->findOrFail($id);
+        if (Gate::denies('phieudenghi-hoanThanhPolicy', $phieu)) {
+            return redirect(route('index'))->with('alert-fail', 'Không thể truy cập');
+        };
         $this->phieuMuaRepo->hoanThanhPhieuMua($id);
         return back()->with('alert-success', 'Xác nhận hoàn thành phiếu đề nghị thành công');
     }
