@@ -6,10 +6,12 @@ use App\Models\HanMuc;
 use Carbon\Carbon;
 use App\Models\ChiTietMua;
 use App\Models\PhieuDeNghi;
-use Illuminate\Support\Facades\DB;
 use App\Repositories\BaseRepository;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+use function PHPUnit\Framework\isNull;
 
 class PhieuDeNghiRepository extends BaseRepository implements PhieuDeNghiInterface
 {
@@ -38,7 +40,7 @@ class PhieuDeNghiRepository extends BaseRepository implements PhieuDeNghiInterfa
 
     public function listAll()
     {
-        return $this->model->select()->orderby('TrangThai', 'asc')->orderby('NgayLapPhieu', 'asc')->paginate($this->limit);
+        return $this->model->select()->orderby('TrangThai', 'asc')->orderby('NgayLapPhieu', 'desc')->paginate($this->limit);
     }
 
     public function myListPhieuMua()
@@ -176,5 +178,19 @@ class PhieuDeNghiRepository extends BaseRepository implements PhieuDeNghiInterfa
         }
         DB::commit();
         return true;
+    }
+
+    public function timKiem($q, $trangthai)
+    {
+        $data = $this->model->select()
+            ->where('ID_NguoiDN', Auth::user()->ID)
+            ->where('ID', 'like', '%' . $q . '%');
+
+        if ($trangthai != -1) {
+            $data = $data->where('TrangThai', '=', $trangthai);
+        }
+
+        return $data->orderby('TrangThai', 'asc')->orderby('NgayLapPhieu', 'asc')
+            ->paginate($this->limit);
     }
 }

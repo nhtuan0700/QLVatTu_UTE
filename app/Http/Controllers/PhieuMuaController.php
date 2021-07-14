@@ -24,6 +24,13 @@ class PhieuMuaController extends Controller
         return view('phieudenghi.mua.index', compact('data'));
     }
 
+    public function timKiemPhieuMua(Request $request)
+    {
+        $trangthai = $request->has('trangthai') ? $request->get('trangthai') : -1;
+        $data = $this->phieuMuaRepo->timKiem($request->get('q'), $trangthai);
+        return view('phieudenghi.mua.index', compact('data'));
+    }
+
     public function showCreate()
     {
         return view('phieudenghi.mua.create');

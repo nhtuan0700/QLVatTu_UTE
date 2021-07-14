@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'phieumua', 'as' => 'phieumua.'], function () {
         Route::middleware('acl:phieumua-list')->group(function () {
             Route::get('danhsach', 'PhieuMuaController@index')->name('index');
+            Route::get('timkiem', 'PhieuMuaController@timKiemPhieuMua')->name('search');
         });
         Route::middleware('acl:phieumua-create')->group(function () {
             Route::get('them', 'PhieuMuaController@showCreate')->name('create');
@@ -46,7 +47,6 @@ Route::middleware('auth')->group(function () {
         Route::middleware('acl:phieudenghi-hoanthanh')->group(function () {
             Route::put('hoanthanh/{ID?}', 'PhieuMuaController@hoanThanh')->name('hoanThanh');
         });
-
     });
 
     Route::group(['prefix' => 'xetduyet', 'as' => 'xetduyet.'], function () {

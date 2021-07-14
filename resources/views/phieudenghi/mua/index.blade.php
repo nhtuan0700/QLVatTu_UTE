@@ -19,17 +19,27 @@ Phiếu đề nghị mua
             Tất cả <span class="caret"></span>
           </button>
           <ul class="dropdown-menu">
-            <li><a href="javascript:void(0);" class=" waves-effect waves-block">Tất cả</a></li>
+            <li>
+              <a href="{{ route('phieumua.search') }}" class=" waves-effect waves-block">Tất cả</a>
+            </li>
             <li role="separator" class="divider"></li>
-            <li><a href="javascript:void(0);" class=" waves-effect waves-block">Chờ duyệt</a></li>
-            <li><a href="javascript:void(0);" class=" waves-effect waves-block">Chờ bàn giao</a></li>
-            <li><a href="javascript:void(0);" class=" waves-effect waves-block">Hoàn thành</a></li>
+            <li>
+              <a href="{{ route('phieumua.search', ['trangthai'=>1]) }}" class=" waves-effect waves-block" >Chờ duyệt</a>
+            </li>
+            <li>
+              <a href="{{ route('phieumua.search', ['trangthai'=>2]) }}" class=" waves-effect waves-block">Chờ bàn giao</a>
+            </li>
+            <li>
+              <a href="{{ route('phieumua.search', ['trangthai'=>3]) }}" class=" waves-effect waves-block">Hoàn thành</a>
+            </li>
           </ul>
         </div>
         <div class="col-md-4" style="float:right;">
           <div class="input-group" style="margin-bottom: 0 !important;">
             <div class="form-line">
-              <input type="text" class="form-control" placeholder="Tìm kiếm">
+            <form action="{{ route('phieumua.search') }}" method="get">
+                <input type="text" name="q" class="form-control" placeholder="Tìm kiếm">
+              </form>
             </div>
             <span class="input-group-addon">
               <i class="material-icons">search</i>
