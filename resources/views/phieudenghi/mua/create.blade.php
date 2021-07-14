@@ -141,11 +141,6 @@ Tạo phiếu đề nghị mua văn phòng phẩm
 
   isTB();
 
-  $(".XoaTB").click(function() {
-    $("#" + $(this).attr("data-tr")).remove();
-    isTB();
-  });
-
   function formatState(state) {
     if (!state.id) {
       return state.text;
@@ -260,12 +255,14 @@ Tạo phiếu đề nghị mua văn phòng phẩm
       }
     });
   });
+  
   $("#btn-them").click(function() {
     var id = $(".dsvanphongpham :selected").val();
     var ten = $(".dsvanphongpham :selected").text();
     var dvt = $("#DonVi").text();
     var sl = $("#SoLuong").val();
-    $("#DSTB tr:first").after("<tr><td>" + id + "</td><td>" + ten + "</td><td>" + dvt + "</td><td>" + sl + "</td></tr>");
+    
+    $("#DSTB tr:first").after('<tr id="TB' + id + '"><td style="vertical-align: middle;">' + id + '</td><td style="vertical-align: middle;">' + ten + '</td><td style="vertical-align: middle;">' + dvt + '</td><td style="vertical-align: middle;">' + sl + '</td><td style="vertical-align: middle;"><button class="btn btn-default waves-effect XoaTB" data-tr="TB' + id + '"><i class="material-icons">delete</i></button></td></tr>');
     $("#btn-them").attr("disabled", true);
     isTB();
   })
