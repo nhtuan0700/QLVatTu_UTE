@@ -14,4 +14,7 @@ class FormatHelper
     {
         return Carbon::parse($date)->format('d/m/Y');
     }
+    // public function formattosql($date){
+    //     return Carbon::parse($date)->format('Y-m-d');
+    // }
 }
