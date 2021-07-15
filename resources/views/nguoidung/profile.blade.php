@@ -14,7 +14,20 @@ Thông tin cá nhân
         <h2>Thông tin tài khoản</h2>
       </div>
       <div class="body">
-        <form id="form_validation" method="POST">
+        <form id="form_validation" method="POST" action="chinhsuathongtincanhan/suainfo/{{Auth::user()->ID}}">
+          @if(count($errors) > 0)
+            <div class="alert alert-danger">
+              @foreach($errors->all() as $err)
+                {{$err}}
+              @endforeach
+            </div>
+          @endif
+          @if(session('thongbao'))
+            <div class="alert alert-success">
+              {{session('thongbao')}}
+            </div>
+          @endif
+          <input type="hidden" name="_token" value="{{csrf_token()}}"/>
           <div class="row clearfix">
             <div class="col-md-6 demo-masked-input">
               <label for="">Họ tên</label>
@@ -124,7 +137,26 @@ Thông tin cá nhân
         <h2>Đổi mật khẩu</h2>
       </div>
       <div class="body">
-        <form id="form_validation" method="POST">
+        <form id="form_validation" method="POST" action="chinhsuathongtincanhan/suapass/{{Auth::user()->ID}}">
+        @if(count($errors) > 0)
+            <div class="alert alert-danger">
+              @foreach($errors->all() as $err)
+                {{$err}}
+              @endforeach
+            </div>
+          @endif
+          @if(session('thongbaothanhcong'))
+            <div class="alert alert-success">
+              {{session('thongbaothanhcong')}}
+            </div>
+          @endif
+          @if(session('thongbaoloi'))
+            <div class="alert alert-danger">
+              {{session('thongbaoloi')}}
+            </div>
+          @endif
+
+        <input type="hidden" name="_token" value="{{csrf_token()}}"/>
           <div class="row clearfix">
             <div class="col-md-6 demo-masked-input">
               <div class="input-group">
