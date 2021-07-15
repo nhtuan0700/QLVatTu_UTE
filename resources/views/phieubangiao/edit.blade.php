@@ -12,9 +12,9 @@ Chi tiết phiếu bàn giao
 			<div class="header">
 				<h2>Chi tiết phiếu bàn giao</h2>
 				@if (!$phieu->ID_NguoiXN)
-				  <span class="label label-warning">{{ $phieu->trangThai() }}</span>
+				<span class="label label-warning">{{ $phieu->trangThai() }}</span>
 				@else
-				  <span class="label label-success">{{ $phieu->trangThai() }}</span>
+				<span class="label label-success">{{ $phieu->trangThai() }}</span>
 				@endif
 			</div>
 			<div class="body">
@@ -23,7 +23,7 @@ Chi tiết phiếu bàn giao
 						<label for="">Mã phiếu bàn giao</label>
 						<div class="input-group">
 							<div class="form-line">
-								<p>{{ $newID }}</p>
+								<p>{{ $phieu->ID }}</p>
 							</div>
 						</div>
 					</div>
@@ -32,31 +32,56 @@ Chi tiết phiếu bàn giao
 						<label for="">Mã phiếu đề nghị</label>
 						<div class="input-group">
 							<div class="form-line">
-								<p><a href="#">{{ $phieu->ID }}</a></p>
+								<p><a href="#">{{ $phieu->ID_PhieuDN }}</a></p>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="row clearfix">
 					<div class="col-md-6 demo-masked-input">
+						<label for="">Người lập phiếu bàn giao</label>
+						<div class="input-group">
+							<div class="form-line">
+								<p>{{ $phieu->nguoiLapPhieu->HoTen }}<br><em>({{ $phieu->nguoiLapPhieu->vaiTro() }})</em></p>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-6 demo-masked-input">
 						<label for="">Người lập phiếu đề nghị</label>
 						<div class="input-group">
 							<div class="form-line">
-								<p>{{ $phieu->nguoiDeNghi->HoTen }}<br>
-									<em>({{ $phieu->nguoiDeNghi->vaiTro() . ' ' . $phieu->nguoiDeNghi->khoaPB->Ten }})</em>
+								<p>{{ $phieu->phieuDeNghi->nguoiDeNghi->HoTen }}<br>
+									<em>({{ $phieu->phieuDeNghi->nguoiDeNghi->vaiTro() . ' ' . $phieu->phieuDeNghi->nguoiDeNghi->khoaPB->Ten }})</em>
 								</p>
 							</div>
 						</div>
 					</div>
-          <div class="col-md-6 demo-masked-input">
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-6 demo-masked-input">
 						<label for="">Loại phiếu</label>
 						<div class="input-group">
 							<div class="form-line">
-								<p>{{ $phieu->loaiPhieu() }}</p>
+								<p>{{ $phieu->phieuDeNghi->loaiPhieu() }}</p>
 							</div>
 						</div>
 					</div>
 				</div>
+				@if ( $phieu->ID_NguoiXN)
+				<div class="row clearfix">
+					<div class="col-md-6 demo-masked-input">
+						<label for="">Ngày hoàn thành</label>
+						<div class="input-group">
+							<div class="form-line">
+								<p><abbr title="20/7/2021">{{ $phieu->NgayBanGiao }}</abbr>
+									<br><em>(Xác nhận bởi {{ $phieu->nguoiXacNhan->HoTen }})</em>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				@endif
 			</div>
 		</div>
 
@@ -66,12 +91,12 @@ Chi tiết phiếu bàn giao
 				<div class="card">
 					<div class="header row">
 						<h2 style="margin-left: 20px;">
-							Danh sách bàn giao {{ $phieu->LoaiPhieu == 1 ? 'văn phòng phẩm'  : 'thiết bị' }}
+							Danh sách bàn giao {{ $phieu->phieuDenghi->LoaiPhieu == 1 ? 'văn phòng phẩm'  : 'thiết bị' }}
 						</h2>
 					</div>
 					<div class="body table-responsive">
 						<table class="table table-hover">
-							@if ($phieu->LoaiPhieu == 1)
+							@if ($phieu->phieuDeNghi->LoaiPhieu == 1)
 							<thead>
 								<tr>
 									<th>Mã VPP</th>
@@ -84,7 +109,7 @@ Chi tiết phiếu bàn giao
 								</tr>
 							</thead>
 							<tbody id="DSTB">
-								@foreach ($phieu->chiTietMua as $item)
+								@foreach ($phieu->phieuDeNghi->chiTietMua as $item)
 								<tr id="{{ $item->VatTu->ID }}">
 									<td style="vertical-align: middle;">{{ $item->VatTu->ID }}</td>
 									<td style="vertical-align: middle;">{{ $item->VatTu->Ten }}</td>
@@ -131,16 +156,37 @@ Chi tiết phiếu bàn giao
 				<i class="material-icons">keyboard_return</i>
 				<span>Trở lại</span>
 			</a>
-      <a id="btn-save" class="btn bg-green waves-effect" style="margin: 20px 0;">
-        <i class="material-icons">done</i>
-        <span>Cập nhật</span>
-      </a>
+			@if (Auth::user()->LoaiTK == 2)
+			@if (!$phieu->ID_NguoiXN)
+			<a id="btn-edit" class="btn bg-green waves-effect" style="margin: 20px 0;">
+				<i class="material-icons">done</i>
+				<span>Cập nhật</span>
+			</a>
+			@endif
+			@else
+			@if ($phieu->ID_NguoiXN)
+			<button onclick="window.print()" class="btn bg-green waves-effect" style="margin: 20px 0;">
+				<i class="material-icons">print</i>
+				<span>In</span>
+			</button>
+			@else
+			<form action="{{route('phieubangiao.xacNhan', ['ID' => $phieu->ID])}}" method="post"
+				style="display: inline-block;">
+				@csrf
+				@method('put')
+				<button type="submit" class="btn bg-green waves-effect" style="margin: 20px 0;">
+					<i class="material-icons">done</i>
+					<span>Xác nhận</span>
+				</button>
+			</form>
+			@endif
+			@endif
 		</div>
 	</div>
 </div>
 <script>
 	$(function() {
-		$("#btn-save").click(function() {
+		$("#btn-edit").click(function() {
 			var flag = true
 			var dt = [];
 			$('#DSTB tr').each(function() {
@@ -156,34 +202,34 @@ Chi tiết phiếu bàn giao
 						ID_VatTu,
 						soLuong
 				});
+				
 			});
 			if (!flag) {
 				toastr.error("Số lượng chưa phù hợp")
 				return;
 			} else {
 				$.ajax({
-					url: "{{ route('phieubangiao.create', ['ID' => $phieu->ID] )}}",
+					url: "{{ route('phieubangiao.update', ['ID' => $phieu->ID] )}}",
 					dataType: 'json',
 					type: 'POST',
 					data: {
-						_method: 'POST',
-						data: dt,
-						_token: '{!! csrf_token() !!}'
+							data: dt,
+							_token: '{!! csrf_token() !!}'
 					},
 					success: function(response) {
 						console.log(response)
 						swal({
-							title: "Hoàn thành",
-							text: "Tạo phiếu bàn giao thành công",
-							type: "success",
-							confirmButtonColor: "rgb(140, 212, 245)",
-							confirmButtonText: "Ok",
-							closeOnConfirm: false
+								title: "Hoàn thành",
+								text: "Cập nhật phiếu bàn giao thành công",
+								type: "success",
+								confirmButtonColor: "rgb(140, 212, 245)",
+								confirmButtonText: "Ok",
+								closeOnConfirm: false
 						}, function() {
-							location.href = `{{route('phieubangiao.detail')}}/${response}`;
+								location.href = "{{route('phieubangiao.detail', ['ID' => $phieu->ID])}}";
 						});
 					}, error: function(err) {
-						toastr.error("Tạo phiếu thất bại")
+						toastr.error("Cập nhật thất bại")
 					}
 				});
 			}

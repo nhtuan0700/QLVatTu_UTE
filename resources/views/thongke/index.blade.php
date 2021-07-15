@@ -10,11 +10,22 @@ Thống kê
 <div class="row clearfix">
   <div class="col-sm-12">
     <div class="block-header" style="float: left;">
-      <div id="reportrange"
-        style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-        <i class="material-icons" style="font-size: 13px;">date_range</i>&nbsp;
-        <span id="DatePicker"></span> <i class="material-icons" style="font-size: 13px;">arrow_drop_down</i>
-      </div>
+      <form action="" class="form-inline">
+        <select class="form-control" name="m" id="month">
+          <option value>Tháng - Tất cả</option>
+          @for ($m = 1; $m <= 12; $m++)
+            <option value="{{$m}}">Tháng {{$m}}</option>
+          @endfor
+        </select>
+
+        <select class="form-control" name="y" id="year">
+          @for ($y = now()->year; $y >= now()->year-3; $y--)
+            <option value="{{$y}}">Năm {{$y}}</option>
+          @endfor
+        </select>
+
+        <button class="btn btn-success">Lọc</button>
+      </form>
     </div>
   </div>
   <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -23,8 +34,10 @@ Thống kê
         <i class="material-icons">shopping_bag</i>
       </div>
       <div class="content">
-        <div class="text">Mua sắm</div>
-        <div class="number count-to" data-from="0" data-to="125" data-speed="1000" data-fresh-interval="20"></div>
+        <div class="text">Mua Văn phòng phẩm</div>
+        <div class="number count-to" data-from="0" data-to="{{ $phieuMua->count() }}" data-speed="1000" 
+          data-fresh-interval="20">
+        </div>
       </div>
     </div>
   </div>
@@ -35,29 +48,30 @@ Thống kê
       </div>
       <div class="content">
         <div class="text">Sửa chữa</div>
-        <div class="number count-to" data-from="0" data-to="125" data-speed="1000" data-fresh-interval="20"></div>
+        <div class="number count-to" data-from="0" data-to="{{ $phieuSua->count() }}" data-speed="1000" 
+          data-fresh-interval="20"></div>
       </div>
     </div>
   </div>
   <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
     <div class="info-box bg-light-green hover-expand-effect">
       <div class="icon">
-        <i class="material-icons">done</i>
+        <i class="material-icons">paid</i>
       </div>
       <div class="content">
-        <div class="text">Sửa hoàn tất</div>
-        <div class="number count-to" data-from="0" data-to="125" data-speed="1000" data-fresh-interval="20"></div>
+        <div class="text">Chi phí mua văn phòng phẩm</div>
+        <div class="number count-to" data-from="0" data-to="{{ $chiPhiMua }}" data-speed="1000" data-fresh-interval="20"></div>
       </div>
     </div>
   </div>
   <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
     <div class="info-box bg-orange hover-expand-effect">
       <div class="icon">
-        <i class="material-icons">dangerous</i>
+        <i class="material-icons">paid</i>
       </div>
       <div class="content">
-        <div class="text">Thiết bị hỏng</div>
-        <div class="number count-to" data-from="0" data-to="125" data-speed="1000" data-fresh-interval="20"></div>
+        <div class="text">Chi phí sửa chữa thiết bị</div>
+        <div class="number count-to" data-from="0" data-to="{{ $chiPhiSua }}" data-speed="1000" data-fresh-interval="20"></div>
       </div>
     </div>
   </div>
@@ -67,7 +81,7 @@ Thống kê
 
 <div class="row clearfix">
   <!-- Tình hình mua sắm, sửa chữa ở các khoa, phòng ban -->
-  <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div class="card">
       <div class="header">
         <h2>TÌNH HÌNH MUA SẮM & SỬA CHỮA</h2>
@@ -81,55 +95,17 @@ Thống kê
                 <th>Khoa</th>
                 <th>Mua sắm</th>
                 <th>Sửa chữa</th>
-                <th>Xu hướng</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Điện - Điện Tử</td>
-                <td>100 phiếu</td>
-                <td>90 phiếu</td>
-                <td>
-                  <i class="material-icons">trending_up</i>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Điện - Điện Tử</td>
-                <td>10 phiếu</td>
-                <td>90 phiếu</td>
-                <td>
-                  <i class="material-icons">trending_up</i>
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Điện - Điện Tử</td>
-                <td>100 phiếu</td>
-                <td>90 phiếu</td>
-                <td>
-                  <i class="material-icons">trending_down</i>
-                </td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>Điện - Điện Tử</td>
-                <td>100 phiếu</td>
-                <td>90 phiếu</td>
-                <td>
-                  <i class="material-icons">trending_flat</i>
-                </td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>Điện - Điện Tử</td>
-                <td>100 phiếu</td>
-                <td>90 phiếu</td>
-                <td>
-                  <i class="material-icons">trending_down</i>
-                </td>
-              </tr>
+              @foreach ($khoaPB as $item)
+                <tr>
+                  <td>{{ $item->ID }}</td>
+                  <td>{{ $item->Ten }}</td>
+                  <td>{{ $item->soLuongphieuMua(request()->get('m'), request()->get('y')) }}</td>
+                  <td>{{ $item->soLuongPhieuSua(request()->get('m'), request()->get('y')) }}</td>
+                </tr>
+              @endforeach
             </tbody>
           </table>
         </div>
@@ -138,34 +114,10 @@ Thống kê
   </div>
   <!-- #END# Tình hình mua sắm các khoa, phòng ban -->
 
-  <!-- Tỉ lệ sửa chữa -->
-  <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-    <div class="card">
-      <div class="header">
-        <h2>TỈ LỆ SỬA CHỮA THIẾT BỊ</h2>
-        <ul class="header-dropdown m-r--5">
-          <li class="dropdown">
-            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"
-              aria-haspopup="true" aria-expanded="false">
-              <i class="material-icons">more_vert</i>
-            </a>
-            <ul class="dropdown-menu pull-right">
-              <li><a href="javascript:void(0);">Action</a></li>
-              <li><a href="javascript:void(0);">Another action</a></li>
-              <li><a href="javascript:void(0);">Something else here</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <div class="body">
-        <div id="donut_chart" class="dashboard-donut-chart"></div>
-      </div>
-    </div>
-  </div>
-  <!-- #END# Tỉ lệ sửa chữa -->
+  
 </div>
 
-<div class="row clearfix">
+{{-- <div class="row clearfix">
   <!-- Mua sắm -->
   <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
     <div class="card">
@@ -248,7 +200,7 @@ Thống kê
     </div>
   </div>
   <!-- #END# Số lượng sửa chũa -->
-</div>
+</div> --}}
 
 <!-- Các đề nghị mới nhất -->
 <div class="clearfix">
@@ -262,69 +214,37 @@ Thống kê
           <table class="table table-hover dashboard-task-infos">
             <thead>
               <tr>
-                <th>#</th>
+                <th>Mã phiếu</th>
                 <th>Người yêu cầu</th>
                 <th>Khoa/Phòng ban</th>
+                <th>Loại phiếu</th>
                 <th>Trạng thái</th>
                 <th>Thao tác</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Nguyễn Văn A</td>
-                <td>Điện - Điện Tử</td>
-                <td>Chờ duyệt</td>
-                <td>
-                  <a href="xemchitiet2.html" class="btn btn-default waves-effect">
-                    <i class="material-icons">visibility</i>
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Nguyễn Văn A</td>
-                <td>Điện - Điện Tử</td>
-                <td>Chờ duyệt</td>
-                <td>
-                  <a href="xemchitiet2.html" class="btn btn-default waves-effect">
-                    <i class="material-icons">visibility</i>
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Nguyễn Văn A</td>
-                <td>Điện - Điện Tử</td>
-                <td>Chờ duyệt</td>
-                <td>
-                  <a href="xemchitiet2.html" class="btn btn-default waves-effect">
-                    <i class="material-icons">visibility</i>
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>Nguyễn Văn A</td>
-                <td>Điện - Điện Tử</td>
-                <td>Chờ duyệt</td>
-                <td>
-                  <a href="xemchitiet2.html" class="btn btn-default waves-effect">
-                    <i class="material-icons">visibility</i>
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>Nguyễn Văn A</td>
-                <td>Điện - Điện Tử</td>
-                <td>Chờ duyệt</td>
-                <td>
-                  <a href="xemchitiet2.html" class="btn btn-default waves-effect">
-                    <i class="material-icons">visibility</i>
-                  </a>
-                </td>
-              </tr>
+              @foreach ($phieuChoDuyet as $item)
+                <tr>
+                  <td>{{ $item->ID }}</td>
+                  <td>{{ $item->nguoiDeNghi->HoTen }}</td>
+                  <td>{{ $item->nguoiDeNghi->khoaPB->Ten }}</td>
+                  <td>{{ $item->loaiPhieu() }}</td>
+                  <td>{{ $item->trangThai() }}</td>
+                  @if ($item->LoaiPhieu == 1)
+                    <td>
+                      <a href="{{ route('xetduyet.detail', ['ID' => $item->ID]) }}" class="btn btn-default waves-effect">
+                        <i class="material-icons">visibility</i>
+                      </a>
+                    </td>
+                  @else
+                    <td>
+                      <a href="#" class="btn btn-default waves-effect">
+                        <i class="material-icons">visibility</i>
+                      </a>
+                    </td>
+                  @endif
+                </tr>
+              @endforeach
             </tbody>
           </table>
         </div>
@@ -402,33 +322,28 @@ Thống kê
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <script type="text/javascript">
   $(function () {
+    var start = moment().subtract(0, 'days');
+    var end = moment();
 
-          var start = moment().subtract(0, 'days');
-          var end = moment();
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+    }
 
-          function cb(start, end) {
-              $('#reportrange span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
-          }
+    // $('#reportrange').daterangepicker({
+    //     startDate: start,
+    //     endDate: end,
+    //     ranges: {
+    //         'Hôm nay': [moment(), moment()],
+    //         'Hôm qua': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+    //         '7 ngày trước': [moment().subtract(6, 'days'), moment()],
+    //         '30 ngày trước': [moment().subtract(29, 'days'), moment()],
+    //         'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+    //         'Tháng trước': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    //     }
+    // }, cb);
 
-          $('#reportrange').daterangepicker({
-              startDate: start,
-              endDate: end,
-              ranges: {
-                  'Hôm nay': [moment(), moment()],
-                  'Hôm qua': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                  '7 ngày trước': [moment().subtract(6, 'days'), moment()],
-                  '30 ngày trước': [moment().subtract(29, 'days'), moment()],
-                  'Tháng này': [moment().startOf('month'), moment().endOf('month')],
-                  'Tháng trước': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-              }
-          }, cb);
-
-          cb(start, end);
-
-      });
-      $("#DatePicker").on('DOMSubtreeModified', function () {
-          alert($(this).html());
-      });
+    cb(start, end);
+  });
 </script>
 <!-- End Script Bổ sung -->
 
@@ -447,4 +362,14 @@ Thống kê
 <!-- noUISlider Plugin Js -->
 <script src="{{ asset('dist/plugins/nouislider/nouislider.js') }}"></script>
 <script src="{{ asset('dist/js/pages/forms/advanced-form-elements.js') }}"></script>
+<script>
+  $(function() {
+    var m = `{{ request()->get('m') }}`
+    $(`#month > option[value='${m}']`).attr('selected', 'selected')
+
+    var y = `{{ request()->get('y') ? request()->get('y') : now()->year }}`
+    $(`#year > option[value='${y}']`).attr('selected', 'selected')
+    console.log($(`#year > option[value='${y}']`))
+  })
+</script>
 @endsection

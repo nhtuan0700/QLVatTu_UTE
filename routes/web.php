@@ -37,9 +37,6 @@ Route::middleware('auth')->group(function () {
         Route::middleware('acl:phieudenghi-detail')->group(function () {
             Route::get('chitiet/{ID?}', 'PhieuMuaController@detail')->name('detail');
         });
-        Route::middleware('acl:phieudenghi-detail')->group(function () {
-            Route::get('chitiet/{ID?}', 'PhieuMuaController@detail')->name('detail');
-        });
         Route::middleware('acl:phieudenghi-edit')->group(function () {
             Route::get('sua/{ID?}', 'PhieuMuaController@showEdit')->name('edit');
             Route::put('sua/{ID?}', 'PhieuMuaController@edit');
