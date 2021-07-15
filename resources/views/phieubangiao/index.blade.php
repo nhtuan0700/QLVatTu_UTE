@@ -10,6 +10,10 @@ Tạo phiếu bàn giao
 	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 		<div class="card">
 			<div class="header row">
+                <a href="{{ route('xetduyet.index') }}" class="btn bg-orange waves-effect" style="float: left; margin-left: 10px;">
+                    <i class="material-icons">add</i>
+                    <span>Thêm phiếu bàn giao</span>
+                </a>
 				<div class="col-md-4" style="float:right;">
 					<div class="input-group" style="margin-bottom: 0 !important;">
 						<div class="form-line">
@@ -66,10 +70,15 @@ Tạo phiếu bàn giao
 														<h4 class="modal-title">Bạn có chắc chắn muốn xóa?</h4>
 													</div>
 													<div class="modal-body">
-														Mọi thông tin về phiếu đề nghị 4 sẽ biến mất hoàn toàn.
+														Mọi thông tin về phiếu đề nghị {{ $item->ID }} sẽ biến mất hoàn toàn.
 													</div>
 													<div class="modal-footer">
-														<a href="#" class="btn btn-link waves-effect">Tiếp tục xóa</a>
+														<form action="{{ route('phieubangiao.delete', ['ID'=>$item->ID]) }}" method="post" style="display: inline-block">
+																@method('delete')
+																@csrf
+																<button class="btn btn-link waves-effect">
+																		Tiếp tục xóa</button>
+														</form>
 														<button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hủy</button>
 													</div>
 												</div>

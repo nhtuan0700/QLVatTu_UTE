@@ -2,8 +2,11 @@
 
 namespace App\Repositories\PhieuBanGiao;
 
-use App\Models\PhieuBanGiao;
+use Exception;
 use Carbon\Carbon;
+use App\Models\PhieuBanGiao;
+use App\Models\ChiTietBanGiao;
+use Illuminate\Support\Facades\DB;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,5 +51,75 @@ class PhieuBanGiaoRepository extends BaseRepository implements PhieuBanGiaoInter
     public function xacNhan($id_phieuBG)
     {
         $this->update($id_phieuBG, ['ID_NguoiXN' => Auth::user()->ID, 'NgayBanGiao' => now()]);
+    }
+
+    public function themBanGiao($data, $id_phieuDN)
+    {
+        $newID = $this->getIDPhieuBG();
+        DB::beginTransaction();
+        $this->model->insert([
+            'ID' => $newID,
+            'ID_PhieuDN' => $id_phieuDN,
+            'ID_NVCSVC' => Auth::user()->ID
+        ]);
+        try {
+            foreach ($data as  $item) {
+                $soLuongBG = $item['soLuong'];
+                $id_vatTu = $item['ID_VatTu'];
+                if ($soLuongBG <= 0) {
+                    throw new Exception();
+                };
+                DB::table('ChiTietBanGiao')->insert([
+                    'ID_Phieu' => $newID,
+                    'ID_VatTu' => $id_vatTu,
+                    'SoLuong' => $soLuongBG,
+                ]);
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+            return false;
+        }
+        DB::commit();
+        return $newID;
+    }
+
+    public function suaBanGiao($data, $id = null)
+    {
+        DB::beginTransaction();
+        try {
+            foreach ($data as $item) {
+                $soLuongBG = $item['soLuong'];
+                $id_vatTu = $item['ID_VatTu'];
+                $chiTiet = DB::table('chitietbangiao')->where('ID_Phieu', $id)->where('ID_VatTu', $id_vatTu);
+                if ($soLuongBG > 0) {
+                    if ($chiTiet->first()) {
+                        $chiTiet->update(['SoLuong' => $soLuongBG]);
+                    } else {
+                        DB::table('ChiTietBanGiao')->insert([
+                            'ID_Phieu' => $id,
+                            'ID_VatTu' => $id_vatTu,
+                            'SoLuong' => $soLuongBG,
+                        ]);
+                    }
+                } else {
+                    $chiTiet->delete();
+                }
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+            return false;
+        }
+        DB::commit();
+        return true;
+    }
+
+    public function delete($id)
+    {
+        try {
+            DB::table('chitietbangiao')->where('ID_Phieu', '=', $id)->delete();
+            DB::table('phieubangiao')->where('ID', '=', $id)->delete();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

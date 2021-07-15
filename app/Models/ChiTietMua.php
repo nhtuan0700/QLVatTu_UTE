@@ -43,12 +43,20 @@ class ChiTietMua extends Model
         return !!$query ? $query->SoLuong : 0;
     }
 
-    public function soLuongDaBG()
+    public function soLuongDaBG($id_phieuBG = null)
     {
-        return DB::table('ChiTietBanGiao')->join('PhieuBanGiao', 'PhieuBanGiao.ID', '=', 'ChiTietBanGiao.ID_Phieu')
-            ->where('ChiTietBanGiao.ID_VatTu', '=', $this->ID_VatTu)
-            ->where('PhieuBanGiao.ID_PhieuDN', '=', $this->phieu->ID)
-            ->whereNotNull('PhieuBanGiao.ID_NguoiXN')
-            ->sum('ChiTietBanGiao.SoLuong');
+        if ($id_phieuBG) {
+            $query = DB::table('ChiTietBanGiao')->join('PhieuBanGiao', 'PhieuBanGiao.ID', '=', 'ChiTietBanGiao.ID_Phieu')
+                ->where('ChiTietBanGiao.ID_VatTu', '=', $this->ID_VatTu)
+                ->where('PhieuBanGiao.ID_PhieuDN', '=', $this->phieu->ID)
+                ->whereNotNull('PhieuBanGiao.ID_NguoiXN')
+                ->whereNotIn('ChiTietBanGiao.ID_Phieu', [$id_phieuBG]);
+        } else {
+            $query = DB::table('ChiTietBanGiao')->join('PhieuBanGiao', 'PhieuBanGiao.ID', '=', 'ChiTietBanGiao.ID_Phieu')
+                ->where('ChiTietBanGiao.ID_VatTu', '=', $this->ID_VatTu)
+                ->where('PhieuBanGiao.ID_PhieuDN', '=', $this->phieu->ID)
+                ->whereNotNull('PhieuBanGiao.ID_NguoiXN');
+        }
+        return $query->sum('ChiTietBanGiao.SoLuong');
     }
 }
