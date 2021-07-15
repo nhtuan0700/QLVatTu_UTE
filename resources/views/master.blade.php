@@ -26,6 +26,7 @@
   <script src="{{ asset('dist/plugins/jquery/jquery.min.js') }}"></script>
   <!-- Toastr -->
   <link rel="stylesheet" href="{{ asset('dist/plugins/toastr/toastr.min.css') }}">
+
   @yield('link_head')
   <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
   <!-- Sweetalert Css -->
@@ -97,7 +98,7 @@
   <!-- Demo Js -->
   <script src="{{ asset('dist/js/demo.js') }}"></script>
 
-  <script src="{{ asset('dist/plugins/toastr/toastr.min.js') }}"></script> 
+  <script src="{{ asset('dist/plugins/toastr/toastr.min.js') }}"></script>
 	@php
     if (session('alert-success'))
     {

@@ -2,22 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5ab4e663-bda8-4d29-86b6-119cf9cd5fb5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/QLVatTu_UTE.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/phpunit.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PhieuBanGiaoController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PhieuBanGiaoController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PhieuMuaController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PhieuMuaController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/PhieuDeNghi.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/PhieuDeNghi.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Repositories/PhieuBanGiao/PhieuBanGiaoInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/PhieuBanGiao/PhieuBanGiaoInterface.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Repositories/PhieuBanGiao/PhieuBanGiaoRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/PhieuBanGiao/PhieuBanGiaoRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repositories/PhieuDeNghi/PhieuDeNghiInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/PhieuDeNghi/PhieuDeNghiInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repositories/PhieuDeNghi/PhieuDeNghiRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/PhieuDeNghi/PhieuDeNghiRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/master.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/master.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/phieubangiao/detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/phieubangiao/detail.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/phieubangiao/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/phieubangiao/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/phieudenghi/mua/detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/phieudenghi/mua/detail.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/phieudenghi/mua/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/phieudenghi/mua/index.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/phieudenghi/mua/xetduyet.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/phieudenghi/mua/xetduyet.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
@@ -150,7 +142,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../QLBanHang" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ecommerce-project-f5" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
     <property name="vue.rearranger.settings.migration" value="true" />
@@ -170,7 +162,10 @@
       <option name="presentableId" value="Default" />
       <updated>1626162587340</updated>
       <workItem from="1626162591636" duration="9486000" />
-      <workItem from="1626186967788" duration="6987000" />
+      <workItem from="1626186967788" duration="7889000" />
+      <workItem from="1626231712087" duration="14882000" />
+      <workItem from="1626258675646" duration="10988000" />
+      <workItem from="1626307990886" duration="3581000" />
     </task>
     <servers />
   </component>
