@@ -52,7 +52,10 @@ Route::middleware('auth')->group(function () {
             Route::get('them', 'PhieuBanGiaoController@showCreateForm')->name('create');
             Route::post('bangiao', 'PhieuBanGiaoController@create');
         });
-        Route::post('bangiao', 'PhieuBanGiaoController@create')->name('createBanGiao');
+        Route::post('thembangiao', 'PhieuBanGiaoController@create')->name('createBanGiao');
+        Route::post('capnhatbangiao', 'PhieuBanGiaoController@update')->name('updateBanGiao');
+        Route::delete('xoabangiao/{ID}', 'PhieuBanGiaoController@delete')->name('deleteBanGiao');
+
         Route::get('chitiet/{ID?}', 'PhieuBanGiaoController@detail')->name('detail');
         Route::get('xacnhanBG/{ID?}','PhieuBanGiaoController@confirmPhieuBG')->name('confirm');
     });

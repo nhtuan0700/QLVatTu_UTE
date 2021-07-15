@@ -28,6 +28,10 @@
 
   @yield('link_head')
   <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <!-- Sweetalert Css -->
+    <link href="{{ asset('dist/plugins/sweetalert/sweetalert.css') }}" rel="stylesheet" />
+    <!-- SweetAlert Plugin Js -->
+    <script src="{{ asset('dist/plugins/sweetalert/sweetalert.min.js') }}"></script>
 </head>
 
 <body class="theme-red">

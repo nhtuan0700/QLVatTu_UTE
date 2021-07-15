@@ -105,7 +105,9 @@ Chi tiết phiếu đề nghị mua
                   <th>Đơn vị tính</th>
                   <th>Giá</th>
                   <th>Đã bàn giao / Tổng số lượng</th>
+                    @if($phieu->TrangThai ==2)
                     <th>Bàn giao thêm</th>
+                        @endif
                 </tr>
               </thead>
               <tbody id="DSTB">
@@ -116,13 +118,15 @@ Chi tiết phiếu đề nghị mua
                     <td style="vertical-align: middle;">{{ $item->VatTu->DonViTinh }}</td>
                       <td style="vertical-align: middle;">{{ $item->Gia }}</td>
                     <td style="vertical-align: middle;">{{ $item->soLuongDaBG() }}/{{ $item->SoLuong }}</td>
-                    <td style="vertical-align: middle;">
-                        <div class="form-group" style="margin-bottom: 0">
-                            <div class="form-line">
-                                <input type="number" name="SL_VatTu[]" class="form-control" min="0" max="{{$item->SoLuong - $item->soLuongDaBG() }}">
+                      @if($phieu->TrangThai == 2)
+                        <td style="vertical-align: middle;">
+                            <div class="form-group" style="margin-bottom: 0">
+                                <div class="form-line">
+                                    <input type="number" name="SL_VatTu[]" class="form-control" min="0" max="{{$item->SoLuong - $item->soLuongDaBG() }}">
+                                </div>
                             </div>
-                        </div>
-                    </td>
+                        </td>
+                      @endif
                   </tr>
                 @endforeach
               </tbody>
@@ -220,10 +224,12 @@ Chi tiết phiếu đề nghị mua
           </div>
           @break
         @case(2)
+        @if($item->soluongDaBG() == $item->SoLuong)
           <a id="btn-guiyeucau" class="btn bg-orange waves-effect" style="margin: 20px 0;">
             <i class="material-icons">add</i>
             <span>Tạo phiếu bàn giao</span>
           </a>
+            @endif
           @break
         @default
           <button onclick="window.print();" class="btn bg-green waves-effect" style="margin: 20px 0;">

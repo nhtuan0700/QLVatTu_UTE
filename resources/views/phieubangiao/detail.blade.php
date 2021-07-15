@@ -23,7 +23,8 @@ Chi tiết phiếu bàn giao
 						<label for="">Mã phiếu bàn giao</label>
 						<div class="input-group">
 							<div class="form-line">
-								<p>{{ $phieu->ID }}</p>
+								<p >{{ $phieu->ID }}</p>
+                                <input type="hidden" id="ID_PhieuBG" value="{{$phieu->ID}}" >
 							</div>
 						</div>
 					</div>
@@ -102,11 +103,11 @@ Chi tiết phiếu bàn giao
 										<th>Mã VPP</th>
 										<th>Tên VPP</th>
 										<th>Đơn vị tính</th>
-										<th>Số lượng</th>
 										<th>Giá</th>
-										<th>Đã bàn giao</th>
+										<th>Đã bàn giao/ Tổng số lượng</th>
 										@if (!$phieu->ID_NguoiXN)
-											<th>Đang bàn giao</th>
+                                            <th>Đang bàn giao</th>
+                                            <th>Bàn giao thêm</th>
 										@endif
 									</tr>
 								</thead>
@@ -116,11 +117,17 @@ Chi tiết phiếu bàn giao
 											<td style="vertical-align: middle;">{{ $item->VatTu->ID }}</td>
 											<td style="vertical-align: middle;">{{ $item->VatTu->Ten }}</td>
 											<td style="vertical-align: middle;">{{ $item->VatTu->DonViTinh }}</td>
-											<td style="vertical-align: middle;">{{ $item->SoLuong }}</td>
 											<td style="vertical-align: middle;">{{ $item->Gia }}</td>
-											<td style="vertical-align: middle;">{{ $item->soLuongDaBG() }}</td>
+											<td style="vertical-align: middle;">{{ $item->soLuongDaBG() }}/ {{$item->SoLuong}}</td>
 											@if (!$phieu->ID_NguoiXN)
-												<td style="vertical-align: middle;">{{ $item->soLuongDangBG($phieu->ID) }}</td>
+                                                <td>{{ $item->soLuongDangBG($phieu->ID) }}</td>
+												<td style="vertical-align: middle;">
+                                                    <div class="form-group" style="margin-bottom: 0">
+                                                        <div class="form-line">
+                                                            <input type="number" class="form-control" min="0" max="{{$item->SoLuong - $item->soLuongDaBG() }}" >
+                                                        </div>
+                                                    </div>
+                                                </td>
 											@endif
 										</tr>
 									@endforeach
@@ -153,7 +160,7 @@ Chi tiết phiếu bàn giao
 			</a>
 			@if (Auth::user()->LoaiTK == 2)
 				@if (!$phieu->ID_NguoiXN)
-					<a href="#" class="btn bg-green waves-effect" style="margin: 20px 0;">
+					<a id="btn-edit" class="btn bg-green waves-effect" style="margin: 20px 0;">
 						<i class="material-icons">done</i>
 						<span>Cập nhật</span>
 					</a>
@@ -174,4 +181,53 @@ Chi tiết phiếu bàn giao
 		</div>
 	</div>
 </div>
+<script>
+    $("#btn-edit").click(function() {
+        var ID_PhieuBG = document.getElementById("ID_PhieuBG").value;
+        var dt = [];
+        $('#DSTB tr').each(function() {
+            var idTB = $(this).find("td").eq(0).html();
+            var soLuong = $(this).find("td").find('div').find('div').find('input').eq(0).val();
+            dt.push({
+                idTB,
+                soLuong
+            });
+        });
+        $.ajax({
+            url: "{{route('phieubangiao.updateBanGiao')}}",
+            dataType: 'json',
+            type: 'POST',
+            data: {
+                data: dt,
+                ID_PhieuBG:ID_PhieuBG,
+                _token: '{!! csrf_token() !!}',
+            },
+            success: function(response) {
+                if (response) {
+                    console.log(1)
+                    swal({
+                        title: "Hoàn thành",
+                        text: "Cập nhật phiếu bàn giao thành công",
+                        type: "success",
+                        confirmButtonColor: "rgb(140, 212, 245)",
+                        confirmButtonText: "Ok",
+                        closeOnConfirm: false
+                    }, function() {
+                        location.href = "{{route('phieubangiao.index')}}";
+                    });
+                }
+                else{
+                    console.log(2);
+                    swal({
+                        title: "Lỗi",
+                        text: "Lỗi khi tạo cập nhật phiếu bàn giao",
+                        type: "alert",
+                        confirmButtonColor: "rgb(140, 212, 245)",
+                        confirmButtonText: "Ok",
+                    });
+                }
+            }
+        });
+    });
+</script>
 @endsection

@@ -14,7 +14,7 @@ interface PhieuBanGiaoInterface extends RepositoryInterface
 
     public function confirmPhieuBG($id_phieuBG);
 
-    public function themChiTietBG($data);
-
     public function themPhieuBanGiao($data);
+
+    public function suaPhieuBanGiao($data);
 }

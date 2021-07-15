@@ -111,7 +111,7 @@ Phiếu đề nghị mua
                               <h4 class="modal-title">Bạn có chắc chắn muốn xóa?</h4>
                             </div>
                             <div class="modal-body">
-                              Mọi thông tin về phiếu đề nghị {{ $item->ID }} sẽ biến mất hoàn toàn.
+                              Mọi thông tin về phiếu đề {{ $item->ID }} sẽ biến mất hoàn toàn.
                             </div>
                             <div class="modal-footer">
                               <a href="#" class="btn btn-link waves-effect">Tiếp tục xóa</a>
@@ -127,7 +127,7 @@ Phiếu đề nghị mua
                       </a>
                   @endswitch
                 </td>
-              </tr> 
+              </tr>
             @endforeach
           </tbody>
         </table>
