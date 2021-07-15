@@ -2,6 +2,7 @@
 
 namespace App\Repositories\PhieuBanGiao;
 
+use App\Models\ChiTietBanGiao;
 use App\Models\PhieuBanGiao;
 use Carbon\Carbon;
 use App\Repositories\BaseRepository;
@@ -72,17 +73,24 @@ class PhieuBanGiaoRepository extends BaseRepository implements PhieuBanGiaoInter
             return $e->getMessage();
         }
     }
-    public function themChiTietBG($data)
+
+    public function suaPhieuBanGiao($data)
     {
-        $data=array($data)[0][0];
         try {
-            DB::table('chitietbangiao')->insert([
-                    'ID_Phieu' => $data['idPhieu'],
-                'ID_VatTu' => $data['idTB'],
-                'SoLuong' => $data['soLuong'],
-            ]);
-            return true;
-        } catch (Exception $e) {
+            foreach($data['data'] as $item)
+            {
+                DB::table('chitietbangiao')->where('ID_Phieu', $data['ID_PhieuBG'])->where('ID_VatTu',$item['idTB'])->update(['SoLuong' => $item['soLuong']]);
+            }
+        } catch (Exception $e){
+            return $e->getMessage();
+        }
+    }
+    public function xoaPhieuBanGiao($id)
+    {
+        try {
+            DB::table('chitietbangiao')->where('ID_Phieu', '=',$id)->delete();
+            DB::table('phieubangiao')->where('ID', '=',$id)->delete();
+        } catch (Exception $e){
             return $e->getMessage();
         }
     }

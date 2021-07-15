@@ -56,9 +56,17 @@ class PhieuBanGiaoController extends Controller
         $this->phieuBanGiaoRepo->xacNhan($id_phieuBG);
         return back()->with('alert-success','Xác nhận phiếu bàn giao thành công');
     }
-    public function createChiTietPhieuBG(Request $request)
+
+    public function update(Request $request)
     {
-        $them=$this->phieuBanGiaoRepo->themChiTietBG($request->input('data'));
-        return response()->json($them);
+        $data =$this->phieuBanGiaoRepo->suaPhieuBanGiao($request);
+        return response()->json($data);
+    }
+    public function delete($id)
+    {
+        if ($this->phieuBanGiaoRepo->xoaPhieuBanGiao($id)) {
+            return back()->with('alert-fail', 'Xóa thất bại');
+        }
+        return back()->with('alert-success', 'Xóa thành công');
     }
 }

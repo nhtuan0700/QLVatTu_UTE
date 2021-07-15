@@ -70,10 +70,15 @@ Tạo phiếu bàn giao
 														<h4 class="modal-title">Bạn có chắc chắn muốn xóa?</h4>
 													</div>
 													<div class="modal-body">
-														Mọi thông tin về phiếu đề nghị 4 sẽ biến mất hoàn toàn.
+														Mọi thông tin về phiếu đề nghị {{ $item->ID }} sẽ biến mất hoàn toàn.
 													</div>
 													<div class="modal-footer">
-														<a href="#" class="btn btn-link waves-effect">Tiếp tục xóa</a>
+                                                        <form action="{{ route('phieubangiao.deleteBanGiao', ['ID'=>$item->ID]) }}" method="post" style="display: inline-block">
+                                                            @method('delete')
+                                                            @csrf
+                                                            <button class="btn btn-link waves-effect">
+                                                                Tiếp tục xóa</button>
+                                                        </form>
 														<button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hủy</button>
 													</div>
 												</div>
