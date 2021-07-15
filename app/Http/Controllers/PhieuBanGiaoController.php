@@ -6,15 +6,19 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use App\Http\Requests\PhieuBanGiao\CreatePhieuBanGiao;
 use App\Repositories\PhieuBanGiao\PhieuBanGiaoInterface;
+use App\Repositories\PhieuDeNghi\PhieuDeNghiInterface;
 
 class PhieuBanGiaoController extends Controller
 {
     protected $phieuBanGiaoRepo;
-    public function __construct(PhieuBanGiaoInterface $phieuBanGiaoInterface)
-    {
+    protected $phieuDeNghiRepo;
+    public function __construct(
+        PhieuBanGiaoInterface $phieuBanGiaoInterface,
+        PhieuDeNghiInterface $phieuDeNghiInterface
+    ) {
         $this->phieuBanGiaoRepo = $phieuBanGiaoInterface;
+        $this->phieuDeNghiRepo = $phieuDeNghiInterface;
     }
 
     public function index()
@@ -27,15 +31,24 @@ class PhieuBanGiaoController extends Controller
         return view('phieubangiao.index', compact('data'));
     }
 
-    public function showCreateform()
+    public function showCreateform($id)
     {
-        return view('phieubangiao.create');
+        $newID = $this->phieuBanGiaoRepo->getIDPhieuBG();
+        $phieu = $this->phieuDeNghiRepo->findOrFail($id);
+        if ($phieu->TrangThai == 1) {
+            return back()->with('alert-fail', 'Phiếu chưa được duyệt');
+        }
+        return view('phieubangiao.create', compact(['newID', 'phieu']));
     }
 
-    public function create(Request $request)
+    public function create(Request $request, $id)
     {
-        $data = $this->phieuBanGiaoRepo->themPhieuBanGiao($request);
-        return response()->json($data);
+        $data = $request->get('data');
+        $newID = $this->phieuBanGiaoRepo->themBanGiao($data, $id);
+        if ($newID) {
+            return response()->json($newID);
+        }
+        return response()->json(['message' => 'Fail'], 404);
     }
 
     public function detail($id)
@@ -54,17 +67,22 @@ class PhieuBanGiaoController extends Controller
             return redirect(route('index'))->with('alert-fail', 'Không thể truy cập');
         };
         $this->phieuBanGiaoRepo->xacNhan($id_phieuBG);
-        return back()->with('alert-success','Xác nhận phiếu bàn giao thành công');
+        return back()->with('alert-success', 'Xác nhận phiếu bàn giao thành công');
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $data =$this->phieuBanGiaoRepo->suaPhieuBanGiao($request);
-        return response()->json($data);
+        $data = $request->get('data');
+        $status = $this->phieuBanGiaoRepo->suaBanGiao($data, $id);
+        if ($status) {
+            return response()->json(['message' => 'Success']);
+        }
+        return response()->json(['message' => 'Fail'], 404);
     }
+
     public function delete($id)
     {
-        if ($this->phieuBanGiaoRepo->xoaPhieuBanGiao($id)) {
+        if ($this->phieuBanGiaoRepo->delete($id)) {
             return back()->with('alert-fail', 'Xóa thất bại');
         }
         return back()->with('alert-success', 'Xóa thành công');

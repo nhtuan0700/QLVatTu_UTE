@@ -63,8 +63,8 @@ Route::middleware('auth')->group(function () {
             Route::get('danhsach', 'PhieuBanGiaoController@index')->name('index');
         });
         Route::middleware('acl:phieubangiao-create')->group(function () {
-            Route::get('them', 'PhieuBanGiaoController@showCreateForm')->name('create');
-            Route::post('bangiao', 'PhieuBanGiaoController@create');
+            Route::get('them/{ID?}', 'PhieuBanGiaoController@showCreateForm')->name('create');
+            Route::post('them/{ID?}', 'PhieuBanGiaoController@create');
         });
         Route::middleware('acl:phieubangiao-xacnhan')->group(function () {
             Route::put('xacnhan/{ID?}','PhieuBanGiaoController@xacNhan')->name('xacNhan');
@@ -72,12 +72,12 @@ Route::middleware('auth')->group(function () {
         Route::middleware('acl:phieubangiao-detail')->group(function () {
             Route::get('chitiet/{ID?}', 'PhieuBanGiaoController@detail')->name('detail');
         });
-        Route::post('bangiao', 'PhieuBanGiaoController@create')->name('createBanGiao');
-        Route::post('thembangiao', 'PhieuBanGiaoController@create')->name('createBanGiao');
-        Route::post('capnhatbangiao', 'PhieuBanGiaoController@update')->name('updateBanGiao');
-        Route::delete('xoabangiao/{ID}', 'PhieuBanGiaoController@delete')->name('deleteBanGiao');
-
-        Route::get('chitiet/{ID?}', 'PhieuBanGiaoController@detail')->name('detail');
+        Route::middleware('acl:phieubangiao-edit')->group(function () {
+            Route::post('sua/{ID?}', 'PhieuBanGiaoController@update')->name('update');
+        });
+        Route::middleware('acl:phieubangiao-delete')->group(function () {
+            Route::delete('xoa/{ID}', 'PhieuBanGiaoController@delete')->name('delete');
+        });
     });
 
     Route::group(['prefix' => 'vattu', 'as' => 'vattu.'], function () {

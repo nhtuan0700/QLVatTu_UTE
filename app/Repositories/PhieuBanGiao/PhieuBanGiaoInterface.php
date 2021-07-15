@@ -14,7 +14,7 @@ interface PhieuBanGiaoInterface extends RepositoryInterface
 
     public function xacNhan($id_phieuBG);
 
-    public function themPhieuBanGiao($data);
+    public function themBanGiao($data, $id_phieuDN);
 
-    public function suaPhieuBanGiao($data);
+    public function suaBanGiao($data, $id);
 }

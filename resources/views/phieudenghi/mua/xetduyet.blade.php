@@ -36,8 +36,6 @@ Chi tiết phiếu đề nghị mua
                     <div class="input-group">
                         <div class="form-line">
                             <p>{{ $phieu->ID }}</p>
-                            <input type="hidden" id="ID_PhieuDN" value="{{$phieu->ID}}" >
-                            <input type="hidden" id="ID_NVCSVC" value="{{$phieu->NguoiDeNghi->ID}}" >
                         </div>
                     </div>
                 </div>
@@ -120,6 +118,7 @@ Chi tiết phiếu đề nghị mua
                   <th>Mã VPP</th>
                   <th>Tên văn phòng phẩm</th>
                   <th>Đơn vị tính</th>
+                  <th>Số lượng</th>
                   <th>Giá</th>
                   @if ($phieu->TrangThai != 1)
                     <th>Đã bàn giao</th>
@@ -248,7 +247,7 @@ Chi tiết phiếu đề nghị mua
           @break
         @case(2)
           @if ($phieu->tongSoLuongBG() < $phieu->tongSoLuongDN())
-            <a href="#" class="btn bg-orange waves-effect" style="margin: 20px 0;">
+            <a href="{{ route('phieubangiao.create' , ['ID' => $phieu->ID]) }}" class="btn bg-orange waves-effect" style="margin: 20px 0;">
               <i class="material-icons">add</i>
               <span>Tạo phiếu bàn giao</span>
             </a>
