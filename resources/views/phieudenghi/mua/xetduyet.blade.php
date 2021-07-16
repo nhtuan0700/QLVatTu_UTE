@@ -86,20 +86,22 @@ Chi tiết phiếu đề nghị mua
                     </div>
                 </div>
             </div>
-          </div>
-        </div>
-        @if ($phieu->TrangThai != 1)
-          <div class="row clearfix">
-            <div class="col-md-6 demo-masked-input">
-                <label for="">Ngày hoàn thành dự kiến</label>
-                <div class="input-group">
-                    <div class="form-line">
-                        <p>{{ $phieu->NgayDuKien }}</p>
+
+            @if ($phieu->TrangThai != 1)
+              <div class="row clearfix">
+                <div class="col-md-6 demo-masked-input">
+                    <label for="">Ngày hoàn thành dự kiến</label>
+                    <div class="input-group">
+                        <div class="form-line">
+                            <p>{{ $phieu->NgayDuKien }}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+              </div>
+            @endif
           </div>
-        @endif
+        </div>
+        
 
       </div>
     </div>
