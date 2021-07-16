@@ -95,8 +95,11 @@ Route::middleware('auth')->group(function () {
     });
     Route::get('thongke', 'ThongKeController@index')->name('thongke');
 
-    Route::get('trangcanhan', 'NguoiDungController@profile')->name('profile');
-    
+    Route::group(['prefix' => 'trangcanhan', 'as' => 'profile.'], function(){
+        Route::get('', 'NguoiDungController@profile')->name('index');
+        Route::put('thaydoithongtin', 'NguoiDungController@updateInfo')->name('updateInfo');
+        Route::put('thaydoimatkhan', 'NguoiDungController@updatePassword')->name('updatePassword');
+    });
 });
 
 Route::group(['prefix' => 'api'],function(){
