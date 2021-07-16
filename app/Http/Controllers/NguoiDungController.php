@@ -1,18 +1,22 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Helpers\Facade\FormatDate;
-use App\Models\NguoiDung;
+use App\Http\Requests\User\UpdateInfo;
+use App\Http\Requests\User\UpdatePassword;
 use Illuminate\Http\Request;
 use App\Repositories\NguoiDung\NguoiDungInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+
 class NguoiDungController extends Controller
 {
     protected $nguoiDungRepo;
 
     public function __construct(NguoiDungInterface $nguoiDungInterface)
     {
-        $this->nguoiDungRepo = $nguoiDungInterface;   
+        $this->nguoiDungRepo = $nguoiDungInterface;
     }
     public function index()
     {
@@ -24,34 +28,25 @@ class NguoiDungController extends Controller
     {
         return view('nguoidung.profile');
     }
-    public function getupdateinfo($id){
-        $user = NguoiDung::find($id);
-        return view('nguoidung.profile', ['userinfo' => $user]);
+
+    public function updateInfo(UpdateInfo $request)
+    {
+        $user = Auth::user();
+        $data = $request->only(['HoTen', 'CMND', 'SDT', 'Email', 'NgaySinh']);
+        $data['NgaySinh'] = FormatDate::formatToSQL($data['NgaySinh']);
+        $this->nguoiDungRepo->update($user->ID, $data);
+        return back()->with('alert-success', 'Cập nhật thông tin thành công!');
     }
-    public function postupdateinfo(Request $request, $id){
-        $user = NguoiDung::find($id);
-        $user->HoTen = $request->HoTen;
-        //lỗi ngày tháng
-        // $user->NgaySinh = FormatDate::formattosql($request->NgaySinh);
-        $user->CMND = $request->CMND;
-        $user->SDT = $request->SDT;
-        $user->Email = $request->Email;
-        $user->save();
-        return  redirect('trangcanhan')->with('thongbao', 'Cập nhật thông tin thành công!');
-    }
-    public function getupdatepassword($id){
-        $user = NguoiDung::find($id);
-        return view('nguoidung.profile', ['userinfo' => $user]);
-    }
-    public function postupdatepassword(Request $request, $id){
-        $user = NguoiDung::find($id);
-        if($request->MatKhau === $request->NLMatKhau){
-            $user->MatKhau = Hash::make($request->MatKhau);
-            $user->save();
-            return  redirect('trangcanhan')->with('thongbaothanhcong', 'Cập nhật mật khẩu thành công!');
+
+    public function updatePassword(UpdatePassword $request)
+    {
+        $user = Auth::user();
+        if (!Hash::check($request->MatKhau_current, $user->MatKhau)) {
+            return back()
+                ->withErrors(['MatKhau_current' => 'Mật khẩu hiện tại chưa đúng']);
         }
-        else{
-            return redirect('trangcanhan')->with('thongbaoloi', 'Mật khẩu không trùng khớp!');
-        }
+        $data['MatKhau'] = Hash::make($request->MatKhau);
+        $this->nguoiDungRepo->update($user->ID, $data);
+        return back()->with('alert-success', 'Thay đổi mật khẩu thành công!');
     }
 }

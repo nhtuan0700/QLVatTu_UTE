@@ -20,7 +20,7 @@
                 <img src="{{ asset('dist/images/user.png') }}" width="48" height="48" alt="User"/>
               </div>
               <ul class="dropdown-menu pull-right">
-                <li><a href="{{ route('profile') }}"><i class="material-icons">person</i>Thông tin cá nhân</a></li>
+                <li><a href="{{ route('profile.index') }}"><i class="material-icons">person</i>Thông tin cá nhân</a></li>
                 <li role="seperator" class="divider"></li>
                 <li><a href="{{ route('logout') }}"><i class="material-icons">input</i>Đăng xuất</a></li>
               </ul>

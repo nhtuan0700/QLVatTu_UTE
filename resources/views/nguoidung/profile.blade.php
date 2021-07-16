@@ -14,20 +14,9 @@ Thông tin cá nhân
         <h2>Thông tin tài khoản</h2>
       </div>
       <div class="body">
-        <form id="form_validation" method="POST" action="chinhsuathongtincanhan/suainfo/{{Auth::user()->ID}}">
-          @if(count($errors) > 0)
-            <div class="alert alert-danger">
-              @foreach($errors->all() as $err)
-                {{$err}}
-              @endforeach
-            </div>
-          @endif
-          @if(session('thongbao'))
-            <div class="alert alert-success">
-              {{session('thongbao')}}
-            </div>
-          @endif
-          <input type="hidden" name="_token" value="{{csrf_token()}}"/>
+        <form id="form_validation" method="POST" action="{{ route('profile.updateInfo') }}">
+          @csrf
+          @method('put')
           <div class="row clearfix">
             <div class="col-md-6 demo-masked-input">
               <label for="">Họ tên</label>
@@ -35,10 +24,15 @@ Thông tin cá nhân
                 <span class="input-group-addon">
                   <i class="material-icons">label</i>
                 </span>
-                <div class="form-line">
+                <div class="form-line @error('HoTen') error @enderror">
                   <input type="text" class="form-control" name="HoTen" value="{{ Auth::user()->HoTen }}" placeholder="Họ tên"
-                    disabled required />
+                    required disabled />
                 </div>
+                @error('HoTen')
+                  <label class="error">
+                    {{ $message }}
+                  </label>
+                @enderror
               </div>
             </div>
 
@@ -48,10 +42,15 @@ Thông tin cá nhân
                 <span class="input-group-addon">
                   <i class="material-icons">date_range</i>
                 </span>
-                <div class="form-line">
+                <div class="form-line @error('NgaySinh') error @enderror">
                   <input type="text" class="form-control date" name="NgaySinh" value="{{ Auth::user()->NgaySinh }}"
                     placeholder="Ex: 30/07/2016" disabled required>
                 </div>
+                @error('NgaySinh')
+                  <label class="error">
+                    {{ $message }}
+                  </label>
+                @enderror
               </div>
             </div>
           </div>
@@ -62,10 +61,15 @@ Thông tin cá nhân
                 <span class="input-group-addon">
                   <i class="material-icons">badge</i>
                 </span>
-                <div class="form-line">
-                  <input type="number" class="form-control" name="CMND" value="{{ Auth::user()->CMND }}" placeholder="Số CMND/CCID"
-                    min="100000000" disabled required />
+                <div class="form-line" @error('CMND') error @enderror>
+                  <input type="text" class="form-control" name="CMND" value="{{ Auth::user()->CMND }}" placeholder="Số CMND/CCID" 
+                    maxlength="9" disabled required />
                 </div>
+                @error('CMND')
+                  <label class="error">
+                    {{ $message }}
+                  </label>
+                @enderror
               </div>
             </div>
 
@@ -75,10 +79,15 @@ Thông tin cá nhân
                 <span class="input-group-addon">
                   <i class="material-icons">phone</i>
                 </span>
-                <div class="form-line">
+                <div class="form-line @error('SDT') error @enderror">
                   <input type="text" class="form-control sodt" name="SDT" value="{{ Auth::user()->SDT }}"
-                    placeholder="Ex: 036-8376-080" disabled required>
+                    placeholder="Số điện thoại" maxlength="10" disabled required>
                 </div>
+                @error('SDT')
+                  <label class="error">
+                    {{ $message }}
+                  </label>
+                @enderror
               </div>
             </div>
           </div>
@@ -89,10 +98,15 @@ Thông tin cá nhân
                 <span class="input-group-addon">
                   <i class="material-icons">email</i>
                 </span>
-                <div class="form-line">
+                <div class="form-line @error('Email') error @enderror">
                   <input type="text" class="form-control email" name="Email" value="{{ Auth::user()->Email }}"
                     placeholder="Ex: admin@gmail.com" disabled required />
                 </div>
+                @error('Email')
+                  <label class="error">
+                    {{ $message }}
+                  </label>
+                @enderror
               </div>
             </div>
 
@@ -137,35 +151,42 @@ Thông tin cá nhân
         <h2>Đổi mật khẩu</h2>
       </div>
       <div class="body">
-        <form id="form_validation" method="POST" action="chinhsuathongtincanhan/suapass/{{Auth::user()->ID}}">
-        @if(count($errors) > 0)
-            <div class="alert alert-danger">
-              @foreach($errors->all() as $err)
-                {{$err}}
-              @endforeach
-            </div>
-          @endif
-          @if(session('thongbaothanhcong'))
-            <div class="alert alert-success">
-              {{session('thongbaothanhcong')}}
-            </div>
-          @endif
-          @if(session('thongbaoloi'))
-            <div class="alert alert-danger">
-              {{session('thongbaoloi')}}
-            </div>
-          @endif
-
-        <input type="hidden" name="_token" value="{{csrf_token()}}"/>
+        <form method="POST" action="{{ route('profile.updatePassword') }}">
+          @method('put')
+          @csrf
           <div class="row clearfix">
             <div class="col-md-6 demo-masked-input">
               <div class="input-group">
                 <span class="input-group-addon">
                   <i class="material-icons">lock</i>
                 </span>
-                <div class="form-line">
-                  <input type="password" class="form-control" name="MatKhau" placeholder="Mật khẩu mới" required />
+                <div class="form-line @error('MatKhau_current') error @enderror">
+                  <input type="password" class="form-control" name="MatKhau_current" placeholder="Mật khẩu hiện tại" 
+                    focus />
                 </div>
+                @error('MatKhau_current')
+                  <div class="text-danger">
+                    {{ $message }}
+                  </div>
+                @enderror
+              </div>
+            </div>
+          </div>
+
+          <div class="row clearfix">
+            <div class="col-md-6 demo-masked-input">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="material-icons">lock</i>
+                </span>
+                <div class="form-line @error('MatKhau') error @enderror">
+                  <input type="password" class="form-control" name="MatKhau" placeholder="Mật khẩu mới" focus required />
+                </div>
+                @error('MatKhau')
+                  <div class="text-danger">
+                    {{ $message }}
+                  </div>
+                @enderror
               </div>
             </div>
 
@@ -175,7 +196,8 @@ Thông tin cá nhân
                   <i class="material-icons">lock</i>
                 </span>
                 <div class="form-line">
-                  <input type="password" class="form-control" name="NLMatKhau" placeholder="Nhập lại mật khẩu mới" required />
+                  <input type="password" class="form-control" name="MatKhau_confirmation"
+                    placeholder="Nhập lại mật khẩu mới" focus required />
                 </div>
               </div>
             </div>

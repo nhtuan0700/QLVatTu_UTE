@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 use Carbon\Carbon;
@@ -14,7 +15,9 @@ class FormatHelper
     {
         return Carbon::parse($date)->format('d/m/Y');
     }
-    // public function formattosql($date){
-    //     return Carbon::parse($date)->format('Y-m-d');
-    // }
+
+    public function formatToSQL($date)
+    {
+        return Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+    }
 }

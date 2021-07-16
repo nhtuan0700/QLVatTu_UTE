@@ -95,13 +95,10 @@ Route::middleware('auth')->group(function () {
     });
     Route::get('thongke', 'ThongKeController@index')->name('thongke');
 
-    Route::get('trangcanhan', 'NguoiDungController@profile')->name('profile');
-    Route::group(['prefix' => 'chinhsuathongtincanhan', 'as' => 'thongtincanhan'], function(){
-        // Route::get('trangcanhan', 'NguoiDungController@profile')->name('profile');
-        Route::get('suainfo/{id}', 'NguoiDungController@getupdateinfo');
-        Route::post('suainfo/{id}', 'NguoiDungController@postupdateinfo');
-        Route::get('suapass/{id}', 'NguoiDungController@getupdatepassword');
-        Route::post('suapass/{id}', 'NguoiDungController@postupdatepassword');
+    Route::group(['prefix' => 'trangcanhan', 'as' => 'profile.'], function(){
+        Route::get('', 'NguoiDungController@profile')->name('index');
+        Route::put('thaydoithongtin', 'NguoiDungController@updateInfo')->name('updateInfo');
+        Route::put('thaydoimatkhan', 'NguoiDungController@updatePassword')->name('updatePassword');
     });
 });
 
